@@ -9,12 +9,25 @@
 /* Begin PBXBuildFile section */
 		D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6152AC9F85C00B7C307 /* HassFramework.docc */; };
 		D00BF6172AC9F85C00B7C307 /* HassFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = D00BF6142AC9F85C00B7C307 /* HassFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D00BF61E2AC9F8A700B7C307 /* HomeAssistantWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF61D2AC9F8A700B7C307 /* HomeAssistantWebSocket.swift */; };
+		D00BF6202ACA01DE00B7C307 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF61F2ACA01DE00B7C307 /* ContentView.swift */; };
+		D00BF6232ACA020E00B7C307 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D00BF6222ACA020E00B7C307 /* Starscream */; };
+		D00BF6252ACA023400B7C307 /* webSocket_library.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6242ACA023400B7C307 /* webSocket_library.swift */; };
+		D00BF6272ACA024100B7C307 /* EventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6262ACA024100B7C307 /* EventsListView.swift */; };
+		D00BF6292ACA024900B7C307 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6282ACA024900B7C307 /* View+Extensions.swift */; };
+		D00BF62B2ACA025200B7C307 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF62A2ACA025200B7C307 /* WebSocketManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D00BF6112AC9F85C00B7C307 /* HassFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HassFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00BF6142AC9F85C00B7C307 /* HassFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HassFramework.h; sourceTree = "<group>"; };
 		D00BF6152AC9F85C00B7C307 /* HassFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = HassFramework.docc; sourceTree = "<group>"; };
+		D00BF61D2AC9F8A700B7C307 /* HomeAssistantWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAssistantWebSocket.swift; sourceTree = "<group>"; };
+		D00BF61F2ACA01DE00B7C307 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D00BF6242ACA023400B7C307 /* webSocket_library.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = webSocket_library.swift; sourceTree = "<group>"; };
+		D00BF6262ACA024100B7C307 /* EventsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
+		D00BF6282ACA024900B7C307 /* View+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		D00BF62A2ACA025200B7C307 /* WebSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -22,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D00BF6232ACA020E00B7C307 /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -31,6 +45,12 @@
 		D00BF6072AC9F85C00B7C307 = {
 			isa = PBXGroup;
 			children = (
+				D00BF6242ACA023400B7C307 /* webSocket_library.swift */,
+				D00BF61F2ACA01DE00B7C307 /* ContentView.swift */,
+				D00BF6262ACA024100B7C307 /* EventsListView.swift */,
+				D00BF6282ACA024900B7C307 /* View+Extensions.swift */,
+				D00BF62A2ACA025200B7C307 /* WebSocketManager.swift */,
+				D00BF61D2AC9F8A700B7C307 /* HomeAssistantWebSocket.swift */,
 				D00BF6132AC9F85C00B7C307 /* HassFramework */,
 				D00BF6122AC9F85C00B7C307 /* Products */,
 			);
@@ -81,6 +101,9 @@
 			dependencies = (
 			);
 			name = HassFramework;
+			packageProductDependencies = (
+				D00BF6222ACA020E00B7C307 /* Starscream */,
+			);
 			productName = HassFramework;
 			productReference = D00BF6112AC9F85C00B7C307 /* HassFramework.framework */;
 			productType = "com.apple.product-type.framework";
@@ -108,6 +131,9 @@
 				Base,
 			);
 			mainGroup = D00BF6072AC9F85C00B7C307;
+			packageReferences = (
+				D00BF6212ACA020E00B7C307 /* XCRemoteSwiftPackageReference "Starscream" */,
+			);
 			productRefGroup = D00BF6122AC9F85C00B7C307 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -133,6 +159,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */,
+				D00BF6272ACA024100B7C307 /* EventsListView.swift in Sources */,
+				D00BF6252ACA023400B7C307 /* webSocket_library.swift in Sources */,
+				D00BF61E2AC9F8A700B7C307 /* HomeAssistantWebSocket.swift in Sources */,
+				D00BF6292ACA024900B7C307 /* View+Extensions.swift in Sources */,
+				D00BF6202ACA01DE00B7C307 /* ContentView.swift in Sources */,
+				D00BF62B2ACA025200B7C307 /* WebSocketManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +176,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -194,6 +227,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -210,6 +244,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -254,6 +289,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -348,6 +384,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D00BF6212ACA020E00B7C307 /* XCRemoteSwiftPackageReference "Starscream" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/daltoniam/Starscream.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D00BF6222ACA020E00B7C307 /* Starscream */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D00BF6212ACA020E00B7C307 /* XCRemoteSwiftPackageReference "Starscream" */;
+			productName = Starscream;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D00BF6082AC9F85C00B7C307 /* Project object */;
 }
