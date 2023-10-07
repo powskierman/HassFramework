@@ -1,41 +1,54 @@
-import SwiftUI
 import Starscream
 
-class WebSocketManager: ObservableObject {
-    private var homeAssistantWebSocket = HomeAssistantWebSocket()
-
-    @Published var isConnected: Bool = false
-    @Published var eventsReceived: [String] = []  // Changed from a singular event to an array of events
+public class WebSocketManager: ObservableObject {
     
-    init() {
+    // Shared instance
+    public static let shared = WebSocketManager()
+    
+    private var homeAssistantWebSocket = HomeAssistantWebSocket.shared
+    
+    @Published public var isConnected: Bool = false
+    @Published public var eventsReceived: [String] = []
+    
+    public enum ConnectionState {
+        case disconnected
+        case connecting
+        case connected
+    }
+    
+    @Published public var connectionState: ConnectionState = .disconnected
+
+    // Make the initializer private
+    private init() {
         homeAssistantWebSocket.onConnected = { [weak self] in
             DispatchQueue.main.async {
-                self?.isConnected = true
+                self?.connectionState = .connected
             }
         }
 
         homeAssistantWebSocket.onDisconnected = { [weak self] in
             DispatchQueue.main.async {
-                self?.isConnected = false
+                self?.connectionState = .disconnected
             }
         }
 
         homeAssistantWebSocket.onEventReceived = { [weak self] event in
             DispatchQueue.main.async {
-                self?.eventsReceived.append(event)  // Append each event to the eventsReceived array
+                self?.eventsReceived.append(event)
             }
         }
     }
     
-    func connect() {
+    public func connect() {
+        connectionState = .connecting
         homeAssistantWebSocket.connect()
     }
-    
-    func disconnect() {
+        
+    public func disconnect() {
         homeAssistantWebSocket.disconnect()
     }
-    
-    func subscribeToEvents() {
+        
+    public func subscribeToEvents() {
         homeAssistantWebSocket.subscribeToEvents()
     }
 }

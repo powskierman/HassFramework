@@ -10,6 +10,9 @@ import Starscream
 
 public class HomeAssistantWebSocket {
     
+    // Shared instance
+    public static let shared = HomeAssistantWebSocket()
+    
     private var socket: WebSocket
     private let serverURL: String = "ws://192.168.0.14:8123/api/websocket"
     private var id : Int
@@ -17,50 +20,63 @@ public class HomeAssistantWebSocket {
     var onConnected: (() -> Void)?
     var onDisconnected: (() -> Void)?
     var onEventReceived: ((String) -> Void)?
-    
-    init() {
-        self.id = 0 // Initialize the 'id' property
+
+    // Make the initializer private
+    private init() {
+        self.id = 0
         var request = URLRequest(url: URL(string: serverURL)!)
         request.timeoutInterval = 5
         socket = WebSocket(request: request)
         socket.delegate = self
     }
+
     
     // Connect to Home Assistant
     func connect() {
+        print("Attempting to connect to WebSocket...")
         socket.connect()
     }
    
-    // Authenticate with Home Assistant
-    func authenticate() {
-        let authMessage = [
-            "type": "auth",
-            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkN2MyOWY2MzBiNDM0NjcxYjNlMTM5YWY4MDk4MWVhNyIsImlhdCI6MTY5NTc0NDMxMSwiZXhwIjoyMDExMTA0MzExfQ.OPqaqXdNbsQnOC7RvS5PAVVllKt8iC9YTnKkpFAOSmY"
-        ]
+    private func getAccessToken() -> String? {
+        let frameworkBundle = Bundle(for: type(of: self))
         
-        if let data = try? JSONSerialization.data(withJSONObject: authMessage, options: []),
-            let jsonString = String(data: data, encoding: .utf8) {
-            print("Authenticating with message:", jsonString)
-            socket.write(string: jsonString)
-        } else {
-            print("Failed to serialize authentication message.")
+        guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist") else {
+            print("Failed to find Secrets.plist in the framework bundle.")
+            return nil
         }
+        
+        guard let dict = NSDictionary(contentsOfFile: path) as? [String: Any] else {
+            print("Failed to read the contents of Secrets.plist as a dictionary.")
+            return nil
+        }
+        
+        guard let token = dict["HomeAssistantAccessToken"] as? String else {
+            print("Failed to retrieve the 'HomeAssistantAccessToken' key from the dictionary.")
+            return nil
+        }
+        print("Successfully retrieved access token from Secrets.plist")
+        return token
     }
-    
-    // Subscribe to Home Assistant events
-//    func subscribeToEvents(with client: Starscream.WebSocketClient) {
-//        id += 1  // A method to generate unique IDs for your requests
-//        let subscriptionMessage = [
-//            "id": id,
-//            "type": "subscribe_events",
-//            "event_type": "state_changed"
-//        ] as [String : Any]
-//        if let data = try? JSONSerialization.data(withJSONObject: subscriptionMessage, options: []),
-//           let jsonString = String(data: data, encoding: .utf8) {
-//            client.write(string: jsonString)
-//        }
-//    }
-    
+
+        func authenticate() {
+            guard let accessToken = getAccessToken() else {
+                print("Failed to retrieve access token.")
+                return
+            }
+
+            let authMessage = [
+                "type": "auth",
+                "access_token": accessToken
+            ]
+            
+            if let data = try? JSONSerialization.data(withJSONObject: authMessage, options: []),
+                let jsonString = String(data: data, encoding: .utf8) {
+                print("Authenticating with message:", jsonString)
+                socket.write(string: jsonString)
+            } else {
+                print("Failed to serialize authentication message.")
+            }
+        }
     
     func subscribeToEvents() {
         id += 1
