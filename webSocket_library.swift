@@ -104,6 +104,28 @@ public class HomeAssistantWebSocket {
     func disconnect() {
         socket.disconnect()
     }
+    func setEntityState(entityId: String, newState: String) {
+        id += 1
+        let command: [String: Any] = [
+            "id": id,
+            "type": "call_service",
+            "domain": "homeassistant", // or whatever domain your garage doors belong to
+            "service": "turn_\(newState)",
+            "service_data": [
+                "entity_id": entityId
+            ]
+        ]
+
+        do {
+            let data = try JSONSerialization.data(withJSONObject: command, options: [])
+            if let jsonString = String(data: data, encoding: .utf8) {
+                self.sendTextMessage(jsonString)
+            }
+        } catch {
+            print("Failed to encode message:", error)
+        }
+    }
+
 }
 
 extension HomeAssistantWebSocket: WebSocketDelegate {
