@@ -61,6 +61,7 @@ public class WebSocketManager: ObservableObject {
                }
             }
         }
+        
     }
     
     public func connect() {
