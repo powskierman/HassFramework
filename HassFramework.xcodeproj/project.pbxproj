@@ -10,7 +10,7 @@
 		D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6152AC9F85C00B7C307 /* HassFramework.docc */; };
 		D00BF6172AC9F85C00B7C307 /* HassFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = D00BF6142AC9F85C00B7C307 /* HassFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D00BF6232ACA020E00B7C307 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D00BF6222ACA020E00B7C307 /* Starscream */; };
-		D00BF6252ACA023400B7C307 /* webSocket_library.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6242ACA023400B7C307 /* webSocket_library.swift */; };
+		D00BF6252ACA023400B7C307 /* HassWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6242ACA023400B7C307 /* HassWebSocket.swift */; };
 		D033BAEA2ACC575C00FAFC4C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D033BAE92ACC575C00FAFC4C /* .gitignore */; };
 		D033BAEC2ACC57D600FAFC4C /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033BAEB2ACC57D600FAFC4C /* Secrets.plist */; };
 		D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */; };
@@ -21,7 +21,7 @@
 		D00BF6112AC9F85C00B7C307 /* HassFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HassFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00BF6142AC9F85C00B7C307 /* HassFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HassFramework.h; sourceTree = "<group>"; };
 		D00BF6152AC9F85C00B7C307 /* HassFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = HassFramework.docc; sourceTree = "<group>"; };
-		D00BF6242ACA023400B7C307 /* webSocket_library.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = webSocket_library.swift; sourceTree = "<group>"; };
+		D00BF6242ACA023400B7C307 /* HassWebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HassWebSocket.swift; sourceTree = "<group>"; };
 		D033BAE92ACC575C00FAFC4C /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D033BAEB2ACC57D600FAFC4C /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
@@ -47,7 +47,7 @@
 				D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */,
 				D033BAEB2ACC57D600FAFC4C /* Secrets.plist */,
 				D033BAE92ACC575C00FAFC4C /* .gitignore */,
-				D00BF6242ACA023400B7C307 /* webSocket_library.swift */,
+				D00BF6242ACA023400B7C307 /* HassWebSocket.swift */,
 				D00BF6132AC9F85C00B7C307 /* HassFramework */,
 				D00BF6122AC9F85C00B7C307 /* Products */,
 			);
@@ -159,7 +159,7 @@
 			files = (
 				D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */,
 				D0E5D6C82AD5A875007038A7 /* ConnectionState.swift in Sources */,
-				D00BF6252ACA023400B7C307 /* webSocket_library.swift in Sources */,
+				D00BF6252ACA023400B7C307 /* HassWebSocket.swift in Sources */,
 				D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
