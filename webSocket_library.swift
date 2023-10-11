@@ -8,23 +8,72 @@
 import Foundation
 import Starscream
 
-public class HomeAssistantWebSocket {
+public class HassWebSocket: ObservableObject {
     
     // Shared instance
-    public static let shared = HomeAssistantWebSocket()
+    public static let shared = HassWebSocket()
+
+    @Published var connectionState: ConnectionState = .disconnected
     
     private var socket: WebSocket
-    private let serverURL: String = "ws://192.168.0.14:8123/api/websocket"
-    private var id : Int
+    private var serverURL: String? {
+         get {
+             let frameworkBundle = Bundle(for: type(of: self))
+             guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist") else {
+                 print("Failed to find Secrets.plist in the framework bundle.")
+                 return nil
+             }
+             
+             guard let dict = NSDictionary(contentsOfFile: path) as? [String: Any] else {
+                 print("Failed to read the contents of Secrets.plist as a dictionary.")
+                 return nil
+             }
+             
+             guard let url = dict["HomeAssistantServerURL"] as? String else {
+                 print("Failed to retrieve the 'HomeAssistantServerURL' key from the dictionary.")
+                 return nil
+             }
+             return url
+         }
+     }
+    private var id : Int = 0
     private var isAuthenticated = false
     var onConnected: (() -> Void)?
     var onDisconnected: (() -> Void)?
     var onEventReceived: ((String) -> Void)?
+    private var pingTimer: Timer?
+    private let pingInterval: TimeInterval = 60.0 // Ping every 60 seconds
 
-    // Make the initializer private
+
+    private static func fetchServerURL() -> URL? {
+        let frameworkBundle = Bundle(for: HassWebSocket.self)
+        
+        guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist") else {
+            print("Failed to find Secrets.plist in the framework bundle.")
+            return nil
+        }
+        
+        guard let dict = NSDictionary(contentsOfFile: path) as? [String: Any] else {
+            print("Failed to read the contents of Secrets.plist as a dictionary.")
+            return nil
+        }
+        
+        guard let serverURLString = dict["HomeAssistantServerURL"] as? String else {
+            print("Failed to retrieve the 'HomeAssistantServerURL' key from the dictionary.")
+            return nil
+        }
+        
+        return URL(string: serverURLString)
+    }
+
     private init() {
         self.id = 0
-        var request = URLRequest(url: URL(string: serverURL)!)
+        
+        guard let requestURL = HassWebSocket.fetchServerURL() else {
+            fatalError("Failed to retrieve server URL from Secrets.plist or the URL is malformed.")
+        }
+        
+        var request = URLRequest(url: requestURL)
         request.timeoutInterval = 5
         socket = WebSocket(request: request)
         socket.delegate = self
@@ -32,10 +81,32 @@ public class HomeAssistantWebSocket {
 
     
     // Connect to Home Assistant
-    func connect() {
-        print("Attempting to connect to WebSocket...")
-        socket.connect()
-    }
+    public func connect() {
+         print("Attempting to connect to WebSocket...")
+         socket.connect()
+
+         // Start the ping timer when we attempt to connect
+         startPingTimer()
+     }
+    private func startPingTimer() {
+         // Schedule a timer to send ping messages
+         pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { _ in
+             self.socket.write(ping: Data()) // Sending a ping message
+         }
+     }
+
+     private func stopPingTimer() {
+         pingTimer?.invalidate()
+         pingTimer = nil
+     }
+
+     public func disconnect() {
+         // Stop the ping timer when we intentionally disconnect
+         stopPingTimer()
+         socket.disconnect()
+     }
+
+ 
    
     private func getAccessToken() -> String? {
         let frameworkBundle = Bundle(for: type(of: self))
@@ -58,7 +129,7 @@ public class HomeAssistantWebSocket {
         return token
     }
 
-        func authenticate() {
+       private func authenticate() {
             guard let accessToken = getAccessToken() else {
                 print("Failed to retrieve access token.")
                 return
@@ -78,7 +149,7 @@ public class HomeAssistantWebSocket {
             }
         }
     
-    func subscribeToEvents() {
+   public func subscribeToEvents() {
         id += 1
         let subscribeMessage: [String: Any] = [
             "id": id,
@@ -96,42 +167,58 @@ public class HomeAssistantWebSocket {
         }
     }
 
-    func sendTextMessage(_ message: String) {
+    public func sendTextMessage(_ message: String) {
         socket.write(string: message)
     }
 
-    // Close the connection
-    func disconnect() {
-        socket.disconnect()
-    }
     func setEntityState(entityId: String, newState: String) {
         id += 1
+        
+        print("Setting entity state for entityId:", entityId, ", newState:", newState)
+        
+        var domain: String
+        var service: String
+        
+        if entityId.starts(with: "switch.") {
+            domain = "switch"
+            service = newState  // newState would be 'toggle' for a switch
+        } else {
+            // Handle other entity types as needed
+            domain = "homeassistant"
+            service = "turn_\(newState)"
+        }
+        
         let command: [String: Any] = [
             "id": id,
             "type": "call_service",
-            "domain": "homeassistant", // or whatever domain your garage doors belong to
-            "service": "turn_\(newState)",
+            "domain": domain,
+            "service": service,
             "service_data": [
                 "entity_id": entityId
             ]
         ]
+        
+        print("Constructed command:", command)
 
         do {
             let data = try JSONSerialization.data(withJSONObject: command, options: [])
             if let jsonString = String(data: data, encoding: .utf8) {
+                print("Sending JSON command:", jsonString)
                 self.sendTextMessage(jsonString)
+            } else {
+                print("Failed to convert data to string.")
             }
         } catch {
             print("Failed to encode message:", error)
         }
     }
-
 }
 
-extension HomeAssistantWebSocket: WebSocketDelegate {
+extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         switch event {
         case .connected(_):
+            connectionState = .connected
             onConnected?()
             print("WebSocket connected")
             
@@ -164,6 +251,7 @@ extension HomeAssistantWebSocket: WebSocketDelegate {
                     }
                 default:
                     onEventReceived?(text)
+                    onEventReceived?(text)
                     print("Received unknown message type:", type)
                 }
                 // Notify the event through the callback instead of calling `websocketManager`
@@ -186,9 +274,17 @@ extension HomeAssistantWebSocket: WebSocketDelegate {
             print("Error:", error ?? "Unknown Error")
         case .peerClosed:
             print("Peer closed the WebSocket")
-        case .disconnected(_, _):
+        case .disconnected(let reason, let code):
+            connectionState = .disconnected
+            isAuthenticated = false // reset the flag
             onDisconnected?()
-            print("WebSocket disconnected")
+            print("WebSocket disconnected with reason: \(reason) and code: \(code)")
+            
+            // Here, we could check the reason or the code and decide if we want to attempt a reconnection.
+            // As a basic example, we'll just attempt to reconnect after 5 seconds.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.connect() // Attempt reconnection
+            }
         }
     }
 }

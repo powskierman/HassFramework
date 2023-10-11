@@ -1,86 +1,88 @@
 import Starscream
+import Combine
 
 public class WebSocketManager: ObservableObject {
-    
-    // Shared instance
+    // Singleton pattern: This provides a shared instance of WebSocketManager
     public static let shared = WebSocketManager()
-    
-    private var homeAssistantWebSocket = HomeAssistantWebSocket.shared
-    private var leftDoorClosed = true
-    private var rightDoorClosed = true
-    @Published public var isConnected: Bool = false
-    @Published public var eventsReceived: [String] = []
-    
-    public enum ConnectionState {
-        case disconnected
-        case connecting
-        case connected
-    }
-    
-    
+
     @Published public var connectionState: ConnectionState = .disconnected
+    @Published public var eventsReceived: [String] = []
+    @Published public var leftDoorClosed: Bool = true
 
-    // Make the initializer private
+
+    private var homeAssistantWebSocket = HassWebSocket.shared
+    private var cancellables: Set<AnyCancellable> = []
+
     private init() {
-        homeAssistantWebSocket.onConnected = { [weak self] in
-            print("DEBUG: WebSocket connected.")
-            DispatchQueue.main.async {
-                self?.connectionState = .connected
-            }
-            self?.homeAssistantWebSocket.subscribeToEvents()
-        }
-
-        homeAssistantWebSocket.onDisconnected = { [weak self] in
-            print("DEBUG: WebSocket disconnected.")
-            DispatchQueue.main.async {
-                self?.connectionState = .disconnected
-            }
-        }
-
-        homeAssistantWebSocket.onEventReceived = { [weak self] event in
-            print("DEBUG: Event received: \(event)")
-            
-            DispatchQueue.main.async {
-                self?.eventsReceived.append(event)
-            }
-            
-            if let data = event.data(using: .utf8),
-               let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-               let entity_id = json["entity_id"] as? String,
-               let state = json["state"] as? String {
-                   
-               DispatchQueue.main.async {
-                   switch entity_id {
-                       case "binary_sensor.left_door_sensor":
-                           self?.leftDoorClosed = (state == "off")
-                       case "binary_sensor.right_door_sensor":
-                           self?.rightDoorClosed = (state == "off")
-                       default:
-                           break
-                   }
-               }
-            }
-        }
-        
+        homeAssistantWebSocket.$connectionState
+            .assign(to: \.connectionState, on: self)
+            .store(in: &cancellables)
     }
     
+    public var onConnected: (() -> Void)? {
+        didSet {
+            homeAssistantWebSocket.onConnected = onConnected
+        }
+    }
+
+    public var onDisconnected: (() -> Void)? {
+        didSet {
+            homeAssistantWebSocket.onDisconnected = onDisconnected
+        }
+    }
+
+    public var onEventReceived: ((String) -> Void)? {
+        didSet {
+            homeAssistantWebSocket.onEventReceived = { [weak self] event in
+                DispatchQueue.main.async {
+                    self?.eventsReceived.append(event)
+                }
+                self?.onEventReceived?(event)
+            }
+        }
+    }
+
     public func connect() {
-        connectionState = .connecting
         homeAssistantWebSocket.connect()
     }
-        
+    
     public func disconnect() {
         homeAssistantWebSocket.disconnect()
     }
-        
+    
     public func subscribeToEvents() {
         homeAssistantWebSocket.subscribeToEvents()
     }
+    
     public func setEntityState(entityId: String, newState: String) {
         homeAssistantWebSocket.setEntityState(entityId: entityId, newState: newState)
     }
-    public func testFunction() {
-        print("Test function called!")
+    func handleEventMessage(_ message: [String: Any]) {
+        guard let eventType = message["event_type"] as? String,
+              eventType == "state_changed",
+              let data = message["data"] as? [String: Any],
+              let entityId = data["entity_id"] as? String,
+              let newStateData = data["new_state"] as? [String: Any],
+              let newState = newStateData["state"] as? String else {
+            return
+        }
+
+        if entityId == "switch.left_door" {
+            self.leftDoorClosed = (newState == "off")
+        }
+        // Handle other entities similarly
+    }
+    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+        guard let data = text.data(using: .utf8),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+              let message = jsonObject as? [String: Any] else {
+            return
+        }
+
+        if let messageType = message["type"] as? String, messageType == "event" {
+            handleEventMessage(message)
+        }
+        // Handle other message types...
     }
 
 }
