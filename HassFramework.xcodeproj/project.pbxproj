@@ -15,7 +15,6 @@
 		D033BAEC2ACC57D600FAFC4C /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033BAEB2ACC57D600FAFC4C /* Secrets.plist */; };
 		D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */; };
 		D0E5D6C82AD5A875007038A7 /* ConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* ConnectionState.swift */; };
-		D0E5D6CA2AD72D8E007038A7 /* GarageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C92AD72D8E007038A7 /* GarageExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		D033BAEB2ACC57D600FAFC4C /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
 		D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		D0E5D6C72AD5A875007038A7 /* ConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionState.swift; sourceTree = "<group>"; };
-		D0E5D6C92AD72D8E007038A7 /* GarageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarageExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +43,6 @@
 		D00BF6072AC9F85C00B7C307 = {
 			isa = PBXGroup;
 			children = (
-				D0E5D6C92AD72D8E007038A7 /* GarageExtension.swift */,
 				D0E5D6C72AD5A875007038A7 /* ConnectionState.swift */,
 				D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */,
 				D033BAEB2ACC57D600FAFC4C /* Secrets.plist */,
@@ -161,7 +158,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */,
-				D0E5D6CA2AD72D8E007038A7 /* GarageExtension.swift in Sources */,
 				D0E5D6C82AD5A875007038A7 /* ConnectionState.swift in Sources */,
 				D00BF6252ACA023400B7C307 /* HassWebSocket.swift in Sources */,
 				D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */,
