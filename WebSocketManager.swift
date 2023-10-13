@@ -1,16 +1,22 @@
 import Starscream
 import Combine
 
+
 public class WebSocketManager: ObservableObject {
-    // Singleton pattern: This provides a shared instance of WebSocketManager
     public static let shared = WebSocketManager()
+    lazy var homeAssistantWebSocket = HassWebSocket.shared
+
+//public class WebSocketManager: ObservableObject {
+    // Singleton pattern: This provides a shared instance of WebSocketManager
+    public var websocket = HassWebSocket.shared
+//    public static let shared = WebSocketManager()
 
     @Published public var connectionState: ConnectionState = .disconnected
     @Published public var eventsReceived: [String] = []
     @Published public var leftDoorClosed: Bool = true
 
 
-    private var homeAssistantWebSocket = HassWebSocket.shared
+ //   private var homeAssistantWebSocket = HassWebSocket.shared
     private var cancellables: Set<AnyCancellable> = []
 
     private init() {
@@ -54,9 +60,6 @@ public class WebSocketManager: ObservableObject {
         homeAssistantWebSocket.subscribeToEvents()
     }
     
-    public func setEntityState(entityId: String, newState: String) {
-        homeAssistantWebSocket.setEntityState(entityId: entityId, newState: newState)
-    }
     func handleEventMessage(_ message: [String: Any]) {
         guard let eventType = message["event_type"] as? String,
               eventType == "state_changed",

@@ -8,209 +8,140 @@
 import Foundation
 import Starscream
 
-public class HassWebSocket: ObservableObject {
-    
-    // Shared instance
+public class HassWebSocket {
     public static let shared = HassWebSocket()
-
-    @Published var connectionState: ConnectionState = .disconnected
     
-    private var socket: WebSocket
-    private var serverURL: String? {
-         get {
-             let frameworkBundle = Bundle(for: type(of: self))
-             guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist") else {
-                 print("Failed to find Secrets.plist in the framework bundle.")
-                 return nil
-             }
-             
-             guard let dict = NSDictionary(contentsOfFile: path) as? [String: Any] else {
-                 print("Failed to read the contents of Secrets.plist as a dictionary.")
-                 return nil
-             }
-             
-             guard let url = dict["HomeAssistantServerURL"] as? String else {
-                 print("Failed to retrieve the 'HomeAssistantServerURL' key from the dictionary.")
-                 return nil
-             }
-             return url
-         }
-     }
-    private var id : Int = 0
+    @Published var connectionState: ConnectionState = .disconnected
+    private var socket: WebSocket!
+    private let pingInterval: TimeInterval = 60.0 // Ping every 60 seconds
+    public var messageId: Int = 0
     private var isAuthenticated = false
     var onConnected: (() -> Void)?
     var onDisconnected: (() -> Void)?
     var onEventReceived: ((String) -> Void)?
     private var pingTimer: Timer?
-    private let pingInterval: TimeInterval = 60.0 // Ping every 60 seconds
-
-
-    private static func fetchServerURL() -> URL? {
+    private var lastSentMessage: String?
+    private var onPongReceived: (() -> Void)?
+    
+    public init() {
+        self.messageId = 0
+        
+        if let requestURLString = getServerURLFromSecrets(),
+           let requestURL = URL(string: requestURLString) {
+            var request = URLRequest(url: requestURL)
+            request.timeoutInterval = 5
+            self.socket = WebSocket(request: request)
+            self.socket.delegate = self
+        } else {
+            fatalError("Failed to create a URL from the string provided in Secrets.plist or the URL is malformed.")
+        }
+    }
+    
+    private func getServerURLFromSecrets() -> String? {
         let frameworkBundle = Bundle(for: HassWebSocket.self)
         
-        guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist") else {
-            print("Failed to find Secrets.plist in the framework bundle.")
+        guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist"),
+              let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
+              let serverURL = dict["HomeAssistantServerURL"] as? String else {
+            print("Failed to retrieve HomeAssistantServerURL from Secrets.plist.")
             return nil
         }
         
-        guard let dict = NSDictionary(contentsOfFile: path) as? [String: Any] else {
-            print("Failed to read the contents of Secrets.plist as a dictionary.")
-            return nil
-        }
-        
-        guard let serverURLString = dict["HomeAssistantServerURL"] as? String else {
-            print("Failed to retrieve the 'HomeAssistantServerURL' key from the dictionary.")
-            return nil
-        }
-        
-        return URL(string: serverURLString)
+        return serverURL
     }
-
-    private init() {
-        self.id = 0
-        
-        guard let requestURL = HassWebSocket.fetchServerURL() else {
-            fatalError("Failed to retrieve server URL from Secrets.plist or the URL is malformed.")
-        }
-        
-        var request = URLRequest(url: requestURL)
-        request.timeoutInterval = 5
-        socket = WebSocket(request: request)
-        socket.delegate = self
-    }
-
     
-    // Connect to Home Assistant
     public func connect() {
-         print("Attempting to connect to WebSocket...")
-         socket.connect()
-
-         // Start the ping timer when we attempt to connect
-         startPingTimer()
-     }
+        print("Attempting to connect to WebSocket...")
+        socket.connect()
+        startPingTimer()
+    }
+    
     private func startPingTimer() {
-         // Schedule a timer to send ping messages
-         pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { _ in
-             self.socket.write(ping: Data()) // Sending a ping message
-         }
-     }
+        pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { _ in
+            if let _ = self.lastSentMessage {
+                // Set up a pong timeout, i.e., if a pong isn't received in time, reconnect
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { // 5 seconds pong timeout, tweak as necessary
+                    if self.connectionState == .connected {
+                        print("No pong received in time, reconnecting...")
+                        self.disconnect()
+                        self.connect()
+                    }
+                }
+            }
+            self.socket.write(ping: Data())
+        }
+    }
+    
+    private func awaitPongThenSendMessage() {
+        onPongReceived = { [weak self] in
+            if let message = self?.lastSentMessage {
+                self?.socket.write(string: message)
+                self?.lastSentMessage = nil // Clear the stored message after sending
+            }
+        }
+    }
 
-     private func stopPingTimer() {
-         pingTimer?.invalidate()
-         pingTimer = nil
-     }
-
-     public func disconnect() {
-         // Stop the ping timer when we intentionally disconnect
-         stopPingTimer()
-         socket.disconnect()
-     }
-
- 
-   
+    private func stopPingTimer() {
+        pingTimer?.invalidate()
+        pingTimer = nil
+    }
+    
+    public func disconnect() {
+        stopPingTimer()
+        socket.disconnect()
+    }
+    
     private func getAccessToken() -> String? {
         let frameworkBundle = Bundle(for: type(of: self))
         
-        guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist") else {
-            print("Failed to find Secrets.plist in the framework bundle.")
+        guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist"),
+              let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
+              let token = dict["HomeAssistantAccessToken"] as? String else {
+            print("Failed to retrieve access token from Secrets.plist.")
             return nil
         }
         
-        guard let dict = NSDictionary(contentsOfFile: path) as? [String: Any] else {
-            print("Failed to read the contents of Secrets.plist as a dictionary.")
-            return nil
-        }
-        
-        guard let token = dict["HomeAssistantAccessToken"] as? String else {
-            print("Failed to retrieve the 'HomeAssistantAccessToken' key from the dictionary.")
-            return nil
-        }
-        print("Successfully retrieved access token from Secrets.plist")
         return token
     }
-
-       private func authenticate() {
-            guard let accessToken = getAccessToken() else {
-                print("Failed to retrieve access token.")
-                return
-            }
-
-            let authMessage = [
-                "type": "auth",
-                "access_token": accessToken
-            ]
-            
-            if let data = try? JSONSerialization.data(withJSONObject: authMessage, options: []),
-                let jsonString = String(data: data, encoding: .utf8) {
-                print("Authenticating with message:", jsonString)
-                socket.write(string: jsonString)
-            } else {
-                print("Failed to serialize authentication message.")
-            }
-        }
     
-   public func subscribeToEvents() {
-        id += 1
+    private func authenticate() {
+        guard let accessToken = getAccessToken() else {
+            return
+        }
+        
+        let authMessage = [
+            "type": "auth",
+            "access_token": accessToken
+        ]
+        
+        if let data = try? JSONSerialization.data(withJSONObject: authMessage, options: []),
+           let jsonString = String(data: data, encoding: .utf8) {
+            socket.write(string: jsonString)
+        } else {
+            print("Failed to serialize authentication message.")
+        }
+    }
+    
+    public func subscribeToEvents() {
+        messageId += 1
         let subscribeMessage: [String: Any] = [
-            "id": id,
+            "id": messageId,
             "type": "subscribe_events",
             "event_type": "state_changed"
         ]
         
-        do {
-            let data = try JSONSerialization.data(withJSONObject: subscribeMessage, options: [])
-            if let jsonString = String(data: data, encoding: .utf8) {
-                self.sendTextMessage(jsonString)
-            }
-        } catch {
-            print("Failed to encode message:", error)
-        }
-    }
-
-    public func sendTextMessage(_ message: String) {
-        socket.write(string: message)
-    }
-
-    func setEntityState(entityId: String, newState: String) {
-        id += 1
-        
-        print("Setting entity state for entityId:", entityId, ", newState:", newState)
-        
-        var domain: String
-        var service: String
-        
-        if entityId.starts(with: "switch.") {
-            domain = "switch"
-            service = newState  // newState would be 'toggle' for a switch
+        if let data = try? JSONSerialization.data(withJSONObject: subscribeMessage, options: []),
+           let jsonString = String(data: data, encoding: .utf8) {
+            sendTextMessage(jsonString)
         } else {
-            // Handle other entity types as needed
-            domain = "homeassistant"
-            service = "turn_\(newState)"
+            print("Failed to encode message.")
         }
-        
-        let command: [String: Any] = [
-            "id": id,
-            "type": "call_service",
-            "domain": domain,
-            "service": service,
-            "service_data": [
-                "entity_id": entityId
-            ]
-        ]
-        
-        print("Constructed command:", command)
-
-        do {
-            let data = try JSONSerialization.data(withJSONObject: command, options: [])
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("Sending JSON command:", jsonString)
-                self.sendTextMessage(jsonString)
-            } else {
-                print("Failed to convert data to string.")
-            }
-        } catch {
-            print("Failed to encode message:", error)
-        }
+    }
+    
+    public func sendTextMessage(_ message: String) {
+        lastSentMessage = message
+        socket.write(ping: Data()) // Send ping before message
+        awaitPongThenSendMessage()
     }
 }
 
@@ -221,12 +152,6 @@ extension HassWebSocket: WebSocketDelegate {
             connectionState = .connected
             onConnected?()
             print("WebSocket connected")
-            
-            // Log before introducing delay for authentication
-            //           print("Preparing to send authentication in 1 second...")
-            //           DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // 1-second delay
-            //                self.authenticate(with: client)
-            //            }
             
         case .text(let text):
             print("Received text:", text)
@@ -264,6 +189,7 @@ extension HassWebSocket: WebSocketDelegate {
             print("Received ping.")
         case .pong:
             print("Received pong.")
+            onPongReceived?() // Execute the closure
         case .viabilityChanged(let isViable):
             print("Viability changed to: \(isViable)")
         case .reconnectSuggested(let shouldReconnect):
