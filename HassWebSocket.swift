@@ -8,7 +8,7 @@
 import Foundation
 import Starscream
 
-public class HassWebSocket {
+public class HassWebSocket: EventMessageHandler {
     public static let shared = HassWebSocket()
     
     @Published var connectionState: ConnectionState = .disconnected
@@ -22,6 +22,7 @@ public class HassWebSocket {
     private var pingTimer: Timer?
     private var lastSentMessage: String?
     private var onPongReceived: (() -> Void)?
+    private var eventMessageHandlers: [EventMessageHandler] = []
     
     public init() {
         self.messageId = 0
@@ -36,6 +37,11 @@ public class HassWebSocket {
             fatalError("Failed to create a URL from the string provided in Secrets.plist or the URL is malformed.")
         }
     }
+    
+    public func addEventMessageHandler(_ handler:EventMessageHandler){
+        eventMessageHandlers.append(handler)
+    }
+
     
     private func getServerURLFromSecrets() -> String? {
         let frameworkBundle = Bundle(for: HassWebSocket.self)
@@ -143,7 +149,33 @@ public class HassWebSocket {
         socket.write(ping: Data()) // Send ping before message
         awaitPongThenSendMessage()
     }
+    public func handleEventMessage(_ message: HAEventData) {
+        // Process or forward event to other handlers
+        for handler in eventMessageHandlers {
+            handler.handleEventMessage(message)
+        }
+    }
 }
+
+private func determineWebSocketMessageType(data: Data) -> WebSocketMessageType {
+      if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+         let type = json["type"] as? String {
+          switch type {
+          case "auth_required":
+              return .authRequired
+          case "auth_ok":
+              return .authOk
+          case "event":
+              return .event
+          case "result":
+              return .result
+          default:
+              // Handle default case
+              return .result
+          }
+      }
+      return .result
+  }
 
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
@@ -154,34 +186,32 @@ extension HassWebSocket: WebSocketDelegate {
             print("WebSocket connected")
             
         case .text(let text):
-            print("Received text:", text)
-            
-            if let data = text.data(using: .utf8),
-               let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-               let type = json["type"] as? String {
-                switch type {
-                case "auth_required":
-                    print("Authentication request detected. Authenticating...")
-                    if !self.isAuthenticated {
-                        self.authenticate()
-                    }
-                case "auth_ok":
-                    print("Authentication successful!")
-                    self.isAuthenticated = true
-                case "auth_invalid":
-                    if let message = json["message"] as? String {
-                        print("Authentication failed with message:", message)
-                    } else {
-                        print("Authentication failed with no specific message.")
-                    }
-                default:
-                    onEventReceived?(text)
-                    onEventReceived?(text)
-                    print("Received unknown message type:", type)
-                }
-                // Notify the event through the callback instead of calling `websocketManager`
-                onEventReceived?(text)
-            }
+             print("Received text:", text)
+
+             if let data = text.data(using: .utf8) {
+                 // We will utilize a function to determine the message type
+                 let messageType = determineWebSocketMessageType(data: data)
+
+                 switch messageType {
+                 case .authRequired:
+                     // Handle authentication required
+                     if !self.isAuthenticated {
+                         self.authenticate()
+                     }
+                 case .authOk:
+                     // Handle authentication success
+                     self.isAuthenticated = true
+                 case .event:
+                     // Handle event message
+                     if let haEventData = try? JSONDecoder().decode(HAEventData.self, from: data) {
+                         self.handleEventMessage(haEventData)
+                     }
+                 case .result:
+                     // Handle results if needed
+                     // If it's garage-specific, this could be passed to GarageHass
+                     break
+                 }
+             }
             
         case .binary(let data):
             print("Received binary data:", data)
@@ -211,6 +241,6 @@ extension HassWebSocket: WebSocketDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                 self.connect() // Attempt reconnection
             }
-        }
+          }
     }
 }

@@ -13,6 +13,9 @@
 		D00BF6252ACA023400B7C307 /* HassWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6242ACA023400B7C307 /* HassWebSocket.swift */; };
 		D033BAEA2ACC575C00FAFC4C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D033BAE92ACC575C00FAFC4C /* .gitignore */; };
 		D033BAEC2ACC57D600FAFC4C /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033BAEB2ACC57D600FAFC4C /* Secrets.plist */; };
+		D05FCF6F2ADC30A2000AF815 /* HassProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */; };
+		D05FCF712ADC312B000AF815 /* HassModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF702ADC312B000AF815 /* HassModels.swift */; };
+		D05FCF732ADC31A5000AF815 /* HassMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */; };
 		D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */; };
 		D0E5D6C82AD5A875007038A7 /* ConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* ConnectionState.swift */; };
 /* End PBXBuildFile section */
@@ -24,6 +27,9 @@
 		D00BF6242ACA023400B7C307 /* HassWebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HassWebSocket.swift; sourceTree = "<group>"; };
 		D033BAE92ACC575C00FAFC4C /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D033BAEB2ACC57D600FAFC4C /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
+		D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassProtocols.swift; sourceTree = "<group>"; };
+		D05FCF702ADC312B000AF815 /* HassModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassModels.swift; sourceTree = "<group>"; };
+		D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassMessageTypes.swift; sourceTree = "<group>"; };
 		D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		D0E5D6C72AD5A875007038A7 /* ConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -43,6 +49,9 @@
 		D00BF6072AC9F85C00B7C307 = {
 			isa = PBXGroup;
 			children = (
+				D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */,
+				D05FCF702ADC312B000AF815 /* HassModels.swift */,
+				D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */,
 				D0E5D6C72AD5A875007038A7 /* ConnectionState.swift */,
 				D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */,
 				D033BAEB2ACC57D600FAFC4C /* Secrets.plist */,
@@ -159,8 +168,11 @@
 			files = (
 				D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */,
 				D0E5D6C82AD5A875007038A7 /* ConnectionState.swift in Sources */,
+				D05FCF712ADC312B000AF815 /* HassModels.swift in Sources */,
 				D00BF6252ACA023400B7C307 /* HassWebSocket.swift in Sources */,
+				D05FCF732ADC31A5000AF815 /* HassMessageTypes.swift in Sources */,
 				D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */,
+				D05FCF6F2ADC30A2000AF815 /* HassProtocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
