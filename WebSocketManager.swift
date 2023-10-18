@@ -3,8 +3,6 @@ import Combine
 
 public class WebSocketManager: ObservableObject {
     public static let shared = WebSocketManager()
-    
-    // No need to re-declare the `HassWebSocket` instance; we already have it declared once as 'websocket'
     public var websocket = HassWebSocket.shared
     
     @Published public var connectionState: ConnectionState = .disconnected
