@@ -155,27 +155,27 @@ public class HassWebSocket: EventMessageHandler {
             handler.handleEventMessage(message)
         }
     }
+    
+    private func determineWebSocketMessageType(data: Data) -> WebSocketMessageType {
+         if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+             let type = json["type"] as? String {
+             switch type {
+             case "auth_required":
+                 return .authRequired
+             case "auth_ok":
+                 return .authOk
+             case "event":
+                 return .event
+             case "result":
+                 return .result
+             default:
+                 // Handle default case
+                 return .result
+             }
+         }
+         return .result
+     }
 }
-
-private func determineWebSocketMessageType(data: Data) -> WebSocketMessageType {
-      if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-         let type = json["type"] as? String {
-          switch type {
-          case "auth_required":
-              return .authRequired
-          case "auth_ok":
-              return .authOk
-          case "event":
-              return .event
-          case "result":
-              return .result
-          default:
-              // Handle default case
-              return .result
-          }
-      }
-      return .result
-  }
 
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {

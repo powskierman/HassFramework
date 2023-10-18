@@ -1,11 +1,11 @@
-//
-//  HassModels.swift
-//  HassFramework
-//
-//  Created by Michel Lapointe on 2023-10-15.
-//
-
 import Foundation
+
+public enum WebSocketMessageType {
+    case authRequired
+    case authOk
+    case event
+    case result
+}
 
 public struct HAContext: Decodable {
     let id: String
@@ -31,4 +31,11 @@ public struct HAEventData: Decodable {
     public let entityId: String
     public let oldState: HAState
     public let newState: HAState
+}
+
+public struct HAEventMessage {
+    public let eventType: String
+    public let entityId: String
+    public let newState: String
+    // ... any other necessary fields
 }

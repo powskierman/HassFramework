@@ -5,6 +5,7 @@ import Combine
 public class WebSocketManager: ObservableObject {
     public static let shared = WebSocketManager()
     lazy var homeAssistantWebSocket = HassWebSocket.shared
+    weak var delegate: WebSocketManagerDelegate?
 
 //public class WebSocketManager: ObservableObject {
     // Singleton pattern: This provides a shared instance of WebSocketManager
@@ -13,7 +14,7 @@ public class WebSocketManager: ObservableObject {
 
     @Published public var connectionState: ConnectionState = .disconnected
     @Published public var eventsReceived: [String] = []
-    @Published public var leftDoorClosed: Bool = true
+    //@Published public var leftDoorClosed: Bool = true
 
 
  //   private var homeAssistantWebSocket = HassWebSocket.shared
@@ -70,9 +71,9 @@ public class WebSocketManager: ObservableObject {
             return
         }
 
-        if entityId == "switch.left_door" {
-            self.leftDoorClosed = (newState == "off")
-        }
+//        if entityId == "switch.left_door" {
+//            self.leftDoorClosed = (newState == "off")
+//        }
         // Handle other entities similarly
     }
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
