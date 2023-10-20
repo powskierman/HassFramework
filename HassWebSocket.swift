@@ -15,13 +15,11 @@ public class HassWebSocket: EventMessageHandler {
     private var socket: WebSocket!
     private let pingInterval: TimeInterval = 60.0 // Ping every 60 seconds
     public var messageId: Int = 0
-    private var isAuthenticated = false
+    var isAuthenticated = false
     var onConnected: (() -> Void)?
     var onDisconnected: (() -> Void)?
     var onEventReceived: ((String) -> Void)?
-    private var pingTimer: Timer?
-    private var lastSentMessage: String?
-    private var onPongReceived: (() -> Void)?
+    var pingTimer: Timer?
     private var eventMessageHandlers: [EventMessageHandler] = []
     
     public init() {
@@ -38,15 +36,13 @@ public class HassWebSocket: EventMessageHandler {
         }
     }
     
-    public func addEventMessageHandler(_ handler:EventMessageHandler){
+    public func addEventMessageHandler(_ handler: EventMessageHandler) {
         eventMessageHandlers.append(handler)
     }
 
-    
     private func getServerURLFromSecrets() -> String? {
-        let frameworkBundle = Bundle(for: HassWebSocket.self)
-        
-        guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist"),
+        // Use the more robust method for fetching resource from bundle
+        guard let path = Bundle(for: HassWebSocket.self).path(forResource: "Secrets", ofType: "plist"),
               let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
               let serverURL = dict["HomeAssistantServerURL"] as? String else {
             print("Failed to retrieve HomeAssistantServerURL from Secrets.plist.")
@@ -62,27 +58,16 @@ public class HassWebSocket: EventMessageHandler {
         startPingTimer()
     }
     
-    private func startPingTimer() {
-        pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { _ in
-            if let _ = self.lastSentMessage {
-                // Set up a pong timeout, i.e., if a pong isn't received in time, reconnect
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { // 5 seconds pong timeout, tweak as necessary
-                    if self.connectionState == .connected {
-                        print("No pong received in time, reconnecting...")
-                        self.disconnect()
-                        self.connect()
-                    }
+    func startPingTimer() {
+        pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { [weak self] _ in
+            guard let strongSelf = self else { return }
+            strongSelf.socket.write(ping: Data())
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                if strongSelf.connectionState == .connected {
+                    print("No pong received in time, reconnecting...")
+                    strongSelf.disconnect()
+                    strongSelf.connect()
                 }
-            }
-            self.socket.write(ping: Data())
-        }
-    }
-    
-    private func awaitPongThenSendMessage() {
-        onPongReceived = { [weak self] in
-            if let message = self?.lastSentMessage {
-                self?.socket.write(string: message)
-                self?.lastSentMessage = nil // Clear the stored message after sending
             }
         }
     }
@@ -98,9 +83,8 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     private func getAccessToken() -> String? {
-        let frameworkBundle = Bundle(for: type(of: self))
-        
-        guard let path = frameworkBundle.path(forResource: "Secrets", ofType: "plist"),
+        // Use the more robust method for fetching resource from bundle
+        guard let path = Bundle(for: type(of: self)).path(forResource: "Secrets", ofType: "plist"),
               let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
               let token = dict["HomeAssistantAccessToken"] as? String else {
             print("Failed to retrieve access token from Secrets.plist.")
@@ -110,7 +94,7 @@ public class HassWebSocket: EventMessageHandler {
         return token
     }
     
-    private func authenticate() {
+    func authenticate() {
         guard let accessToken = getAccessToken() else {
             return
         }
@@ -145,18 +129,16 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     public func sendTextMessage(_ message: String) {
-        lastSentMessage = message
-        socket.write(ping: Data()) // Send ping before message
-        awaitPongThenSendMessage()
+        socket.write(string: message)
     }
+    
     public func handleEventMessage(_ message: HAEventData) {
-        // Process or forward event to other handlers
         for handler in eventMessageHandlers {
             handler.handleEventMessage(message)
         }
     }
     
-    private func determineWebSocketMessageType(data: Data) -> WebSocketMessageType {
+    func determineWebSocketMessageType(data: Data) -> WebSocketMessageType {
          if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
              let type = json["type"] as? String {
              switch type {
@@ -169,13 +151,13 @@ public class HassWebSocket: EventMessageHandler {
              case "result":
                  return .result
              default:
-                 // Handle default case
-                 return .result
+                 return .unknown
              }
          }
-         return .result
+         return .unknown
      }
 }
+
 
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
@@ -210,6 +192,8 @@ extension HassWebSocket: WebSocketDelegate {
                      // Handle results if needed
                      // If it's garage-specific, this could be passed to GarageHass
                      break
+                 case .unknown:
+                     break
                  }
              }
             
@@ -219,7 +203,7 @@ extension HassWebSocket: WebSocketDelegate {
             print("Received ping.")
         case .pong:
             print("Received pong.")
-            onPongReceived?() // Execute the closure
+            onPongReceived() // Execute the closure
         case .viabilityChanged(let isViable):
             print("Viability changed to: \(isViable)")
         case .reconnectSuggested(let shouldReconnect):
@@ -243,4 +227,8 @@ extension HassWebSocket: WebSocketDelegate {
             }
           }
     }
-}
+        func onPongReceived() {
+            connectionState = .connected
+        }
+    }
+

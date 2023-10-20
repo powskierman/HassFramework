@@ -1,80 +1,85 @@
+import Foundation
 import Starscream
-import Combine
 
-public class WebSocketManager: ObservableObject {
-    public static let shared = WebSocketManager()
-    public var websocket = HassWebSocket.shared
-    
-    @Published public var connectionState: ConnectionState = .disconnected
-    @Published public var eventsReceived: [String] = []
+public class WebSocketManager: WebSocketDelegate {
+    private let websocket: HassWebSocket
 
-    private var cancellables: Set<AnyCancellable> = []
-
-    private init() {
-        websocket.$connectionState
-            .assign(to: \.connectionState, on: self)
-            .store(in: &cancellables)
+    init(websocket: HassWebSocket) {
+        self.websocket = websocket
     }
 
-    public var onConnected: (() -> Void)? {
-        didSet {
-            websocket.onConnected = onConnected
-        }
-    }
+    public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
+        switch event {
+        case .connected(let headers):
+            print("WebSocket connected with headers:", headers)
+            websocket.connectionState = .connected
+            websocket.onConnected?()
 
-    public var onDisconnected: (() -> Void)? {
-        didSet {
-            websocket.onDisconnected = onDisconnected
-        }
-    }
-
-    public var onEventReceived: ((String) -> Void)? {
-        didSet {
-            websocket.onEventReceived = { [weak self] event in
-                DispatchQueue.main.async {
-                    self?.eventsReceived.append(event)
-                }
-                self?.onEventReceived?(event)
+        case .disconnected(let reason, let code):
+            print("WebSocket disconnected with reason: \(reason) and code: \(code)")
+            websocket.connectionState = .disconnected
+            websocket.isAuthenticated = false
+            websocket.onDisconnected?()
+            
+            // Optionally, consider reconnect logic here as previously outlined.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.websocket.connect()
             }
+
+        case .text(let text):
+            print("Received text:", text)
+            
+            if let data = text.data(using: .utf8) {
+                let messageType = websocket.determineWebSocketMessageType(data: data)
+                switch messageType {
+                case .authRequired:
+                    websocket.authenticate()
+                case .authOk:
+                    websocket.isAuthenticated = true
+                case .event:
+                    if let haEventData = try? JSONDecoder().decode(HAEventData.self, from: data) {
+                        websocket.handleEventMessage(haEventData)
+                    }
+                case .result: break
+                    // Handle if needed
+                case .unknown:
+                    print("Unknown WebSocket message type received.")
+                }
+            }
+
+        case .binary(let data):
+            print("Received binary data:", data)
+
+        case .ping:
+            print("Received ping.")
+            
+        case .pong:
+            print("Received pong.")
+            websocket.onPongReceived()
+
+        case .viabilityChanged(let isViable):
+            print("Viability changed to: \(isViable)")
+
+        case .reconnectSuggested(let shouldReconnect):
+            print("Reconnect suggested: \(shouldReconnect)")
+            
+        case .cancelled:
+            print("WebSocket cancelled")
+            
+        case .error(let error):
+            print("Error:", error ?? "Unknown error occurred.")
+            
+        case .peerClosed:
+            print("Peer closed the WebSocket connection.")
         }
     }
 
-    public func connect() {
-        websocket.connect()
-    }
-    
-    public func disconnect() {
-        websocket.disconnect()
-    }
-    
-    public func subscribeToEvents() {
-        websocket.subscribeToEvents()
-    }
-    
-    func handleEventMessage(_ message: [String: Any]) {
-        guard let eventType = message["event_type"] as? String,
-              eventType == "state_changed",
-              let data = message["data"] as? [String: Any],
-              // If you don't use these variables, either replace them with _ or comment them out
-              let _ = data["entity_id"] as? String,
-              let _ = (data["new_state"] as? [String: Any])?["state"] as? String
-        else {
-            return
-        }
-        // If you plan to use entityId and newState later, you can uncomment the below lines
-        // let entityId = data["entity_id"] as! String
-        // let newState = (data["new_state"] as! [String: Any])["state"] as! String
-    }
-    
-    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        guard let data = text.data(using: .utf8),
-              let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
-              let message = jsonObject as? [String: Any] else {
-            return
-        }
+    // ... (Any additional methods or properties of WebSocketManager class)
 
-        if let messageType = message["type"] as? String, messageType == "event" {
-            handleEventMessage(message)
-        }
+
+    func stopPingTimer() {
+        websocket.pingTimer?.invalidate()
+        websocket.pingTimer = nil
     }
+
 }

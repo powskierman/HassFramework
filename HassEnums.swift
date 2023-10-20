@@ -11,3 +11,10 @@ public enum ConnectionState {
     case connecting
     case connected
 }
+enum HAError: Error {
+    case invalidURL
+    case missingSecret
+    case serializationError
+    case unknownMessageType
+}
+

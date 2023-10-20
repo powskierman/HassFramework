@@ -1,10 +1,11 @@
 import Foundation
 
-public enum WebSocketMessageType {
+enum WebSocketMessageType {
     case authRequired
     case authOk
     case event
     case result
+    case unknown
 }
 
 public struct HAContext: Decodable {
