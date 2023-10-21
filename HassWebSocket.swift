@@ -1,39 +1,32 @@
-//
-//  ContentView.swift
-//  websocket_test2
-//
-//  Created by Michel Lapointe on 2023-09-27.
-//
-
 import Foundation
 import Starscream
 
 public class HassWebSocket: EventMessageHandler {
-    public static let shared = HassWebSocket()
+    public static let hassWebSocket = HassWebSocket()
     
-    @Published var connectionState: ConnectionState = .disconnected
+    @Published public var connectionState: ConnectionState = .disconnected
     private var socket: WebSocket!
-    private let pingInterval: TimeInterval = 60.0 // Ping every 60 seconds
+    private let pingInterval: TimeInterval = 60.0
     public var messageId: Int = 0
     var isAuthenticated = false
     var onConnected: (() -> Void)?
     var onDisconnected: (() -> Void)?
-    var onEventReceived: ((String) -> Void)?
+    public var onEventReceived: ((String) -> Void)?
     var pingTimer: Timer?
     private var eventMessageHandlers: [EventMessageHandler] = []
     
     public init() {
         self.messageId = 0
         
-        if let requestURLString = getServerURLFromSecrets(),
-           let requestURL = URL(string: requestURLString) {
-            var request = URLRequest(url: requestURL)
-            request.timeoutInterval = 5
-            self.socket = WebSocket(request: request)
-            self.socket.delegate = self
-        } else {
+        guard let requestURLString = getServerURLFromSecrets(),
+              let requestURL = URL(string: requestURLString) else {
             fatalError("Failed to create a URL from the string provided in Secrets.plist or the URL is malformed.")
         }
+        
+        var request = URLRequest(url: requestURL)
+        request.timeoutInterval = 5
+        self.socket = WebSocket(request: request)
+        self.socket.delegate = self
     }
     
     public func addEventMessageHandler(_ handler: EventMessageHandler) {
@@ -41,7 +34,6 @@ public class HassWebSocket: EventMessageHandler {
     }
 
     private func getServerURLFromSecrets() -> String? {
-        // Use the more robust method for fetching resource from bundle
         guard let path = Bundle(for: HassWebSocket.self).path(forResource: "Secrets", ofType: "plist"),
               let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
               let serverURL = dict["HomeAssistantServerURL"] as? String else {
@@ -83,7 +75,6 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     private func getAccessToken() -> String? {
-        // Use the more robust method for fetching resource from bundle
         guard let path = Bundle(for: type(of: self)).path(forResource: "Secrets", ofType: "plist"),
               let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
               let token = dict["HomeAssistantAccessToken"] as? String else {
@@ -108,7 +99,7 @@ public class HassWebSocket: EventMessageHandler {
            let jsonString = String(data: data, encoding: .utf8) {
             socket.write(string: jsonString)
         } else {
-            print("Failed to serialize authentication message.")
+            print(HAError.unableToSerializeMessage.localizedDescription)
         }
     }
     
@@ -124,7 +115,7 @@ public class HassWebSocket: EventMessageHandler {
            let jsonString = String(data: data, encoding: .utf8) {
             sendTextMessage(jsonString)
         } else {
-            print("Failed to encode message.")
+            print(HAError.unableToSerializeMessage.localizedDescription)
         }
     }
     
@@ -138,7 +129,7 @@ public class HassWebSocket: EventMessageHandler {
         }
     }
     
-    func determineWebSocketMessageType(data: Data) -> WebSocketMessageType {
+    func determineWebSocketMessageType(data: Data) throws -> WebSocketMessageType {
          if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
              let type = json["type"] as? String {
              switch type {
@@ -151,13 +142,12 @@ public class HassWebSocket: EventMessageHandler {
              case "result":
                  return .result
              default:
-                 return .unknown
+                 throw HAError.unknownMessageType
              }
          }
-         return .unknown
+         throw HAError.unknownMessageType
      }
 }
-
 
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
@@ -171,29 +161,27 @@ extension HassWebSocket: WebSocketDelegate {
              print("Received text:", text)
 
              if let data = text.data(using: .utf8) {
-                 // We will utilize a function to determine the message type
-                 let messageType = determineWebSocketMessageType(data: data)
+                 do {
+                     let messageType = try determineWebSocketMessageType(data: data)
 
-                 switch messageType {
-                 case .authRequired:
-                     // Handle authentication required
-                     if !self.isAuthenticated {
-                         self.authenticate()
+                     switch messageType {
+                     case .authRequired:
+                         if !self.isAuthenticated {
+                             self.authenticate()
+                         }
+                     case .authOk:
+                         self.isAuthenticated = true
+                     case .event:
+                         if let haEventData = try? JSONDecoder().decode(HAEventData.self, from: data) {
+                             self.handleEventMessage(haEventData)
+                         }
+                     case .result:
+                         break
+                     case .unknown:
+                         break
                      }
-                 case .authOk:
-                     // Handle authentication success
-                     self.isAuthenticated = true
-                 case .event:
-                     // Handle event message
-                     if let haEventData = try? JSONDecoder().decode(HAEventData.self, from: data) {
-                         self.handleEventMessage(haEventData)
-                     }
-                 case .result:
-                     // Handle results if needed
-                     // If it's garage-specific, this could be passed to GarageHass
-                     break
-                 case .unknown:
-                     break
+                 } catch {
+                     print(error.localizedDescription)
                  }
              }
             
@@ -203,7 +191,7 @@ extension HassWebSocket: WebSocketDelegate {
             print("Received ping.")
         case .pong:
             print("Received pong.")
-            onPongReceived() // Execute the closure
+            onPongReceived()
         case .viabilityChanged(let isViable):
             print("Viability changed to: \(isViable)")
         case .reconnectSuggested(let shouldReconnect):
@@ -216,19 +204,18 @@ extension HassWebSocket: WebSocketDelegate {
             print("Peer closed the WebSocket")
         case .disconnected(let reason, let code):
             connectionState = .disconnected
-            isAuthenticated = false // reset the flag
+            isAuthenticated = false
             onDisconnected?()
             print("WebSocket disconnected with reason: \(reason) and code: \(code)")
-            
-            // Here, we could check the reason or the code and decide if we want to attempt a reconnection.
+            // Based on the reason or the code, decide if you want to attempt a reconnection.
             // As a basic example, we'll just attempt to reconnect after 5 seconds.
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                 self.connect() // Attempt reconnection
             }
           }
     }
-        func onPongReceived() {
-            connectionState = .connected
-        }
+    
+    func onPongReceived() {
+        connectionState = .connected
     }
-
+}

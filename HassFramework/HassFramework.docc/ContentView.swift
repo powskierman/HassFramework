@@ -2,7 +2,7 @@ import SwiftUI
 import Starscream
 
 struct ContentView: View {
-    @ObservedObject private var websocketVM = WebSocketManager()
+    @ObservedObject public var websocketVM = WebSocketManager()
     @State private var showEventsList: Bool = false
 
     var body: some View {

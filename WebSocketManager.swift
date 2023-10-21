@@ -1,23 +1,28 @@
 import Foundation
 import Starscream
 
-public class WebSocketManager: WebSocketDelegate {
-    private let websocket: HassWebSocket
+public class WebSocketManager: ObservableObject, WebSocketDelegate {
+    public let websocket: HassWebSocket
 
-    init(websocket: HassWebSocket) {
+    public init(websocket: HassWebSocket) {
         self.websocket = websocket
     }
 
+    
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         switch event {
         case .connected(let headers):
             print("WebSocket connected with headers:", headers)
+            print("Before update: \(websocket.connectionState)")
             websocket.connectionState = .connected
+            print("After update: \(websocket.connectionState)")
             websocket.onConnected?()
 
         case .disconnected(let reason, let code):
             print("WebSocket disconnected with reason: \(reason) and code: \(code)")
+            print("Before disconnect update: \(websocket.connectionState)")
             websocket.connectionState = .disconnected
+            print("After disconnect update: \(websocket.connectionState)")
             websocket.isAuthenticated = false
             websocket.onDisconnected?()
             
@@ -28,22 +33,26 @@ public class WebSocketManager: WebSocketDelegate {
 
         case .text(let text):
             print("Received text:", text)
-            
+
             if let data = text.data(using: .utf8) {
-                let messageType = websocket.determineWebSocketMessageType(data: data)
-                switch messageType {
-                case .authRequired:
-                    websocket.authenticate()
-                case .authOk:
-                    websocket.isAuthenticated = true
-                case .event:
-                    if let haEventData = try? JSONDecoder().decode(HAEventData.self, from: data) {
-                        websocket.handleEventMessage(haEventData)
+                do {
+                    let messageType = try websocket.determineWebSocketMessageType(data: data)
+                    switch messageType {
+                    case .authRequired:
+                        websocket.authenticate()
+                    case .authOk:
+                        websocket.isAuthenticated = true
+                    case .event:
+                        if let haEventData = try? JSONDecoder().decode(HAEventData.self, from: data) {
+                            websocket.handleEventMessage(haEventData)
+                        }
+                    case .result: break
+                        // Handle if needed
+                    case .unknown:
+                        print("Unknown WebSocket message type received.")
                     }
-                case .result: break
-                    // Handle if needed
-                case .unknown:
-                    print("Unknown WebSocket message type received.")
+                } catch {
+                    print("Error determining WebSocket message type: \(error)")
                 }
             }
 
