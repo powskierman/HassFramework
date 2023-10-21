@@ -1,6 +1,10 @@
 import Foundation
 import Starscream
 
+public protocol HassWebSocketDelegate: AnyObject {
+    func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient)
+}
+
 public class HassWebSocket: EventMessageHandler {
     public static let shared = HassWebSocket()
     
@@ -14,6 +18,9 @@ public class HassWebSocket: EventMessageHandler {
     public var onEventReceived: ((String) -> Void)?
     var pingTimer: Timer?
     private var eventMessageHandlers: [EventMessageHandler] = []
+
+    // Our custom delegate property
+    weak var delegate: HassWebSocketDelegate?
     
     public init() {
         self.messageId = 0
@@ -44,10 +51,15 @@ public class HassWebSocket: EventMessageHandler {
         return serverURL
     }
     
-    public func connect() {
-        print("Attempting to connect to WebSocket...")
+    public func connect(completion: @escaping (Bool) -> Void) {
         socket.connect()
         startPingTimer()
+        onConnected = {
+            completion(true)
+        }
+        onDisconnected = {
+            completion(false)
+        }
     }
     
     func startPingTimer() {
@@ -58,7 +70,10 @@ public class HassWebSocket: EventMessageHandler {
                 if strongSelf.connectionState == .connected {
                     print("No pong received in time, reconnecting...")
                     strongSelf.disconnect()
-                    strongSelf.connect()
+                    strongSelf.connect(completion: { _ in
+                        // You can add any functionality you want to be executed
+                        // after the connection attempt here or leave it empty.
+                    })
                 }
             }
         }
@@ -120,8 +135,29 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     public func sendTextMessage(_ message: String) {
-        socket.write(string: message)
+        // If not connected, reconnect
+        if !isConnected() {
+            connect { (success) in
+                if success && self.isAuthenticated {
+                    self.socket.write(string: message)
+                } else if !self.isAuthenticated {
+                    self.authenticate()
+                    // Ideally, add a similar callback mechanism for authentication
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                        self.socket.write(string: message)
+                    }
+                }
+            }
+        } else if !isAuthenticated {
+            self.authenticate()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                self.socket.write(string: message)
+            }
+        } else {
+            socket.write(string: message)
+        }
     }
+
     
     public func handleEventMessage(_ message: HAEventData) {
         for handler in eventMessageHandlers {
@@ -147,6 +183,13 @@ public class HassWebSocket: EventMessageHandler {
          }
          throw HAError.unknownMessageType
      }
+    
+    public func setDelegate(_ delegate: HassWebSocketDelegate) {
+        self.delegate = delegate
+    }
+    public func isConnected() -> Bool {
+        return connectionState == .connected
+    }
 }
 
 extension HassWebSocket: WebSocketDelegate {
@@ -210,8 +253,11 @@ extension HassWebSocket: WebSocketDelegate {
             // Based on the reason or the code, decide if you want to attempt a reconnection.
             // As a basic example, we'll just attempt to reconnect after 5 seconds.
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                self.connect() // Attempt reconnection
+                self.connect(completion: { _ in
+                    print("Reconnected!")
+                })
             }
+
           }
     }
     
