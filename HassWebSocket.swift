@@ -2,7 +2,7 @@ import Foundation
 import Starscream
 
 public class HassWebSocket: EventMessageHandler {
-    public static let hassWebSocket = HassWebSocket()
+    public static let shared = HassWebSocket()
     
     @Published public var connectionState: ConnectionState = .disconnected
     private var socket: WebSocket!

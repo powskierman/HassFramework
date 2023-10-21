@@ -1,14 +1,29 @@
 import Foundation
+import Combine
 import Starscream
 
 public class WebSocketManager: ObservableObject, WebSocketDelegate {
-    public let websocket: HassWebSocket
+    // Singleton pattern to ensure a single instance of WebSocketManager
+    public static let shared = WebSocketManager()
 
-    public init(websocket: HassWebSocket) {
-        self.websocket = websocket
+    // Properties
+    @Published public var connectionState: ConnectionState = .disconnected
+    @Published public var eventsReceived: [String] = []
+    @Published public var leftDoorClosed: Bool = true
+
+    public var websocket: HassWebSocket = HassWebSocket.shared
+    private var cancellables: Set<AnyCancellable> = []
+
+    public init() {
+        setupBindings()
     }
 
-    
+    private func setupBindings() {
+        websocket.$connectionState
+            .assign(to: \.connectionState, on: self)
+            .store(in: &cancellables)
+    }
+
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         switch event {
         case .connected(let headers):
@@ -33,7 +48,6 @@ public class WebSocketManager: ObservableObject, WebSocketDelegate {
 
         case .text(let text):
             print("Received text:", text)
-
             if let data = text.data(using: .utf8) {
                 do {
                     let messageType = try websocket.determineWebSocketMessageType(data: data)
@@ -58,37 +72,35 @@ public class WebSocketManager: ObservableObject, WebSocketDelegate {
 
         case .binary(let data):
             print("Received binary data:", data)
-
         case .ping:
             print("Received ping.")
-            
         case .pong:
             print("Received pong.")
             websocket.onPongReceived()
-
         case .viabilityChanged(let isViable):
             print("Viability changed to: \(isViable)")
-
         case .reconnectSuggested(let shouldReconnect):
             print("Reconnect suggested: \(shouldReconnect)")
-            
         case .cancelled:
             print("WebSocket cancelled")
-            
         case .error(let error):
             print("Error:", error ?? "Unknown error occurred.")
-            
         case .peerClosed:
             print("Peer closed the WebSocket connection.")
         }
     }
 
-    // ... (Any additional methods or properties of WebSocketManager class)
-
-
-    func stopPingTimer() {
-        websocket.pingTimer?.invalidate()
-        websocket.pingTimer = nil
+    public func connect() {
+        websocket.connect()
     }
 
+    public func disconnect() {
+        websocket.disconnect()
+    }
+
+    public func subscribeToEvents() {
+        websocket.subscribeToEvents()
+    }
+
+    // Additional methods if required ...
 }
