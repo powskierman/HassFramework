@@ -2,14 +2,15 @@ import Foundation
 import Starscream  // Ensure you've imported the necessary library
 import Combine
 
-public class WebSocketManager: ObservableObject, WebSocketDelegate, HassWebSocketDelegate {
+public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
+    
     public let websocket: HassWebSocket
     public static let shared = WebSocketManager(websocket: HassWebSocket.shared)
 
     // Initializer
     public init(websocket: HassWebSocket) {
         self.websocket = websocket
-        self.websocket.delegate = self  // Now this should work since HassWebSocket should have a delegate property
+        self.websocket.delegate = self  // This sets the WebSocketManager as the delegate for HassWebSocket
     }
 
     public func connectIfNeeded() {
@@ -27,6 +28,7 @@ public class WebSocketManager: ObservableObject, WebSocketDelegate, HassWebSocke
         }
     }
 
+    // Implement the HassWebSocketDelegate method
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         switch event {
         case .connected(let headers):

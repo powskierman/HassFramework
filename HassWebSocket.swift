@@ -119,6 +119,7 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     public func subscribeToEvents() {
+        print("subscribeToEvents called with messageId: \(messageId)")
         messageId += 1
         let subscribeMessage: [String: Any] = [
             "id": messageId,
@@ -135,6 +136,9 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     public func sendTextMessage(_ message: String) {
+        // Print the sent message
+        print("Sending text:", message)
+
         // If not connected, reconnect
         if !isConnected() {
             connect { (success) in
@@ -158,7 +162,6 @@ public class HassWebSocket: EventMessageHandler {
         }
     }
 
-    
     public func handleEventMessage(_ message: HAEventData) {
         for handler in eventMessageHandlers {
             handler.handleEventMessage(message)
@@ -194,71 +197,21 @@ public class HassWebSocket: EventMessageHandler {
 
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
+        // Only deal with the raw events here and update the state
         switch event {
         case .connected(_):
             connectionState = .connected
             onConnected?()
-            print("WebSocket connected")
-            
-        case .text(let text):
-             print("Received text:", text)
-
-             if let data = text.data(using: .utf8) {
-                 do {
-                     let messageType = try determineWebSocketMessageType(data: data)
-
-                     switch messageType {
-                     case .authRequired:
-                         if !self.isAuthenticated {
-                             self.authenticate()
-                         }
-                     case .authOk:
-                         self.isAuthenticated = true
-                     case .event:
-                         if let haEventData = try? JSONDecoder().decode(HAEventData.self, from: data) {
-                             self.handleEventMessage(haEventData)
-                         }
-                     case .result:
-                         break
-                     case .unknown:
-                         break
-                     }
-                 } catch {
-                     print(error.localizedDescription)
-                 }
-             }
-            
-        case .binary(let data):
-            print("Received binary data:", data)
-        case .ping:
-            print("Received ping.")
-        case .pong:
-            print("Received pong.")
-            onPongReceived()
-        case .viabilityChanged(let isViable):
-            print("Viability changed to: \(isViable)")
-        case .reconnectSuggested(let shouldReconnect):
-            print("Reconnect suggested: \(shouldReconnect)")
-        case .cancelled:
-            print("WebSocket cancelled")
-        case .error(let error):
-            print("Error:", error ?? "Unknown Error")
-        case .peerClosed:
-            print("Peer closed the WebSocket")
-        case .disconnected(let reason, let code):
+            delegate?.didReceive(event: event, client: client) // Forward the event to the manager
+        case .disconnected(_, _):
             connectionState = .disconnected
             isAuthenticated = false
             onDisconnected?()
-            print("WebSocket disconnected with reason: \(reason) and code: \(code)")
-            // Based on the reason or the code, decide if you want to attempt a reconnection.
-            // As a basic example, we'll just attempt to reconnect after 5 seconds.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                self.connect(completion: { _ in
-                    print("Reconnected!")
-                })
-            }
-
-          }
+            delegate?.didReceive(event: event, client: client) // Forward the event to the manager
+        default:
+            // For other events, just forward them directly
+            delegate?.didReceive(event: event, client: client)
+        }
     }
     
     func onPongReceived() {
