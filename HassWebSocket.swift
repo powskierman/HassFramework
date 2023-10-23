@@ -8,7 +8,11 @@ public protocol HassWebSocketDelegate: AnyObject {
 public class HassWebSocket: EventMessageHandler {
     public static let shared = HassWebSocket()
     
-    @Published public var connectionState: ConnectionState = .disconnected
+    @Published public var connectionState: ConnectionState = .disconnected {
+        willSet {
+            print("connectionState is about to change from \(connectionState) to \(newValue)")
+        }
+    }
     private var socket: WebSocket!
     private let pingInterval: TimeInterval = 60.0
     public var messageId: Int = 0
@@ -53,7 +57,7 @@ public class HassWebSocket: EventMessageHandler {
     
     public func connect(completion: @escaping (Bool) -> Void) {
         socket.connect()
-        startPingTimer()
+ //       startPingTimer()
         onConnected = {
             completion(true)
         }
@@ -62,30 +66,8 @@ public class HassWebSocket: EventMessageHandler {
         }
     }
     
-    func startPingTimer() {
-        pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { [weak self] _ in
-            guard let strongSelf = self else { return }
-            strongSelf.socket.write(ping: Data())
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                if strongSelf.connectionState == .connected {
-                    print("No pong received in time, reconnecting...")
-                    strongSelf.disconnect()
-                    strongSelf.connect(completion: { _ in
-                        // You can add any functionality you want to be executed
-                        // after the connection attempt here or leave it empty.
-                    })
-                }
-            }
-        }
-    }
-
-    private func stopPingTimer() {
-        pingTimer?.invalidate()
-        pingTimer = nil
-    }
-    
     public func disconnect() {
-        stopPingTimer()
+
         socket.disconnect()
     }
     
@@ -118,7 +100,13 @@ public class HassWebSocket: EventMessageHandler {
         }
     }
     
+    var isSubscribedToStateChanges = false
+    
     public func subscribeToEvents() {
+        if isSubscribedToStateChanges {
+            print("Already subscribed to state_changed events.")
+            return
+        }
         print("subscribeToEvents called with messageId: \(messageId)")
         messageId += 1
         let subscribeMessage: [String: Any] = [
@@ -133,6 +121,7 @@ public class HassWebSocket: EventMessageHandler {
         } else {
             print(HAError.unableToSerializeMessage.localizedDescription)
         }
+        isSubscribedToStateChanges = true
     }
     
     public func sendTextMessage(_ message: String) {
@@ -200,13 +189,17 @@ extension HassWebSocket: WebSocketDelegate {
         // Only deal with the raw events here and update the state
         switch event {
         case .connected(_):
-            connectionState = .connected
-            onConnected?()
+            DispatchQueue.main.async {
+                self.connectionState = .connected
+                self.onConnected?()
+            }
             delegate?.didReceive(event: event, client: client) // Forward the event to the manager
         case .disconnected(_, _):
-            connectionState = .disconnected
-            isAuthenticated = false
-            onDisconnected?()
+            DispatchQueue.main.async {
+                self.connectionState = .disconnected
+                self.isAuthenticated = false
+                self.onDisconnected?()
+            }
             delegate?.didReceive(event: event, client: client) // Forward the event to the manager
         default:
             // For other events, just forward them directly
@@ -215,6 +208,8 @@ extension HassWebSocket: WebSocketDelegate {
     }
     
     func onPongReceived() {
-        connectionState = .connected
+        DispatchQueue.main.async {
+            self.connectionState = .connected
+        }
     }
 }

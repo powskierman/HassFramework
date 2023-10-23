@@ -4,7 +4,7 @@ import Combine
 
 public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
     
-    public let websocket: HassWebSocket
+    @Published public var websocket: HassWebSocket
     public static let shared = WebSocketManager(websocket: HassWebSocket.shared)
 
     // Initializer
@@ -97,10 +97,5 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
         case .peerClosed:
             print("Peer closed the WebSocket connection.")
         }
-    }
-
-    func stopPingTimer() {
-        websocket.pingTimer?.invalidate()
-        websocket.pingTimer = nil
     }
 }
