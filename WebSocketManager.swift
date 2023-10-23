@@ -28,19 +28,16 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
         }
     }
 
-    // Implement the HassWebSocketDelegate method
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         switch event {
         case .connected(let headers):
             print("WebSocket connected with headers:", headers)
             websocket.connectionState = .connected
-            websocket.onConnected?()
-            
+
         case .disconnected(let reason, let code):
             print("WebSocket disconnected with reason: \(reason) and code: \(code)")
             websocket.connectionState = .disconnected
             websocket.isAuthenticated = false
-            websocket.onDisconnected?()
             
             // Optionally, consider reconnect logic here if desired.
             DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {

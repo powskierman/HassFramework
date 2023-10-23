@@ -1,5 +1,6 @@
 import Foundation
 import Starscream
+import Combine
 
 public protocol HassWebSocketDelegate: AnyObject {
     func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient)
@@ -9,16 +10,17 @@ public class HassWebSocket: EventMessageHandler {
     public static let shared = HassWebSocket()
     
     @Published public var connectionState: ConnectionState = .disconnected {
-        willSet {
-            print("connectionState is about to change from \(connectionState) to \(newValue)")
+        didSet {
+            print("connectionState changed from \(oldValue) to \(connectionState)")
         }
     }
     private var socket: WebSocket!
     private let pingInterval: TimeInterval = 60.0
     public var messageId: Int = 0
     var isAuthenticated = false
-    var onConnected: (() -> Void)?
-    var onDisconnected: (() -> Void)?
+    public var onConnectionStateChanged: ((ConnectionState) -> Void)?
+//    var onConnected: (() -> Void)?
+//    var onDisconnected: (() -> Void)?
     public var onEventReceived: ((String) -> Void)?
     var pingTimer: Timer?
     private var eventMessageHandlers: [EventMessageHandler] = []
@@ -56,15 +58,22 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     public func connect(completion: @escaping (Bool) -> Void) {
+        // Register for connection state changes
+        onConnectionStateChanged = { newState in
+            switch newState {
+            case .connected:
+                completion(true)
+            case .disconnected:
+                completion(false)
+            default:
+                break
+            }
+        }
+        
+        // Initiate the connection
         socket.connect()
- //       startPingTimer()
-        onConnected = {
-            completion(true)
-        }
-        onDisconnected = {
-            completion(false)
-        }
     }
+
     
     public func disconnect() {
 
@@ -186,21 +195,16 @@ public class HassWebSocket: EventMessageHandler {
 
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
-        // Only deal with the raw events here and update the state
         switch event {
         case .connected(_):
             DispatchQueue.main.async {
                 self.connectionState = .connected
-                self.onConnected?()
             }
-            delegate?.didReceive(event: event, client: client) // Forward the event to the manager
         case .disconnected(_, _):
             DispatchQueue.main.async {
                 self.connectionState = .disconnected
                 self.isAuthenticated = false
-                self.onDisconnected?()
             }
-            delegate?.didReceive(event: event, client: client) // Forward the event to the manager
         default:
             // For other events, just forward them directly
             delegate?.didReceive(event: event, client: client)
