@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6152AC9F85C00B7C307 /* HassFramework.docc */; };
 		D00BF6172AC9F85C00B7C307 /* HassFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = D00BF6142AC9F85C00B7C307 /* HassFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D00BF6232ACA020E00B7C307 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D00BF6222ACA020E00B7C307 /* Starscream */; };
 		D00BF6252ACA023400B7C307 /* HassWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6242ACA023400B7C307 /* HassWebSocket.swift */; };
 		D033BAEA2ACC575C00FAFC4C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D033BAE92ACC575C00FAFC4C /* .gitignore */; };
 		D033BAEC2ACC57D600FAFC4C /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033BAEB2ACC57D600FAFC4C /* Secrets.plist */; };
 		D05FCF6F2ADC30A2000AF815 /* HassProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */; };
 		D05FCF712ADC312B000AF815 /* HassModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF702ADC312B000AF815 /* HassModels.swift */; };
 		D05FCF732ADC31A5000AF815 /* HassMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */; };
+		D0640BEC2AEF29F300809829 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D0640BEB2AEF29F300809829 /* Starscream */; };
 		D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */; };
 		D0E5D6C82AD5A875007038A7 /* HassEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* HassEnums.swift */; };
 /* End PBXBuildFile section */
@@ -39,7 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D00BF6232ACA020E00B7C307 /* Starscream in Frameworks */,
+				D0640BEC2AEF29F300809829 /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +108,7 @@
 			);
 			name = HassFramework;
 			packageProductDependencies = (
-				D00BF6222ACA020E00B7C307 /* Starscream */,
+				D0640BEB2AEF29F300809829 /* Starscream */,
 			);
 			productName = HassFramework;
 			productReference = D00BF6112AC9F85C00B7C307 /* HassFramework.framework */;
@@ -311,6 +311,7 @@
 		D00BF61B2AC9F85C00B7C307 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -318,6 +319,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -342,6 +344,7 @@
 		D00BF61C2AC9F85C00B7C307 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -349,6 +352,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -405,7 +409,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D00BF6222ACA020E00B7C307 /* Starscream */ = {
+		D0640BEB2AEF29F300809829 /* Starscream */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D00BF6212ACA020E00B7C307 /* XCRemoteSwiftPackageReference "Starscream" */;
 			productName = Starscream;
