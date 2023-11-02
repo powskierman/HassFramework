@@ -28,11 +28,14 @@ public struct HAState: Decodable {
     // If you also need the `last_updated`, you can add it here
 }
 
-public struct HAEventData: Decodable {
-    public let entityId: String
-    public let oldState: HAState
-    public let newState: HAState
+public struct HAEventData: Decodable, HAEventProtocol {
+    public let type: String
+    public let event_type: String
+    public let entity_id: String
+    public let old_state: HAState?
+    public let new_state: HAState?
 }
+
 
 public struct HAEventMessage {
     public let eventType: String

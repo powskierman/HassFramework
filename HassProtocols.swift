@@ -24,3 +24,10 @@ public protocol WebSocketProvider {
     func disconnect()
     func subscribeToEvents()
 }
+protocol HAEventProtocol {
+    var type: String { get }
+    var event_type: String { get }
+    var entity_id: String { get }
+    var old_state: HAState? { get }
+    var new_state: HAState? { get }
+}

@@ -92,6 +92,7 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     func authenticate() {
+        print("Attempting to authenticate with WebSocket.")
         guard let accessToken = getAccessToken() else {
             return
         }
@@ -112,6 +113,7 @@ public class HassWebSocket: EventMessageHandler {
     var isSubscribedToStateChanges = false
     
     public func subscribeToEvents() {
+        print("Attempting to subscribe to WebSocket events.")
         if isSubscribedToStateChanges {
             print("Already subscribed to state_changed events.")
             return
@@ -135,7 +137,7 @@ public class HassWebSocket: EventMessageHandler {
     
     public func sendTextMessage(_ message: String) {
         // Print the sent message
-        print("Sending text:", message)
+        print("Attempting to send WebSocket message: \(message)")
 
         // If not connected, reconnect
         if !isConnected() {
@@ -193,23 +195,84 @@ public class HassWebSocket: EventMessageHandler {
     }
 }
 
+
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
+        print("HassWebSocket received event: \(event)")
         switch event {
         case .connected(_):
             DispatchQueue.main.async {
                 self.connectionState = .connected
+                self.authenticate() // Make sure to authenticate first if needed
             }
+        case .text(let text):
+             handleIncomingText(text)
+
         case .disconnected(_, _):
             DispatchQueue.main.async {
                 self.connectionState = .disconnected
                 self.isAuthenticated = false
+                self.isSubscribedToStateChanges = false // Reset the subscription flag
             }
         default:
             // For other events, just forward them directly
             delegate?.didReceive(event: event, client: client)
         }
     }
+    
+    func handleIncomingText(_ text: String) {
+        // Parse the incoming text to a JSON object
+        guard let data = text.data(using: .utf8),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let type = jsonObject["type"] as? String else {
+            print("Error parsing incoming text to JSON.")
+            return
+        }
+        
+        switch type {
+        case "auth_ok":
+            isAuthenticated = true
+            print("Authenticated successfully with WebSocket.")
+            subscribeToEvents()
+        case "auth_required":
+            authenticate()
+        case "result":
+            if jsonObject["success"] as? Bool == false {
+                // Handle errors.
+                print("Received error from WebSocket: \(jsonObject["error"] ?? "Unknown error")")
+            } else {
+                // Handle success if needed.
+                print("Received successful result: \(jsonObject)")
+            }
+        case "event":
+            // Handle the event data.
+            if let event = jsonObject["event"] as? [String: Any] {
+                handleEvent(event)
+            }
+        default:
+            print("Received unknown message type: \(type)")
+        }
+    }
+
+    func handleEvent(_ event: [String: Any]) {
+        // Here you can handle different types of events
+        if let eventType = event["event_type"] as? String {
+            if eventType == "state_changed" {
+                // Process the state_changed event
+                if let eventData = event["data"] as? [String: Any] {
+                    // You can further process the data or forward it to a delegate or notification
+                    print("State changed event data: \(eventData)")
+                    // For example, call a delegate method
+                    // self.delegate?.didReceiveStateChangeEvent(eventData)
+                }
+            } else {
+                print("Received an unhandled event type: \(eventType)")
+            }
+        } else {
+            print("Event type not found in the event dictionary")
+        }
+    }
+
     
     func onPongReceived() {
         DispatchQueue.main.async {

@@ -14,6 +14,7 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
     }
 
     public func connectIfNeeded() {
+        print("Checking if WebSocket needs to connect...")
         if websocket.connectionState == .disconnected {
             websocket.connect(completion: { _ in
                 // Here you can add any functionality you want to be executed
@@ -23,6 +24,7 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
     }
 
     public func disconnectIfNeeded() {
+        print("Checking if WebSocket needs to disconnect...")
         if websocket.connectionState == .connected {
             websocket.disconnect()
         }
