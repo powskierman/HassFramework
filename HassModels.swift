@@ -12,10 +12,20 @@ public struct HAContext: Decodable {
     let id: String
     let parentId: String?
     let userId: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case parentId = "parent_id"
+        case userId = "user_id"
+    }
 }
 
 public struct HAAttributes: Decodable {
     public let friendlyName: String
+
+    private enum CodingKeys: String, CodingKey {
+        case friendlyName = "friendly_name"
+    }
     // Add any other attributes as needed
 }
 
@@ -25,8 +35,16 @@ public struct HAState: Decodable {
     public let attributes: HAAttributes
     public let lastChanged: String
     public let context: HAContext
-    // If you also need the `last_updated`, you can add it here
+
+    private enum CodingKeys: String, CodingKey {
+        case entityId = "entity_id"
+        case state
+        case attributes
+        case lastChanged = "last_changed"
+        case context
+    }
 }
+
 
 public struct HAEventData: Decodable, HAEventProtocol {
     public let type: String

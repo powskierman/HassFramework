@@ -255,18 +255,28 @@ extension HassWebSocket: WebSocketDelegate {
     }
 
     func handleEvent(_ event: [String: Any]) {
-        // Here you can handle different types of events
-        if let eventType = event["event_type"] as? String {
-            if eventType == "state_changed" {
-                // Process the state_changed event
-                if let eventData = event["data"] as? [String: Any] {
-                    // You can further process the data or forward it to a delegate or notification
-                    print("State changed event data: \(eventData)")
-                    // For example, call a delegate method
-                    // self.delegate?.didReceiveStateChangeEvent(eventData)
+        if let eventType = event["event_type"] as? String, eventType == "state_changed" {
+            if let eventData = event["data"] as? [String: Any] {
+                // We need to construct the eventData dictionary to include the "type" at the root level.
+                var wrappedEventData: [String: Any] = eventData
+                wrappedEventData["type"] = eventType
+                wrappedEventData["event_type"] = eventType
+                
+                if let entityId = eventData["entity_id"] as? String {
+                    wrappedEventData["entity_id"] = entityId
                 }
-            } else {
-                print("Received an unhandled event type: \(eventType)")
+                
+                // Now let's convert this wrapped event dictionary into JSON Data
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: wrappedEventData, options: [])
+                    let haEventData = try JSONDecoder().decode(HAEventData.self, from: jsonData)
+                    // Call handleEventMessage on each registered handler
+                    for handler in eventMessageHandlers {
+                        handler.handleEventMessage(haEventData)
+                    }
+                } catch {
+                    print("Error decoding HAEventData: \(error)")
+                }
             }
         } else {
             print("Event type not found in the event dictionary")
