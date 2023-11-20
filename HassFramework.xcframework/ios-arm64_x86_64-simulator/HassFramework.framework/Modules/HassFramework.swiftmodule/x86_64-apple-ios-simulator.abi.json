@@ -1,0 +1,4269 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "ConnectionState",
+        "printedName": "ConnectionState",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "disconnected",
+            "printedName": "disconnected",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(HassFramework.ConnectionState.Type) -> HassFramework.ConnectionState",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ConnectionState",
+                    "printedName": "HassFramework.ConnectionState",
+                    "usr": "s:13HassFramework15ConnectionStateO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "HassFramework.ConnectionState.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ConnectionState",
+                        "printedName": "HassFramework.ConnectionState",
+                        "usr": "s:13HassFramework15ConnectionStateO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13HassFramework15ConnectionStateO12disconnectedyA2CmF",
+            "mangledName": "$s13HassFramework15ConnectionStateO12disconnectedyA2CmF",
+            "moduleName": "HassFramework"
+          },
+          {
+            "kind": "Var",
+            "name": "connecting",
+            "printedName": "connecting",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(HassFramework.ConnectionState.Type) -> HassFramework.ConnectionState",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ConnectionState",
+                    "printedName": "HassFramework.ConnectionState",
+                    "usr": "s:13HassFramework15ConnectionStateO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "HassFramework.ConnectionState.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ConnectionState",
+                        "printedName": "HassFramework.ConnectionState",
+                        "usr": "s:13HassFramework15ConnectionStateO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13HassFramework15ConnectionStateO10connectingyA2CmF",
+            "mangledName": "$s13HassFramework15ConnectionStateO10connectingyA2CmF",
+            "moduleName": "HassFramework"
+          },
+          {
+            "kind": "Var",
+            "name": "connected",
+            "printedName": "connected",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(HassFramework.ConnectionState.Type) -> HassFramework.ConnectionState",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ConnectionState",
+                    "printedName": "HassFramework.ConnectionState",
+                    "usr": "s:13HassFramework15ConnectionStateO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "HassFramework.ConnectionState.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ConnectionState",
+                        "printedName": "HassFramework.ConnectionState",
+                        "usr": "s:13HassFramework15ConnectionStateO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13HassFramework15ConnectionStateO9connectedyA2CmF",
+            "mangledName": "$s13HassFramework15ConnectionStateO9connectedyA2CmF",
+            "moduleName": "HassFramework"
+          },
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "ConnectionState",
+                "printedName": "HassFramework.ConnectionState",
+                "usr": "s:13HassFramework15ConnectionStateO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "ConnectionState",
+                "printedName": "HassFramework.ConnectionState",
+                "usr": "s:13HassFramework15ConnectionStateO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework15ConnectionStateO2eeoiySbAC_ACtFZ",
+            "mangledName": "$s13HassFramework15ConnectionStateO2eeoiySbAC_ACtFZ",
+            "moduleName": "HassFramework",
+            "static": true,
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "hashValue",
+            "printedName": "hashValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework15ConnectionStateO9hashValueSivp",
+            "mangledName": "$s13HassFramework15ConnectionStateO9hashValueSivp",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework15ConnectionStateO9hashValueSivg",
+                "mangledName": "$s13HassFramework15ConnectionStateO9hashValueSivg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "hash",
+            "printedName": "hash(into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Hasher",
+                "printedName": "Swift.Hasher",
+                "paramValueOwnership": "InOut",
+                "usr": "s:s6HasherV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework15ConnectionStateO4hash4intoys6HasherVz_tF",
+            "mangledName": "$s13HassFramework15ConnectionStateO4hash4intoys6HasherVz_tF",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:13HassFramework15ConnectionStateO",
+        "mangledName": "$s13HassFramework15ConnectionStateO",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "HassFramework"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HAContext",
+        "printedName": "HAContext",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HAContext",
+                "printedName": "HassFramework.HAContext",
+                "usr": "s:13HassFramework9HAContextV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Decoder",
+                "printedName": "Swift.Decoder",
+                "usr": "s:s7DecoderP"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HassFramework9HAContextV4fromACs7Decoder_p_tKcfc",
+            "mangledName": "$s13HassFramework9HAContextV4fromACs7Decoder_p_tKcfc",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "throwing": true,
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13HassFramework9HAContextV",
+        "mangledName": "$s13HassFramework9HAContextV",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Decodable",
+            "printedName": "Decodable",
+            "usr": "s:Se",
+            "mangledName": "$sSe"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HAAttributes",
+        "printedName": "HAAttributes",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "friendlyName",
+            "printedName": "friendlyName",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework12HAAttributesV12friendlyNameSSvp",
+            "mangledName": "$s13HassFramework12HAAttributesV12friendlyNameSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework12HAAttributesV12friendlyNameSSvg",
+                "mangledName": "$s13HassFramework12HAAttributesV12friendlyNameSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HAAttributes",
+                "printedName": "HassFramework.HAAttributes",
+                "usr": "s:13HassFramework12HAAttributesV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Decoder",
+                "printedName": "Swift.Decoder",
+                "usr": "s:s7DecoderP"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HassFramework12HAAttributesV4fromACs7Decoder_p_tKcfc",
+            "mangledName": "$s13HassFramework12HAAttributesV4fromACs7Decoder_p_tKcfc",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "throwing": true,
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13HassFramework12HAAttributesV",
+        "mangledName": "$s13HassFramework12HAAttributesV",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Decodable",
+            "printedName": "Decodable",
+            "usr": "s:Se",
+            "mangledName": "$sSe"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HAState",
+        "printedName": "HAState",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "entityId",
+            "printedName": "entityId",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework7HAStateV8entityIdSSvp",
+            "mangledName": "$s13HassFramework7HAStateV8entityIdSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework7HAStateV8entityIdSSvg",
+                "mangledName": "$s13HassFramework7HAStateV8entityIdSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "state",
+            "printedName": "state",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework7HAStateV5stateSSvp",
+            "mangledName": "$s13HassFramework7HAStateV5stateSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework7HAStateV5stateSSvg",
+                "mangledName": "$s13HassFramework7HAStateV5stateSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "attributes",
+            "printedName": "attributes",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HAAttributes",
+                "printedName": "HassFramework.HAAttributes",
+                "usr": "s:13HassFramework12HAAttributesV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework7HAStateV10attributesAA12HAAttributesVvp",
+            "mangledName": "$s13HassFramework7HAStateV10attributesAA12HAAttributesVvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HAAttributes",
+                    "printedName": "HassFramework.HAAttributes",
+                    "usr": "s:13HassFramework12HAAttributesV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework7HAStateV10attributesAA12HAAttributesVvg",
+                "mangledName": "$s13HassFramework7HAStateV10attributesAA12HAAttributesVvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "lastChanged",
+            "printedName": "lastChanged",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework7HAStateV11lastChangedSSvp",
+            "mangledName": "$s13HassFramework7HAStateV11lastChangedSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework7HAStateV11lastChangedSSvg",
+                "mangledName": "$s13HassFramework7HAStateV11lastChangedSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "context",
+            "printedName": "context",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HAContext",
+                "printedName": "HassFramework.HAContext",
+                "usr": "s:13HassFramework9HAContextV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework7HAStateV7contextAA9HAContextVvp",
+            "mangledName": "$s13HassFramework7HAStateV7contextAA9HAContextVvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HAContext",
+                    "printedName": "HassFramework.HAContext",
+                    "usr": "s:13HassFramework9HAContextV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework7HAStateV7contextAA9HAContextVvg",
+                "mangledName": "$s13HassFramework7HAStateV7contextAA9HAContextVvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HAState",
+                "printedName": "HassFramework.HAState",
+                "usr": "s:13HassFramework7HAStateV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Decoder",
+                "printedName": "Swift.Decoder",
+                "usr": "s:s7DecoderP"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HassFramework7HAStateV4fromACs7Decoder_p_tKcfc",
+            "mangledName": "$s13HassFramework7HAStateV4fromACs7Decoder_p_tKcfc",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "throwing": true,
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13HassFramework7HAStateV",
+        "mangledName": "$s13HassFramework7HAStateV",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Decodable",
+            "printedName": "Decodable",
+            "usr": "s:Se",
+            "mangledName": "$sSe"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HAEventData",
+        "printedName": "HAEventData",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "type",
+            "printedName": "type",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework11HAEventDataV4typeSSvp",
+            "mangledName": "$s13HassFramework11HAEventDataV4typeSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework11HAEventDataV4typeSSvg",
+                "mangledName": "$s13HassFramework11HAEventDataV4typeSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "event_type",
+            "printedName": "event_type",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework11HAEventDataV10event_typeSSvp",
+            "mangledName": "$s13HassFramework11HAEventDataV10event_typeSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework11HAEventDataV10event_typeSSvg",
+                "mangledName": "$s13HassFramework11HAEventDataV10event_typeSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "entity_id",
+            "printedName": "entity_id",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework11HAEventDataV9entity_idSSvp",
+            "mangledName": "$s13HassFramework11HAEventDataV9entity_idSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework11HAEventDataV9entity_idSSvg",
+                "mangledName": "$s13HassFramework11HAEventDataV9entity_idSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "old_state",
+            "printedName": "old_state",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "HassFramework.HAState?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HAState",
+                    "printedName": "HassFramework.HAState",
+                    "usr": "s:13HassFramework7HAStateV"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework11HAEventDataV9old_stateAA7HAStateVSgvp",
+            "mangledName": "$s13HassFramework11HAEventDataV9old_stateAA7HAStateVSgvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "HassFramework.HAState?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "HAState",
+                        "printedName": "HassFramework.HAState",
+                        "usr": "s:13HassFramework7HAStateV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework11HAEventDataV9old_stateAA7HAStateVSgvg",
+                "mangledName": "$s13HassFramework11HAEventDataV9old_stateAA7HAStateVSgvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "new_state",
+            "printedName": "new_state",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "HassFramework.HAState?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HAState",
+                    "printedName": "HassFramework.HAState",
+                    "usr": "s:13HassFramework7HAStateV"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework11HAEventDataV9new_stateAA7HAStateVSgvp",
+            "mangledName": "$s13HassFramework11HAEventDataV9new_stateAA7HAStateVSgvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "HassFramework.HAState?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "HAState",
+                        "printedName": "HassFramework.HAState",
+                        "usr": "s:13HassFramework7HAStateV"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework11HAEventDataV9new_stateAA7HAStateVSgvg",
+                "mangledName": "$s13HassFramework11HAEventDataV9new_stateAA7HAStateVSgvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HAEventData",
+                "printedName": "HassFramework.HAEventData",
+                "usr": "s:13HassFramework11HAEventDataV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Decoder",
+                "printedName": "Swift.Decoder",
+                "usr": "s:s7DecoderP"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HassFramework11HAEventDataV4fromACs7Decoder_p_tKcfc",
+            "mangledName": "$s13HassFramework11HAEventDataV4fromACs7Decoder_p_tKcfc",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "throwing": true,
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13HassFramework11HAEventDataV",
+        "mangledName": "$s13HassFramework11HAEventDataV",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Decodable",
+            "printedName": "Decodable",
+            "usr": "s:Se",
+            "mangledName": "$sSe"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HAEventMessage",
+        "printedName": "HAEventMessage",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "eventType",
+            "printedName": "eventType",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework14HAEventMessageV9eventTypeSSvp",
+            "mangledName": "$s13HassFramework14HAEventMessageV9eventTypeSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework14HAEventMessageV9eventTypeSSvg",
+                "mangledName": "$s13HassFramework14HAEventMessageV9eventTypeSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "entityId",
+            "printedName": "entityId",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework14HAEventMessageV8entityIdSSvp",
+            "mangledName": "$s13HassFramework14HAEventMessageV8entityIdSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework14HAEventMessageV8entityIdSSvg",
+                "mangledName": "$s13HassFramework14HAEventMessageV8entityIdSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "newState",
+            "printedName": "newState",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework14HAEventMessageV8newStateSSvp",
+            "mangledName": "$s13HassFramework14HAEventMessageV8newStateSSvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework14HAEventMessageV8newStateSSvg",
+                "mangledName": "$s13HassFramework14HAEventMessageV8newStateSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13HassFramework14HAEventMessageV",
+        "mangledName": "$s13HassFramework14HAEventMessageV",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "HassFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Starscream",
+        "printedName": "Starscream",
+        "declKind": "Import",
+        "moduleName": "HassFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Combine",
+        "printedName": "Combine",
+        "declKind": "Import",
+        "moduleName": "HassFramework"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HassWebSocketDelegate",
+        "printedName": "HassWebSocketDelegate",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "didReceive",
+            "printedName": "didReceive(event:client:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "WebSocketEvent",
+                "printedName": "Starscream.WebSocketEvent",
+                "usr": "s:10Starscream14WebSocketEventO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "WebSocketClient",
+                "printedName": "Starscream.WebSocketClient",
+                "usr": "s:10Starscream15WebSocketClientP"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A17WebSocketDelegateP10didReceive5event6clienty10Starscream0cD5EventO_AG0cD6Client_ptF",
+            "mangledName": "$s13HassFramework0A17WebSocketDelegateP10didReceive5event6clienty10Starscream0cD5EventO_AG0cD6Client_ptF",
+            "moduleName": "HassFramework",
+            "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.HassWebSocketDelegate>",
+            "sugared_genericSig": "<Self where Self : HassFramework.HassWebSocketDelegate>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:13HassFramework0A17WebSocketDelegateP",
+        "mangledName": "$s13HassFramework0A17WebSocketDelegateP",
+        "moduleName": "HassFramework",
+        "genericSig": "<τ_0_0 : AnyObject>",
+        "sugared_genericSig": "<Self : AnyObject>",
+        "declAttributes": [
+          "AccessControl"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HassWebSocket",
+        "printedName": "HassWebSocket",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "shared",
+            "printedName": "shared",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HassWebSocket",
+                "printedName": "HassFramework.HassWebSocket",
+                "usr": "s:13HassFramework0A9WebSocketC"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework0A9WebSocketC6sharedACvpZ",
+            "mangledName": "$s13HassFramework0A9WebSocketC6sharedACvpZ",
+            "moduleName": "HassFramework",
+            "static": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HassWebSocket",
+                    "printedName": "HassFramework.HassWebSocket",
+                    "usr": "s:13HassFramework0A9WebSocketC"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC6sharedACvgZ",
+                "mangledName": "$s13HassFramework0A9WebSocketC6sharedACvgZ",
+                "moduleName": "HassFramework",
+                "static": true,
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "connectionState",
+            "printedName": "connectionState",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ConnectionState",
+                "printedName": "HassFramework.ConnectionState",
+                "usr": "s:13HassFramework15ConnectionStateO"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework0A9WebSocketC15connectionStateAA010ConnectionF0Ovp",
+            "mangledName": "$s13HassFramework0A9WebSocketC15connectionStateAA010ConnectionF0Ovp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "ProjectedValueProperty",
+              "AccessControl",
+              "Custom"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ConnectionState",
+                    "printedName": "HassFramework.ConnectionState",
+                    "usr": "s:13HassFramework15ConnectionStateO"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC15connectionStateAA010ConnectionF0Ovg",
+                "mangledName": "$s13HassFramework0A9WebSocketC15connectionStateAA010ConnectionF0Ovg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ConnectionState",
+                    "printedName": "HassFramework.ConnectionState",
+                    "usr": "s:13HassFramework15ConnectionStateO"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC15connectionStateAA010ConnectionF0Ovs",
+                "mangledName": "$s13HassFramework0A9WebSocketC15connectionStateAA010ConnectionF0Ovs",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "intro_Macosx": "10.15",
+                "intro_iOS": "13.0",
+                "intro_tvOS": "13.0",
+                "intro_watchOS": "6.0",
+                "declAttributes": [
+                  "Available",
+                  "Available",
+                  "Available",
+                  "Available"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC15connectionStateAA010ConnectionF0OvM",
+                "mangledName": "$s13HassFramework0A9WebSocketC15connectionStateAA010ConnectionF0OvM",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "intro_Macosx": "10.15",
+                "intro_iOS": "13.0",
+                "intro_tvOS": "13.0",
+                "intro_watchOS": "6.0",
+                "declAttributes": [
+                  "Available",
+                  "Available",
+                  "Available",
+                  "Available"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "$connectionState",
+            "printedName": "$connectionState",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Publisher",
+                "printedName": "Combine.Published<HassFramework.ConnectionState>.Publisher",
+                "usr": "s:7Combine9PublishedV9PublisherV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework0A9WebSocketC16$connectionState7Combine9PublishedV9PublisherVyAA010ConnectionF0O_Gvp",
+            "mangledName": "$s13HassFramework0A9WebSocketC16$connectionState7Combine9PublishedV9PublisherVyAA010ConnectionF0O_Gvp",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Publisher",
+                    "printedName": "Combine.Published<HassFramework.ConnectionState>.Publisher",
+                    "usr": "s:7Combine9PublishedV9PublisherV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC16$connectionState7Combine9PublishedV9PublisherVyAA010ConnectionF0O_Gvg",
+                "mangledName": "$s13HassFramework0A9WebSocketC16$connectionState7Combine9PublishedV9PublisherVyAA010ConnectionF0O_Gvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Publisher",
+                    "printedName": "Combine.Published<HassFramework.ConnectionState>.Publisher",
+                    "usr": "s:7Combine9PublishedV9PublisherV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC16$connectionState7Combine9PublishedV9PublisherVyAA010ConnectionF0O_Gvs",
+                "mangledName": "$s13HassFramework0A9WebSocketC16$connectionState7Combine9PublishedV9PublisherVyAA010ConnectionF0O_Gvs",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "intro_Macosx": "11.0",
+                "intro_iOS": "14.0",
+                "intro_tvOS": "14.0",
+                "intro_watchOS": "7.0",
+                "declAttributes": [
+                  "Available",
+                  "Available",
+                  "Available",
+                  "Available"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC16$connectionState7Combine9PublishedV9PublisherVyAA010ConnectionF0O_GvM",
+                "mangledName": "$s13HassFramework0A9WebSocketC16$connectionState7Combine9PublishedV9PublisherVyAA010ConnectionF0O_GvM",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "intro_Macosx": "11.0",
+                "intro_iOS": "14.0",
+                "intro_tvOS": "14.0",
+                "intro_watchOS": "7.0",
+                "declAttributes": [
+                  "Available",
+                  "Available",
+                  "Available",
+                  "Available"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "messageId",
+            "printedName": "messageId",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework0A9WebSocketC9messageIdSivp",
+            "mangledName": "$s13HassFramework0A9WebSocketC9messageIdSivp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC9messageIdSivg",
+                "mangledName": "$s13HassFramework0A9WebSocketC9messageIdSivg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC9messageIdSivs",
+                "mangledName": "$s13HassFramework0A9WebSocketC9messageIdSivs",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC9messageIdSivM",
+                "mangledName": "$s13HassFramework0A9WebSocketC9messageIdSivM",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "onConnectionStateChanged",
+            "printedName": "onConnectionStateChanged",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "((HassFramework.ConnectionState) -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(HassFramework.ConnectionState) -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ConnectionState",
+                        "printedName": "HassFramework.ConnectionState",
+                        "usr": "s:13HassFramework15ConnectionStateO"
+                      }
+                    ]
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework0A9WebSocketC24onConnectionStateChangedyAA0fG0OcSgvp",
+            "mangledName": "$s13HassFramework0A9WebSocketC24onConnectionStateChangedyAA0fG0OcSgvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "((HassFramework.ConnectionState) -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(HassFramework.ConnectionState) -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ConnectionState",
+                            "printedName": "HassFramework.ConnectionState",
+                            "usr": "s:13HassFramework15ConnectionStateO"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC24onConnectionStateChangedyAA0fG0OcSgvg",
+                "mangledName": "$s13HassFramework0A9WebSocketC24onConnectionStateChangedyAA0fG0OcSgvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "((HassFramework.ConnectionState) -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(HassFramework.ConnectionState) -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ConnectionState",
+                            "printedName": "HassFramework.ConnectionState",
+                            "usr": "s:13HassFramework15ConnectionStateO"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC24onConnectionStateChangedyAA0fG0OcSgvs",
+                "mangledName": "$s13HassFramework0A9WebSocketC24onConnectionStateChangedyAA0fG0OcSgvs",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC24onConnectionStateChangedyAA0fG0OcSgvM",
+                "mangledName": "$s13HassFramework0A9WebSocketC24onConnectionStateChangedyAA0fG0OcSgvM",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "onEventReceived",
+            "printedName": "onEventReceived",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "((Swift.String) -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ]
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework0A9WebSocketC15onEventReceivedySScSgvp",
+            "mangledName": "$s13HassFramework0A9WebSocketC15onEventReceivedySScSgvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "((Swift.String) -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(Swift.String) -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC15onEventReceivedySScSgvg",
+                "mangledName": "$s13HassFramework0A9WebSocketC15onEventReceivedySScSgvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "((Swift.String) -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(Swift.String) -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC15onEventReceivedySScSgvs",
+                "mangledName": "$s13HassFramework0A9WebSocketC15onEventReceivedySScSgvs",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework0A9WebSocketC15onEventReceivedySScSgvM",
+                "mangledName": "$s13HassFramework0A9WebSocketC15onEventReceivedySScSgvM",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HassWebSocket",
+                "printedName": "HassFramework.HassWebSocket",
+                "usr": "s:13HassFramework0A9WebSocketC"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HassFramework0A9WebSocketCACycfc",
+            "mangledName": "$s13HassFramework0A9WebSocketCACycfc",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "addEventMessageHandler",
+            "printedName": "addEventMessageHandler(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "EventMessageHandler",
+                "printedName": "HassFramework.EventMessageHandler",
+                "usr": "s:13HassFramework19EventMessageHandlerP"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC22addEventMessageHandleryyAA0fgH0_pF",
+            "mangledName": "$s13HassFramework0A9WebSocketC22addEventMessageHandleryyAA0fgH0_pF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "connect",
+            "printedName": "connect(completion:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.Bool) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC7connect10completionyySbc_tF",
+            "mangledName": "$s13HassFramework0A9WebSocketC7connect10completionyySbc_tF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "disconnect",
+            "printedName": "disconnect()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC10disconnectyyF",
+            "mangledName": "$s13HassFramework0A9WebSocketC10disconnectyyF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "subscribeToEvents",
+            "printedName": "subscribeToEvents()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC17subscribeToEventsyyF",
+            "mangledName": "$s13HassFramework0A9WebSocketC17subscribeToEventsyyF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "sendTextMessage",
+            "printedName": "sendTextMessage(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC15sendTextMessageyySSF",
+            "mangledName": "$s13HassFramework0A9WebSocketC15sendTextMessageyySSF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "handleEventMessage",
+            "printedName": "handleEventMessage(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "HAEventData",
+                "printedName": "HassFramework.HAEventData",
+                "usr": "s:13HassFramework11HAEventDataV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC18handleEventMessageyyAA11HAEventDataVF",
+            "mangledName": "$s13HassFramework0A9WebSocketC18handleEventMessageyyAA11HAEventDataVF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setDelegate",
+            "printedName": "setDelegate(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "HassWebSocketDelegate",
+                "printedName": "HassFramework.HassWebSocketDelegate",
+                "usr": "s:13HassFramework0A17WebSocketDelegateP"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC11setDelegateyyAA0acdF0_pF",
+            "mangledName": "$s13HassFramework0A9WebSocketC11setDelegateyyAA0acdF0_pF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "isConnected",
+            "printedName": "isConnected()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC11isConnectedSbyF",
+            "mangledName": "$s13HassFramework0A9WebSocketC11isConnectedSbyF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "didReceive",
+            "printedName": "didReceive(event:client:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "WebSocketEvent",
+                "printedName": "Starscream.WebSocketEvent",
+                "usr": "s:10Starscream14WebSocketEventO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "WebSocketClient",
+                "printedName": "Starscream.WebSocketClient",
+                "usr": "s:10Starscream15WebSocketClientP"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework0A9WebSocketC10didReceive5event6clienty10Starscream0cD5EventO_AG0cD6Client_ptF",
+            "mangledName": "$s13HassFramework0A9WebSocketC10didReceive5event6clienty10Starscream0cD5EventO_AG0cD6Client_ptF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:13HassFramework0A9WebSocketC",
+        "mangledName": "$s13HassFramework0A9WebSocketC",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "EventMessageHandler",
+            "printedName": "EventMessageHandler",
+            "usr": "s:13HassFramework19EventMessageHandlerP",
+            "mangledName": "$s13HassFramework19EventMessageHandlerP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "WebSocketDelegate",
+            "printedName": "WebSocketDelegate",
+            "usr": "s:10Starscream17WebSocketDelegateP",
+            "mangledName": "$s10Starscream17WebSocketDelegateP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "MessageType",
+        "printedName": "MessageType",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "event",
+            "printedName": "event",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(HassFramework.MessageType.Type) -> HassFramework.MessageType",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MessageType",
+                    "printedName": "HassFramework.MessageType",
+                    "usr": "s:13HassFramework11MessageTypeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "HassFramework.MessageType.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MessageType",
+                        "printedName": "HassFramework.MessageType",
+                        "usr": "s:13HassFramework11MessageTypeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13HassFramework11MessageTypeO5eventyA2CmF",
+            "mangledName": "$s13HassFramework11MessageTypeO5eventyA2CmF",
+            "moduleName": "HassFramework"
+          },
+          {
+            "kind": "Var",
+            "name": "result",
+            "printedName": "result",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(HassFramework.MessageType.Type) -> HassFramework.MessageType",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MessageType",
+                    "printedName": "HassFramework.MessageType",
+                    "usr": "s:13HassFramework11MessageTypeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "HassFramework.MessageType.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MessageType",
+                        "printedName": "HassFramework.MessageType",
+                        "usr": "s:13HassFramework11MessageTypeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13HassFramework11MessageTypeO6resultyA2CmF",
+            "mangledName": "$s13HassFramework11MessageTypeO6resultyA2CmF",
+            "moduleName": "HassFramework"
+          },
+          {
+            "kind": "Var",
+            "name": "command",
+            "printedName": "command",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(HassFramework.MessageType.Type) -> HassFramework.MessageType",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MessageType",
+                    "printedName": "HassFramework.MessageType",
+                    "usr": "s:13HassFramework11MessageTypeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "HassFramework.MessageType.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MessageType",
+                        "printedName": "HassFramework.MessageType",
+                        "usr": "s:13HassFramework11MessageTypeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13HassFramework11MessageTypeO7commandyA2CmF",
+            "mangledName": "$s13HassFramework11MessageTypeO7commandyA2CmF",
+            "moduleName": "HassFramework"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(rawValue:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "HassFramework.MessageType?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MessageType",
+                    "printedName": "HassFramework.MessageType",
+                    "usr": "s:13HassFramework11MessageTypeO"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HassFramework11MessageTypeO8rawValueACSgSS_tcfc",
+            "mangledName": "$s13HassFramework11MessageTypeO8rawValueACSgSS_tcfc",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Var",
+            "name": "rawValue",
+            "printedName": "rawValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework11MessageTypeO8rawValueSSvp",
+            "mangledName": "$s13HassFramework11MessageTypeO8rawValueSSvp",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework11MessageTypeO8rawValueSSvg",
+                "mangledName": "$s13HassFramework11MessageTypeO8rawValueSSvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:13HassFramework11MessageTypeO",
+        "mangledName": "$s13HassFramework11MessageTypeO",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl",
+          "RawDocComment"
+        ],
+        "enumRawTypeName": "String",
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "RawRepresentable",
+            "printedName": "RawRepresentable",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "RawValue",
+                "printedName": "RawValue",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ]
+              }
+            ],
+            "usr": "s:SY",
+            "mangledName": "$sSY"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Decodable",
+            "printedName": "Decodable",
+            "usr": "s:Se",
+            "mangledName": "$sSe"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "HAMessage",
+        "printedName": "HAMessage",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HAMessage",
+                "printedName": "HassFramework.HAMessage",
+                "usr": "s:13HassFramework9HAMessageV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Decoder",
+                "printedName": "Swift.Decoder",
+                "usr": "s:s7DecoderP"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HassFramework9HAMessageV4fromACs7Decoder_p_tKcfc",
+            "mangledName": "$s13HassFramework9HAMessageV4fromACs7Decoder_p_tKcfc",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "throwing": true,
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13HassFramework9HAMessageV",
+        "mangledName": "$s13HassFramework9HAMessageV",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl",
+          "RawDocComment"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Decodable",
+            "printedName": "Decodable",
+            "usr": "s:Se",
+            "mangledName": "$sSe"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "HassFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Starscream",
+        "printedName": "Starscream",
+        "declKind": "Import",
+        "moduleName": "HassFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Combine",
+        "printedName": "Combine",
+        "declKind": "Import",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "WebSocketManager",
+        "printedName": "WebSocketManager",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "websocket",
+            "printedName": "websocket",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "HassWebSocket",
+                "printedName": "HassFramework.HassWebSocket",
+                "usr": "s:13HassFramework0A9WebSocketC"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework16WebSocketManagerC9websocketAA0acD0Cvp",
+            "mangledName": "$s13HassFramework16WebSocketManagerC9websocketAA0acD0Cvp",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "ProjectedValueProperty",
+              "AccessControl",
+              "Custom"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HassWebSocket",
+                    "printedName": "HassFramework.HassWebSocket",
+                    "usr": "s:13HassFramework0A9WebSocketC"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework16WebSocketManagerC9websocketAA0acD0Cvg",
+                "mangledName": "$s13HassFramework16WebSocketManagerC9websocketAA0acD0Cvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "HassWebSocket",
+                    "printedName": "HassFramework.HassWebSocket",
+                    "usr": "s:13HassFramework0A9WebSocketC"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework16WebSocketManagerC9websocketAA0acD0Cvs",
+                "mangledName": "$s13HassFramework16WebSocketManagerC9websocketAA0acD0Cvs",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "intro_Macosx": "10.15",
+                "intro_iOS": "13.0",
+                "intro_tvOS": "13.0",
+                "intro_watchOS": "6.0",
+                "declAttributes": [
+                  "Available",
+                  "Available",
+                  "Available",
+                  "Available"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework16WebSocketManagerC9websocketAA0acD0CvM",
+                "mangledName": "$s13HassFramework16WebSocketManagerC9websocketAA0acD0CvM",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "intro_Macosx": "10.15",
+                "intro_iOS": "13.0",
+                "intro_tvOS": "13.0",
+                "intro_watchOS": "6.0",
+                "declAttributes": [
+                  "Available",
+                  "Available",
+                  "Available",
+                  "Available"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "$websocket",
+            "printedName": "$websocket",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Publisher",
+                "printedName": "Combine.Published<HassFramework.HassWebSocket>.Publisher",
+                "usr": "s:7Combine9PublishedV9PublisherV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework16WebSocketManagerC10$websocket7Combine9PublishedV9PublisherVyAA0acD0C_Gvp",
+            "mangledName": "$s13HassFramework16WebSocketManagerC10$websocket7Combine9PublishedV9PublisherVyAA0acD0C_Gvp",
+            "moduleName": "HassFramework",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Publisher",
+                    "printedName": "Combine.Published<HassFramework.HassWebSocket>.Publisher",
+                    "usr": "s:7Combine9PublishedV9PublisherV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework16WebSocketManagerC10$websocket7Combine9PublishedV9PublisherVyAA0acD0C_Gvg",
+                "mangledName": "$s13HassFramework16WebSocketManagerC10$websocket7Combine9PublishedV9PublisherVyAA0acD0C_Gvg",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Publisher",
+                    "printedName": "Combine.Published<HassFramework.HassWebSocket>.Publisher",
+                    "usr": "s:7Combine9PublishedV9PublisherV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework16WebSocketManagerC10$websocket7Combine9PublishedV9PublisherVyAA0acD0C_Gvs",
+                "mangledName": "$s13HassFramework16WebSocketManagerC10$websocket7Combine9PublishedV9PublisherVyAA0acD0C_Gvs",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "intro_Macosx": "11.0",
+                "intro_iOS": "14.0",
+                "intro_tvOS": "14.0",
+                "intro_watchOS": "7.0",
+                "declAttributes": [
+                  "Available",
+                  "Available",
+                  "Available",
+                  "Available"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework16WebSocketManagerC10$websocket7Combine9PublishedV9PublisherVyAA0acD0C_GvM",
+                "mangledName": "$s13HassFramework16WebSocketManagerC10$websocket7Combine9PublishedV9PublisherVyAA0acD0C_GvM",
+                "moduleName": "HassFramework",
+                "implicit": true,
+                "intro_Macosx": "11.0",
+                "intro_iOS": "14.0",
+                "intro_tvOS": "14.0",
+                "intro_watchOS": "7.0",
+                "declAttributes": [
+                  "Available",
+                  "Available",
+                  "Available",
+                  "Available"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "shared",
+            "printedName": "shared",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "WebSocketManager",
+                "printedName": "HassFramework.WebSocketManager",
+                "usr": "s:13HassFramework16WebSocketManagerC"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework16WebSocketManagerC6sharedACvpZ",
+            "mangledName": "$s13HassFramework16WebSocketManagerC6sharedACvpZ",
+            "moduleName": "HassFramework",
+            "static": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "WebSocketManager",
+                    "printedName": "HassFramework.WebSocketManager",
+                    "usr": "s:13HassFramework16WebSocketManagerC"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework16WebSocketManagerC6sharedACvgZ",
+                "mangledName": "$s13HassFramework16WebSocketManagerC6sharedACvgZ",
+                "moduleName": "HassFramework",
+                "static": true,
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(websocket:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "WebSocketManager",
+                "printedName": "HassFramework.WebSocketManager",
+                "usr": "s:13HassFramework16WebSocketManagerC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "HassWebSocket",
+                "printedName": "HassFramework.HassWebSocket",
+                "usr": "s:13HassFramework0A9WebSocketC"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13HassFramework16WebSocketManagerC9websocketAcA0acD0C_tcfc",
+            "mangledName": "$s13HassFramework16WebSocketManagerC9websocketAcA0acD0C_tcfc",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "connectIfNeeded",
+            "printedName": "connectIfNeeded()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework16WebSocketManagerC15connectIfNeededyyF",
+            "mangledName": "$s13HassFramework16WebSocketManagerC15connectIfNeededyyF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "disconnectIfNeeded",
+            "printedName": "disconnectIfNeeded()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework16WebSocketManagerC18disconnectIfNeededyyF",
+            "mangledName": "$s13HassFramework16WebSocketManagerC18disconnectIfNeededyyF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "didReceive",
+            "printedName": "didReceive(event:client:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "WebSocketEvent",
+                "printedName": "Starscream.WebSocketEvent",
+                "usr": "s:10Starscream14WebSocketEventO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "WebSocketClient",
+                "printedName": "Starscream.WebSocketClient",
+                "usr": "s:10Starscream15WebSocketClientP"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework16WebSocketManagerC10didReceive5event6clienty10Starscream0cD5EventO_AG0cD6Client_ptF",
+            "mangledName": "$s13HassFramework16WebSocketManagerC10didReceive5event6clienty10Starscream0cD5EventO_AG0cD6Client_ptF",
+            "moduleName": "HassFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:13HassFramework16WebSocketManagerC",
+        "mangledName": "$s13HassFramework16WebSocketManagerC",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "ObservableObject",
+            "printedName": "ObservableObject",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "ObjectWillChangePublisher",
+                "printedName": "ObjectWillChangePublisher",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ObservableObjectPublisher",
+                    "printedName": "Combine.ObservableObjectPublisher",
+                    "usr": "s:7Combine25ObservableObjectPublisherC"
+                  }
+                ]
+              }
+            ],
+            "usr": "s:7Combine16ObservableObjectP",
+            "mangledName": "$s7Combine16ObservableObjectP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "HassWebSocketDelegate",
+            "printedName": "HassWebSocketDelegate",
+            "usr": "s:13HassFramework0A17WebSocketDelegateP",
+            "mangledName": "$s13HassFramework0A17WebSocketDelegateP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Combine",
+        "printedName": "Combine",
+        "declKind": "Import",
+        "moduleName": "HassFramework"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "EventMessageHandler",
+        "printedName": "EventMessageHandler",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "handleEventMessage",
+            "printedName": "handleEventMessage(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "HAEventData",
+                "printedName": "HassFramework.HAEventData",
+                "usr": "s:13HassFramework11HAEventDataV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework19EventMessageHandlerP06handlecD0yyAA11HAEventDataVF",
+            "mangledName": "$s13HassFramework19EventMessageHandlerP06handlecD0yyAA11HAEventDataVF",
+            "moduleName": "HassFramework",
+            "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.EventMessageHandler>",
+            "sugared_genericSig": "<Self where Self : HassFramework.EventMessageHandler>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:13HassFramework19EventMessageHandlerP",
+        "mangledName": "$s13HassFramework19EventMessageHandlerP",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "WebSocketProvider",
+        "printedName": "WebSocketProvider",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "connectionState",
+            "printedName": "connectionState",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Publisher",
+                "printedName": "Combine.Published<HassFramework.ConnectionState>.Publisher",
+                "usr": "s:7Combine9PublishedV9PublisherV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework17WebSocketProviderP15connectionState7Combine9PublishedV9PublisherVyAA010ConnectionG0O_Gvp",
+            "mangledName": "$s13HassFramework17WebSocketProviderP15connectionState7Combine9PublishedV9PublisherVyAA010ConnectionG0O_Gvp",
+            "moduleName": "HassFramework",
+            "protocolReq": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Publisher",
+                    "printedName": "Combine.Published<HassFramework.ConnectionState>.Publisher",
+                    "usr": "s:7Combine9PublishedV9PublisherV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP15connectionState7Combine9PublishedV9PublisherVyAA010ConnectionG0O_Gvg",
+                "mangledName": "$s13HassFramework17WebSocketProviderP15connectionState7Combine9PublishedV9PublisherVyAA010ConnectionG0O_Gvg",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "onConnected",
+            "printedName": "onConnected",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(() -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "() -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ]
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework17WebSocketProviderP11onConnectedyycSgvp",
+            "mangledName": "$s13HassFramework17WebSocketProviderP11onConnectedyycSgvp",
+            "moduleName": "HassFramework",
+            "protocolReq": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "(() -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "() -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP11onConnectedyycSgvg",
+                "mangledName": "$s13HassFramework17WebSocketProviderP11onConnectedyycSgvg",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "(() -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "() -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP11onConnectedyycSgvs",
+                "mangledName": "$s13HassFramework17WebSocketProviderP11onConnectedyycSgvs",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP11onConnectedyycSgvM",
+                "mangledName": "$s13HassFramework17WebSocketProviderP11onConnectedyycSgvM",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "implicit": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "onDisconnected",
+            "printedName": "onDisconnected",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(() -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "() -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ]
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework17WebSocketProviderP14onDisconnectedyycSgvp",
+            "mangledName": "$s13HassFramework17WebSocketProviderP14onDisconnectedyycSgvp",
+            "moduleName": "HassFramework",
+            "protocolReq": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "(() -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "() -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP14onDisconnectedyycSgvg",
+                "mangledName": "$s13HassFramework17WebSocketProviderP14onDisconnectedyycSgvg",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "(() -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "() -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP14onDisconnectedyycSgvs",
+                "mangledName": "$s13HassFramework17WebSocketProviderP14onDisconnectedyycSgvs",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP14onDisconnectedyycSgvM",
+                "mangledName": "$s13HassFramework17WebSocketProviderP14onDisconnectedyycSgvM",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "implicit": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "onEventReceived",
+            "printedName": "onEventReceived",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "((Swift.String) -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ]
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13HassFramework17WebSocketProviderP15onEventReceivedySScSgvp",
+            "mangledName": "$s13HassFramework17WebSocketProviderP15onEventReceivedySScSgvp",
+            "moduleName": "HassFramework",
+            "protocolReq": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "((Swift.String) -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(Swift.String) -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP15onEventReceivedySScSgvg",
+                "mangledName": "$s13HassFramework17WebSocketProviderP15onEventReceivedySScSgvg",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "((Swift.String) -> ())?",
+                    "children": [
+                      {
+                        "kind": "TypeFunc",
+                        "name": "Function",
+                        "printedName": "(Swift.String) -> ()",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Void",
+                            "printedName": "()"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP15onEventReceivedySScSgvs",
+                "mangledName": "$s13HassFramework17WebSocketProviderP15onEventReceivedySScSgvs",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13HassFramework17WebSocketProviderP15onEventReceivedySScSgvM",
+                "mangledName": "$s13HassFramework17WebSocketProviderP15onEventReceivedySScSgvM",
+                "moduleName": "HassFramework",
+                "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+                "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+                "protocolReq": true,
+                "implicit": true,
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "connect",
+            "printedName": "connect()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework17WebSocketProviderP7connectyyF",
+            "mangledName": "$s13HassFramework17WebSocketProviderP7connectyyF",
+            "moduleName": "HassFramework",
+            "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+            "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "disconnect",
+            "printedName": "disconnect()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework17WebSocketProviderP10disconnectyyF",
+            "mangledName": "$s13HassFramework17WebSocketProviderP10disconnectyyF",
+            "moduleName": "HassFramework",
+            "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+            "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "subscribeToEvents",
+            "printedName": "subscribeToEvents()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13HassFramework17WebSocketProviderP17subscribeToEventsyyF",
+            "mangledName": "$s13HassFramework17WebSocketProviderP17subscribeToEventsyyF",
+            "moduleName": "HassFramework",
+            "genericSig": "<τ_0_0 where τ_0_0 : HassFramework.WebSocketProvider>",
+            "sugared_genericSig": "<Self where Self : HassFramework.WebSocketProvider>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:13HassFramework17WebSocketProviderP",
+        "mangledName": "$s13HassFramework17WebSocketProviderP",
+        "moduleName": "HassFramework",
+        "declAttributes": [
+          "AccessControl"
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 332,
+      "length": 11,
+      "value": "\"parent_id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 366,
+      "length": 9,
+      "value": "\"user_id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 332,
+      "length": 11,
+      "value": "\"parent_id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 366,
+      "length": 9,
+      "value": "\"user_id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 539,
+      "length": 15,
+      "value": "\"friendly_name\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 539,
+      "length": 15,
+      "value": "\"friendly_name\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 885,
+      "length": 11,
+      "value": "\"entity_id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 967,
+      "length": 14,
+      "value": "\"last_changed\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 885,
+      "length": 11,
+      "value": "\"entity_id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassModels.swift",
+      "kind": "StringLiteral",
+      "offset": 967,
+      "length": 14,
+      "value": "\"last_changed\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 410,
+      "length": 64,
+      "value": "\"connectionState changed from \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 451,
+      "length": 2,
+      "value": "\" to \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 473,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "FloatLiteral",
+      "offset": 572,
+      "length": 4,
+      "value": "60.0"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "IntegerLiteral",
+      "offset": 609,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 637,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "Array",
+      "offset": 930,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1066,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 1232,
+      "length": 91,
+      "value": "\"Failed to create a URL from the string provided in Secrets.plist or the URL is malformed.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1428,
+      "length": 1,
+      "value": "5"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 1783,
+      "length": 9,
+      "value": "\"Secrets\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 1802,
+      "length": 7,
+      "value": "\"plist\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 1926,
+      "length": 24,
+      "value": "\"HomeAssistantServerURL\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 1988,
+      "length": 63,
+      "value": "\"Failed to retrieve HomeAssistantServerURL from Secrets.plist.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2379,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2444,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 2788,
+      "length": 9,
+      "value": "\"Secrets\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 2807,
+      "length": 7,
+      "value": "\"plist\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 2927,
+      "length": 26,
+      "value": "\"HomeAssistantAccessToken\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 2991,
+      "length": 53,
+      "value": "\"Failed to retrieve access token from Secrets.plist.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 3160,
+      "length": 44,
+      "value": "\"Attempting to authenticate with WebSocket.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 3368,
+      "length": 14,
+      "value": "\"access_token\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "Array",
+      "offset": 3503,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 3767,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 3830,
+      "length": 46,
+      "value": "\"Attempting to subscribe to WebSocket events.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 3936,
+      "length": 45,
+      "value": "\"Already subscribed to state_changed events.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4026,
+      "length": 55,
+      "value": "\"subscribeToEvents called with messageId: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4080,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "IntegerLiteral",
+      "offset": 4104,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4166,
+      "length": 4,
+      "value": "\"id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4195,
+      "length": 6,
+      "value": "\"type\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4203,
+      "length": 18,
+      "value": "\"subscribe_events\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4235,
+      "length": 12,
+      "value": "\"event_type\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4249,
+      "length": 15,
+      "value": "\"state_changed\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "Array",
+      "offset": 4377,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 4625,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4742,
+      "length": 50,
+      "value": "\"Attempting to send WebSocket message: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 4791,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "FloatLiteral",
+      "offset": 5248,
+      "length": 3,
+      "value": "5.0"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "FloatLiteral",
+      "offset": 5498,
+      "length": 3,
+      "value": "5.0"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "Array",
+      "offset": 5984,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 6036,
+      "length": 6,
+      "value": "\"type\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 6102,
+      "length": 15,
+      "value": "\"auth_required\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 6175,
+      "length": 9,
+      "value": "\"auth_ok\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 6236,
+      "length": 7,
+      "value": "\"event\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 6294,
+      "length": 8,
+      "value": "\"result\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 6845,
+      "length": 40,
+      "value": "\"HassWebSocket received event: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 6884,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 7356,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 7412,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 7904,
+      "length": 6,
+      "value": "\"type\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 7948,
+      "length": 38,
+      "value": "\"Error parsing incoming text to JSON.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8061,
+      "length": 9,
+      "value": "\"auth_ok\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 8102,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8125,
+      "length": 44,
+      "value": "\"Authenticated successfully with WebSocket.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8216,
+      "length": 15,
+      "value": "\"auth_required\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8273,
+      "length": 8,
+      "value": "\"result\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8309,
+      "length": 9,
+      "value": "\"success\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "BooleanLiteral",
+      "offset": 8332,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8396,
+      "length": 74,
+      "value": "\"Received error from WebSocket: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8441,
+      "length": 7,
+      "value": "\"error\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8453,
+      "length": 15,
+      "value": "\"Unknown error\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8469,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8560,
+      "length": 43,
+      "value": "\"Received successful result: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8602,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8632,
+      "length": 7,
+      "value": "\"event\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8717,
+      "length": 7,
+      "value": "\"event\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8830,
+      "length": 40,
+      "value": "\"Received unknown message type: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8869,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 8969,
+      "length": 12,
+      "value": "\"event_type\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 9008,
+      "length": 15,
+      "value": "\"state_changed\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 9063,
+      "length": 6,
+      "value": "\"data\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 9294,
+      "length": 6,
+      "value": "\"type\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 9347,
+      "length": 12,
+      "value": "\"event_type\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 9434,
+      "length": 11,
+      "value": "\"entity_id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 9497,
+      "length": 11,
+      "value": "\"entity_id\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "Array",
+      "offset": 9764,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 10135,
+      "length": 38,
+      "value": "\"Error decoding HAEventData: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 10172,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/HassWebSocket.swift",
+      "kind": "StringLiteral",
+      "offset": 10242,
+      "length": 46,
+      "value": "\"Event type not found in the event dictionary\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 575,
+      "length": 43,
+      "value": "\"Checking if WebSocket needs to connect...\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 955,
+      "length": 46,
+      "value": "\"Checking if WebSocket needs to disconnect...\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 1286,
+      "length": 35,
+      "value": "\"WebSocket connected with headers:\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 1452,
+      "length": 65,
+      "value": "\"WebSocket disconnected with reason: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 1498,
+      "length": 3,
+      "value": "\" and code: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 1516,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1613,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 1762,
+      "length": 3,
+      "value": "5.0"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 1903,
+      "length": 16,
+      "value": "\"Received text:\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2310,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 2720,
+      "length": 42,
+      "value": "\"Unknown WebSocket message type received.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 2838,
+      "length": 52,
+      "value": "\"Error determining WebSocket message type: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 2889,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 2987,
+      "length": 23,
+      "value": "\"Received binary data:\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3069,
+      "length": 16,
+      "value": "\"Received ping.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3138,
+      "length": 16,
+      "value": "\"Received pong.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3272,
+      "length": 35,
+      "value": "\"Viability changed to: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3306,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3395,
+      "length": 41,
+      "value": "\"Reconnect suggested: \""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3435,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3494,
+      "length": 21,
+      "value": "\"WebSocket cancelled\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3580,
+      "length": 8,
+      "value": "\"Error:\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3599,
+      "length": 25,
+      "value": "\"Unknown error occurred.\""
+    },
+    {
+      "filePath": "\/Users\/michel\/Documents\/SwiftUI Projects\/HassFramework\/WebSocketManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3683,
+      "length": 39,
+      "value": "\"Peer closed the WebSocket connection.\""
+    }
+  ]
+}

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D00BF6102AC9F85C00B7C307"
+               BlueprintIdentifier = "D0EF7FFA2B09553400EDBE48"
                BuildableName = "HassFramework.framework"
-               BlueprintName = "HassFramework"
+               BlueprintName = "WatchHassFramework"
                ReferencedContainer = "container:HassFramework.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -49,9 +49,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D00BF6102AC9F85C00B7C307"
+            BlueprintIdentifier = "D0EF7FFA2B09553400EDBE48"
             BuildableName = "HassFramework.framework"
-            BlueprintName = "HassFramework"
+            BlueprintName = "WatchHassFramework"
             ReferencedContainer = "container:HassFramework.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
