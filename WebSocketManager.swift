@@ -13,16 +13,19 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
         self.websocket.delegate = self  // This sets the WebSocketManager as the delegate for HassWebSocket
     }
 
-    public func connectIfNeeded() {
-        print("Checking if WebSocket needs to connect...")
-        if websocket.connectionState == .disconnected {
-            websocket.connect(completion: { _ in
-                // Here you can add any functionality you want to be executed
-                // after the connection attempt or leave it empty.
-            })
-        }
-    }
-
+    public func connectIfNeeded(completion: @escaping (Bool) -> Void) {
+         print("Checking if WebSocket needs to connect...")
+         if websocket.connectionState == .disconnected {
+             websocket.connect { success in
+                 // Call the completion handler with the success status
+                 completion(success)
+             }
+         } else {
+             // If already connected, call the completion handler with `true`
+             completion(true)
+         }
+     }
+    
     public func disconnectIfNeeded() {
         print("Checking if WebSocket needs to disconnect...")
         if websocket.connectionState == .connected {
