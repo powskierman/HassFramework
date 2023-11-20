@@ -82,7 +82,7 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
             
         case .pong:
             print("Received pong.")
-            websocket.onPongReceived()
+   //         websocket.onPongReceived()
             
         case .viabilityChanged(let isViable):
             print("Viability changed to: \(isViable)")
