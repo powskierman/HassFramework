@@ -103,9 +103,12 @@ public class HassWebSocket: EventMessageHandler {
     var isSubscribedToStateChanges = false
     
     public func subscribeToEvents() {
+        print("Attempting to subscribe to WebSocket events.")
         if isSubscribedToStateChanges {
+            print("Already subscribed to state_changed events.")
             return
         }
+        print("subscribeToEvents called with messageId: \(messageId)")
         messageId += 1
         let subscribeMessage: [String: Any] = [
             "id": messageId,
@@ -116,6 +119,8 @@ public class HassWebSocket: EventMessageHandler {
         if let data = try? JSONSerialization.data(withJSONObject: subscribeMessage, options: []),
            let jsonString = String(data: data, encoding: .utf8) {
             sendTextMessage(jsonString)
+        } else {
+            print(HAError.unableToSerializeMessage.localizedDescription)
         }
         isSubscribedToStateChanges = true
     }
@@ -196,6 +201,7 @@ public class HassWebSocket: EventMessageHandler {
 
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
+        print("HassWebSocket received event: \(event)")
         switch event {
         case .connected(_):
             connectionState = .connected
@@ -215,6 +221,72 @@ extension HassWebSocket: WebSocketDelegate {
     }
 
     func handleIncomingText(_ text: String) {
-        // ... [existing text handling logic] ...
+        // Parse the incoming text to a JSON object
+        guard let data = text.data(using: .utf8),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let type = jsonObject["type"] as? String else {
+            print("Error parsing incoming text to JSON.")
+            return
+        }
+        
+        switch type {
+        case "auth_ok":
+            isAuthenticated = true
+            print("Authenticated successfully with WebSocket.")
+            subscribeToEvents()
+        case "auth_required":
+            authenticate()
+        case "result":
+            if jsonObject["success"] as? Bool == false {
+                // Handle errors.
+                print("Received error from WebSocket: \(jsonObject["error"] ?? "Unknown error")")
+            } else {
+                // Handle success if needed.
+                print("Received successful result: \(jsonObject)")
+            }
+        case "event":
+            // Handle the event data.
+            if let event = jsonObject["event"] as? [String: Any] {
+                handleEvent(event)
+            }
+        default:
+            print("Received unknown message type: \(type)")
+        }
+    }
+
+    func handleEvent(_ event: [String: Any]) {
+        if let eventType = event["event_type"] as? String, eventType == "state_changed" {
+            if let eventData = event["data"] as? [String: Any] {
+                // We need to construct the eventData dictionary to include the "type" at the root level.
+                var wrappedEventData: [String: Any] = eventData
+                wrappedEventData["type"] = eventType
+                wrappedEventData["event_type"] = eventType
+                
+                if let entityId = eventData["entity_id"] as? String {
+                    wrappedEventData["entity_id"] = entityId
+                }
+                
+                // Now let's convert this wrapped event dictionary into JSON Data
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: wrappedEventData, options: [])
+                    let haEventData = try JSONDecoder().decode(HAEventData.self, from: jsonData)
+                    // Call handleEventMessage on each registered handler
+                    for handler in eventMessageHandlers {
+                        handler.handleEventMessage(haEventData)
+                    }
+                } catch {
+                    print("Error decoding HAEventData: \(error)")
+                }
+            }
+        } else {
+            print("Event type not found in the event dictionary")
+        }
+    }
+
+    
+    func onPongReceived() {
+        DispatchQueue.main.async {
+            self.connectionState = .connected
+        }
     }
 }
