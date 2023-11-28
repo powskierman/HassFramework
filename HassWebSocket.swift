@@ -20,6 +20,8 @@ public class HassWebSocket: EventMessageHandler {
     private var isAttemptingReconnect = false
     private var messageQueue: [String] = []
 
+    private var completionHandlers = [Int: (String?) -> Void]()
+
     public init() {
         self.messageId = 0
         
@@ -224,7 +226,7 @@ extension HassWebSocket: WebSocketDelegate {
             print("Error parsing incoming text to JSON.")
             return
         }
-        
+
         switch type {
         case "auth_ok":
             isAuthenticated = true
@@ -234,55 +236,57 @@ extension HassWebSocket: WebSocketDelegate {
             authenticate()
         case "result":
             if jsonObject["success"] as? Bool == false {
-                // Handle errors.
                 print("Received error from WebSocket: \(jsonObject["error"] ?? "Unknown error")")
             } else {
-                // Handle success if needed.
-                print("Received successful result: \(jsonObject)")
+                if let id = jsonObject["id"] as? Int, id == messageId {
+                    handleStateResponse(jsonObject) // Handle the state response
+                } else {
+                    print("Received successful result: \(jsonObject)")
+                }
             }
         case "event":
-            // Handle the event data.
-            if let event = jsonObject["event"] as? [String: Any] {
-                handleEvent(event)
-            }
+            // Handle the event data...
+            // ...
+            break
         default:
             print("Received unknown message type: \(type)")
         }
     }
 
-    func handleEvent(_ event: [String: Any]) {
-        if let eventType = event["event_type"] as? String, eventType == "state_changed" {
-            if let eventData = event["data"] as? [String: Any] {
-                // We need to construct the eventData dictionary to include the "type" at the root level.
-                var wrappedEventData: [String: Any] = eventData
-                wrappedEventData["type"] = eventType
-                wrappedEventData["event_type"] = eventType
-                
-                if let entityId = eventData["entity_id"] as? String {
-                    wrappedEventData["entity_id"] = entityId
-                }
-                
-                // Now let's convert this wrapped event dictionary into JSON Data
-                do {
-                    let jsonData = try JSONSerialization.data(withJSONObject: wrappedEventData, options: [])
-                    let haEventData = try JSONDecoder().decode(HAEventData.self, from: jsonData)
-                    // Call handleEventMessage on each registered handler
-                    for handler in eventMessageHandlers {
-                        handler.handleEventMessage(haEventData)
-                    }
-                } catch {
-                    print("Error decoding HAEventData: \(error)")
-                }
+    // Function to handle state response
+    private func handleStateResponse(_ response: [String: Any]) {
+        if let result = response["result"] as? [String: Any],
+           let state = result["state"] as? String {
+            // Retrieve and call the completion handler
+            if let completion = completionHandlers[messageId] {
+                completion(state)
+                completionHandlers.removeValue(forKey: messageId)
             }
         } else {
-            print("Event type not found in the event dictionary")
+            print("Error or unexpected format in state response: \(response)")
         }
     }
 
-    
-    func onPongReceived() {
-        DispatchQueue.main.async {
-            self.connectionState = .connected
+    // Function to fetch state
+    public func fetchState(for entityId: String, completion: @escaping (String?) -> Void) {
+        messageId += 1
+        completionHandlers[messageId] = completion
+        
+        let stateRequest: [String: Any] = [
+            "id": messageId,
+            "type": "get_states",
+            "entity_id": entityId
+        ]
+
+        do {
+            let data = try JSONSerialization.data(withJSONObject: stateRequest, options: [])
+            if let jsonString = String(data: data, encoding: .utf8) {
+                sendTextMessage(jsonString)
+            }
+        } catch {
+            print("Error creating state request message: \(error)")
+            completion(nil)
         }
     }
 }
+
