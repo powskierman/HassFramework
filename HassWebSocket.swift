@@ -24,6 +24,7 @@ public class HassWebSocket: EventMessageHandler {
 
     public init() {
         self.messageId = 0
+        print("HassWebSocket initialized")
         
         guard let requestURLString = getServerURLFromSecrets(),
               let requestURL = URL(string: requestURLString) else {
@@ -34,10 +35,12 @@ public class HassWebSocket: EventMessageHandler {
         request.timeoutInterval = 5
         self.socket = WebSocket(request: request)
         self.socket.delegate = self
+        print("WebSocket initialized with request: \(request)")
     }
     
     public func addEventMessageHandler(_ handler: EventMessageHandler) {
         eventMessageHandlers.append(handler)
+        print("Event message handler added: \(handler)")
     }
 
     private func getServerURLFromSecrets() -> String? {
@@ -47,18 +50,23 @@ public class HassWebSocket: EventMessageHandler {
             print("Failed to retrieve HomeAssistantServerURL from Secrets.plist.")
             return nil
         }
-        
+        print("Server URL retrieved from Secrets: \(serverURL)")
         return serverURL
     }
     
     public func connect(completion: @escaping (Bool) -> Void) {
+        print("Attempting to connect to WebSocket")
         onConnectionStateChanged = { newState in
+            print("Connection state changed: \(newState)")
             switch newState {
             case .connected:
+                print("WebSocket connected")
                 completion(true)
             case .disconnected:
+                print("WebSocket disconnected")
                 completion(false)
             default:
+                print("WebSocket connection state: \(newState)")
                 break
             }
         }
@@ -67,6 +75,7 @@ public class HassWebSocket: EventMessageHandler {
     }
 
     public func disconnect() {
+        print("Disconnecting WebSocket")
         socket.disconnect()
         isAttemptingReconnect = false
     }
@@ -79,11 +88,14 @@ public class HassWebSocket: EventMessageHandler {
             return nil
         }
         
+        print("Access token retrieved: \(token)")
         return token
     }
     
     func authenticate() {
+        print("Attempting authentication with WebSocket")
         guard let accessToken = getAccessToken() else {
+            print("Access token not found, cannot authenticate")
             return
         }
         
@@ -94,6 +106,7 @@ public class HassWebSocket: EventMessageHandler {
         
         if let data = try? JSONSerialization.data(withJSONObject: authMessage, options: []),
            let jsonString = String(data: data, encoding: .utf8) {
+            print("Sending authentication message: \(jsonString)")
             socket.write(string: jsonString)
         }
     }
@@ -116,6 +129,7 @@ public class HassWebSocket: EventMessageHandler {
         
         if let data = try? JSONSerialization.data(withJSONObject: subscribeMessage, options: []),
            let jsonString = String(data: data, encoding: .utf8) {
+            print("Sending subscribe message: \(jsonString)")
             sendTextMessage(jsonString)
         } else {
             print(HAError.unableToSerializeMessage.localizedDescription)
@@ -124,23 +138,29 @@ public class HassWebSocket: EventMessageHandler {
     }
     
     public func sendTextMessage(_ message: String) {
+        print("Preparing to send text message: \(message)")
         guard isConnected() else {
+            print("Not connected. Adding message to queue: \(message)")
             messageQueue.append(message)
             return
         }
+        print("Sending message: \(message)")
         socket.write(string: message)
         flushMessageQueue()
     }
 
     private func flushMessageQueue() {
+        print("Flushing message queue")
         while isConnected() && !messageQueue.isEmpty {
             let message = messageQueue.removeFirst()
+            print("Sending queued message: \(message)")
             socket.write(string: message)
         }
     }
 
     public func handleEventMessage(_ message: HAEventData) {
         for handler in eventMessageHandlers {
+            print("Handling event message with handler: \(handler)")
             handler.handleEventMessage(message)
         }
     }
@@ -148,6 +168,7 @@ public class HassWebSocket: EventMessageHandler {
     func determineWebSocketMessageType(data: Data) throws -> WebSocketMessageType {
         if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
            let type = json["type"] as? String {
+            print("Determining WebSocket message type: \(type)")
             switch type {
             case "auth_required":
                 return .authRequired
@@ -166,17 +187,25 @@ public class HassWebSocket: EventMessageHandler {
     
     public func setDelegate(_ delegate: HassWebSocketDelegate) {
         self.delegate = delegate
+        print("Delegate set for HassWebSocket")
     }
 
     public func isConnected() -> Bool {
-        return connectionState == .connected
+        let connected = connectionState == .connected
+        print("Checking if WebSocket is connected: \(connected)")
+        return connected
     }
 
     public func attemptReconnection() {
-        guard !isConnected(), !isAttemptingReconnect else { return }
+        guard !isConnected(), !isAttemptingReconnect else {
+            print("Already connected or attempting to reconnect")
+            return
+        }
+        print("Attempting reconnection to WebSocket")
         isAttemptingReconnect = true
         DispatchQueue.global().asyncAfter(deadline: .now() + reconnectionInterval) { [weak self] in
             self?.connect { success in
+                print("Reconnection attempt completed with success: \(success)")
                 self?.isAttemptingReconnect = false
                 if !success {
                     self?.attemptReconnection() // Try reconnecting again
@@ -186,39 +215,48 @@ public class HassWebSocket: EventMessageHandler {
     }
 
     private func startHeartbeat() {
+        print("Starting WebSocket heartbeat")
         pingTimer?.invalidate()
         pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { [weak self] _ in
+            print("Sending ping to WebSocket")
             self?.socket.write(ping: Data())
         }
     }
 
     private func stopHeartbeat() {
+        print("Stopping WebSocket heartbeat")
         pingTimer?.invalidate()
     }
 }
 
+// WebSocketDelegate extension with additional print statements
 extension HassWebSocket: WebSocketDelegate {
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         print("HassWebSocket received event: \(event)")
         switch event {
         case .connected(_):
+            print("WebSocket connected event received")
             connectionState = .connected
             startHeartbeat()
             authenticate()
         case .disconnected(_, _):
+            print("WebSocket disconnected event received")
             connectionState = .disconnected
             isAuthenticated = false
             isSubscribedToStateChanges = false
             stopHeartbeat()
             attemptReconnection()
         case .text(let text):
+            print("Received text from WebSocket: \(text)")
             handleIncomingText(text)
         default:
+            print("Received unhandled event: \(event)")
             delegate?.didReceive(event: event, client: client)
         }
     }
 
     func handleIncomingText(_ text: String) {
+        print("Handling incoming text: \(text)")
         // Parse the incoming text to a JSON object
         guard let data = text.data(using: .utf8),
               let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -229,12 +267,14 @@ extension HassWebSocket: WebSocketDelegate {
 
         switch type {
         case "auth_ok":
+            print("Received authentication OK from WebSocket")
             isAuthenticated = true
-            print("Authenticated successfully with WebSocket.")
             subscribeToEvents()
         case "auth_required":
+            print("Authentication required by WebSocket")
             authenticate()
         case "result":
+            print("Received result from WebSocket: \(jsonObject)")
             if jsonObject["success"] as? Bool == false {
                 print("Received error from WebSocket: \(jsonObject["error"] ?? "Unknown error")")
             } else {
