@@ -2,10 +2,6 @@ import Foundation
 import Starscream
 import Combine
 
-public protocol HassWebSocketDelegate: AnyObject {
-    func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient)
-}
-
 public class HassWebSocket: EventMessageHandler {
     public static let shared = HassWebSocket()
     
