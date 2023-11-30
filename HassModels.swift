@@ -8,7 +8,7 @@ enum WebSocketMessageType {
     case unknown
 }
 
-public struct HAContext: Decodable {
+public struct HAContext: Codable {
     let id: String
     let parentId: String?
     let userId: String?
@@ -20,7 +20,7 @@ public struct HAContext: Decodable {
     }
 }
 
-public struct HAAttributes: Decodable {
+public struct HAAttributes: Codable {
     public let friendlyName: String
 
     private enum CodingKeys: String, CodingKey {
@@ -29,10 +29,10 @@ public struct HAAttributes: Decodable {
     // Add any other attributes as needed
 }
 
-public struct HAState: Decodable {
+public struct HAState: Codable {
     public let entityId: String
     public let state: String
-    public let attributes: HAAttributes
+    public let attributes: [String: String]
     public let lastChanged: String
     public let context: HAContext
 
@@ -46,14 +46,34 @@ public struct HAState: Decodable {
 }
 
 
-public struct HAEventData: Decodable, HAEventProtocol {
-    public let type: String
-    public let event_type: String
-    public let entity_id: String
-    public let old_state: HAState?
-    public let new_state: HAState?
+public struct HAEventData: Codable {
+    public let eventType: String
+    public let data: HAData
+    public let origin: String
+    public let timeFired: String
+    public let context: HAContext
+
+    enum CodingKeys: String, CodingKey {
+        case eventType = "event_type"
+        case data
+        case origin
+        case timeFired = "time_fired"
+        case context
+    }
 }
 
+public struct HAData: Codable {
+    // Fields based on your JSON structure
+    public let entityId: String
+    public let newState: HAState
+    public let oldState: HAState
+
+    enum CodingKeys: String, CodingKey {
+        case entityId = "entity_id"
+        case newState = "new_state"
+        case oldState = "old_state"
+    }
+}
 
 public struct HAEventMessage {
     public let eventType: String

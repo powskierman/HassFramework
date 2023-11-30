@@ -34,6 +34,7 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
     }
 
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
+        print("I'm at didReceive! ")
         switch event {
         case .connected(let headers):
             print("WebSocket connected with headers:", headers)
@@ -60,9 +61,11 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
                     case .authOk:
                         websocket.isAuthenticated = true
                     case .event:
-                        if let haEventData = try? JSONDecoder().decode(HAEventData.self, from: data) {
+                        if let haEventData = try?
+                            JSONDecoder().decode(HAEventData.self, from: data) {
                             websocket.handleEventMessage(haEventData)
                         }
+                        print("At: case .event!")
                     case .result:
                         // Handle if needed
                         break

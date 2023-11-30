@@ -285,9 +285,21 @@ extension HassWebSocket: WebSocketDelegate {
                 }
             }
         case "event":
-            // Handle the event data...
-            // ...
-            break
+                print("Received event from WebSocket: \(jsonObject)")
+                if let event = jsonObject["event"] as? [String: Any], let eventType = event["event_type"] as? String {
+                    print("Event type: \(eventType)")
+                    if eventType == "state_changed" {
+                        print("State changed event received: \(event)")
+                        if let eventData = try? JSONSerialization.data(withJSONObject: event, options: []) {
+                            do {
+                                let haEventData = try JSONDecoder().decode(HAEventData.self, from: eventData)
+                                handleEventMessage(haEventData)
+                            } catch {
+                                print("Error decoding HAEventData: \(error)")
+                            }
+                        }
+                    }
+                }
         default:
             print("Received unknown message type: \(type)")
         }
