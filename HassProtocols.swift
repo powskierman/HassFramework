@@ -12,6 +12,7 @@ import Starscream
 protocol HassWebSocketDelegate: AnyObject {
     func didReceive(event: WebSocketEvent, client: WebSocketClient)
     func didReceiveText(_ text: String, from websocket: HassWebSocket)
+    func didReceiveEvent(_ event: HAEventData)
     // ... other methods
 }
 

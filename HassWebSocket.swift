@@ -2,7 +2,7 @@ import Foundation
 import Starscream
 import Combine
 
-public class HassWebSocket: EventMessageHandler {
+public class HassWebSocket {
     weak var delegate: HassWebSocketDelegate?
     public static let shared = HassWebSocket()
     
@@ -38,11 +38,36 @@ public class HassWebSocket: EventMessageHandler {
         print("WebSocket initialized with request: \(request)")
     }
     
-    func handleIncomingText(_ text: String) {
-         // Delegate the high-level handling of the text message
-         delegate?.didReceiveText(text, from: self)
-     }
-    
+    private func handleIncomingText(_ text: String) {
+        guard let data = text.data(using: .utf8),
+              let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let type = jsonObject["type"] as? String else {
+            print("Error parsing incoming text to JSON.")
+            return
+        }
+
+        switch type {
+        case "auth_required":
+            authenticate()
+        case "auth_ok":
+            isAuthenticated = true
+            subscribeToEvents()
+        case "event":
+            if let event = try? JSONDecoder().decode(HAEventData.self, from: data) {
+                // Delegate the event handling to the registered event message handlers
+                for handler in eventMessageHandlers {
+                    handler.handleEventMessage(event)
+                }
+            } else {
+                print("Error decoding HAEventData.")
+            }
+        case "result":
+            print("We are at handleIncomingText.result")
+        default:
+            print("Received unknown message type: \(type)")
+        }
+    }
+   
     public func addEventMessageHandler(_ handler: EventMessageHandler) {
         eventMessageHandlers.append(handler)
         print("Event message handler added: \(handler)")
@@ -163,13 +188,6 @@ public class HassWebSocket: EventMessageHandler {
         }
     }
 
-    public func handleEventMessage(_ message: HAEventData) {
-        for handler in eventMessageHandlers {
-            print("Handling event message with handler: \(handler)")
-            handler.handleEventMessage(message)
-        }
-    }
-    
     func determineWebSocketMessageType(data: Data) throws -> WebSocketMessageType {
         if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
            let type = json["type"] as? String {
@@ -261,7 +279,6 @@ extension HassWebSocket: WebSocketDelegate {
                // Low-level text handling
                handleIncomingText(text)
                // Delegating to higher level
-               delegate?.didReceiveText(text, from: self)
 
            default:
                // Delegating unhandled events
