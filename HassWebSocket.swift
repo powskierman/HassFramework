@@ -3,19 +3,19 @@ import Starscream
 import Combine
 
 public class HassWebSocket: EventMessageHandler {
+    weak var delegate: HassWebSocketDelegate?
     public static let shared = HassWebSocket()
     
     @Published public var connectionState: ConnectionState = .disconnected
     private var socket: WebSocket!
     private let pingInterval: TimeInterval = 60.0
     public var messageId: Int = 0
-    var isAuthenticated = false
+    public var isAuthenticated = false
     public var onConnectionStateChanged: ((ConnectionState) -> Void)?
     public var onEventReceived: ((String) -> Void)?
     var pingTimer: Timer?
     private var eventMessageHandlers: [EventMessageHandler] = []
-    weak var delegate: HassWebSocketDelegate?
-
+ 
     private var reconnectionInterval: TimeInterval = 5.0
     private var isAttemptingReconnect = false
     private var messageQueue: [String] = []
@@ -37,6 +37,11 @@ public class HassWebSocket: EventMessageHandler {
         self.socket.delegate = self
         print("WebSocket initialized with request: \(request)")
     }
+    
+    func handleIncomingText(_ text: String) {
+         // Delegate the high-level handling of the text message
+         delegate?.didReceiveText(text, from: self)
+     }
     
     public func addEventMessageHandler(_ handler: EventMessageHandler) {
         eventMessageHandlers.append(handler)
@@ -185,7 +190,12 @@ public class HassWebSocket: EventMessageHandler {
         throw HAError.unknownMessageType
     }
     
-    public func setDelegate(_ delegate: HassWebSocketDelegate) {
+    public func getNextMessageId() -> Int {
+         messageId += 1
+         return messageId
+     }
+    
+    func setDelegate(_ delegate: HassWebSocketDelegate) {
         self.delegate = delegate
         print("Delegate set for HassWebSocket")
     }
@@ -247,63 +257,18 @@ extension HassWebSocket: WebSocketDelegate {
             stopHeartbeat()
             attemptReconnection()
         case .text(let text):
-            print("Received text from WebSocket: \(text)")
-            handleIncomingText(text)
-        default:
-            print("Received unhandled event: \(event)")
-            delegate?.didReceive(event: event, client: client)
-        }
-    }
+               print("Received text from WebSocket: \(text)")
+               // Low-level text handling
+               handleIncomingText(text)
+               // Delegating to higher level
+               delegate?.didReceiveText(text, from: self)
 
-    func handleIncomingText(_ text: String) {
-        print("Handling incoming text: \(text)")
-        // Parse the incoming text to a JSON object
-        guard let data = text.data(using: .utf8),
-              let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let type = jsonObject["type"] as? String else {
-            print("Error parsing incoming text to JSON.")
-            return
-        }
-
-        switch type {
-        case "auth_ok":
-            print("Received authentication OK from WebSocket")
-            isAuthenticated = true
-            subscribeToEvents()
-        case "auth_required":
-            print("Authentication required by WebSocket")
-            authenticate()
-        case "result":
-            print("Received result from WebSocket: \(jsonObject)")
-            if jsonObject["success"] as? Bool == false {
-                print("Received error from WebSocket: \(jsonObject["error"] ?? "Unknown error")")
-            } else {
-                if let id = jsonObject["id"] as? Int, id == messageId {
-                    handleStateResponse(jsonObject) // Handle the state response
-                } else {
-                    print("Received successful result: \(jsonObject)")
-                }
-            }
-        case "event":
-                print("Received event from WebSocket: \(jsonObject)")
-                if let event = jsonObject["event"] as? [String: Any], let eventType = event["event_type"] as? String {
-                    print("Event type: \(eventType)")
-                    if eventType == "state_changed" {
-                        print("State changed event received: \(event)")
-                        if let eventData = try? JSONSerialization.data(withJSONObject: event, options: []) {
-                            do {
-                                let haEventData = try JSONDecoder().decode(HAEventData.self, from: eventData)
-                                handleEventMessage(haEventData)
-                            } catch {
-                                print("Error decoding HAEventData: \(error)")
-                            }
-                        }
-                    }
-                }
-        default:
-            print("Received unknown message type: \(type)")
-        }
-    }
+           default:
+               // Delegating unhandled events
+               print("Received unhandled event: \(event)")
+               delegate?.didReceive(event: event, client: client)
+       }
+   }
 
     // Function to handle state response
     private func handleStateResponse(_ response: [String: Any]) {

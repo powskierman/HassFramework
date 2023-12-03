@@ -9,8 +9,10 @@ import Foundation
 import Combine
 import Starscream
 
-public protocol HassWebSocketDelegate: AnyObject {
-    func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient)
+protocol HassWebSocketDelegate: AnyObject {
+    func didReceive(event: WebSocketEvent, client: WebSocketClient)
+    func didReceiveText(_ text: String, from websocket: HassWebSocket)
+    // ... other methods
 }
 
 public protocol EventMessageHandler {
