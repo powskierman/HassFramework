@@ -9,20 +9,15 @@ import Foundation
 import Combine
 import Starscream
 
-protocol HassWebSocketDelegate: AnyObject {
+public protocol HassWebSocketDelegate: AnyObject {
     func didReceive(event: WebSocketEvent, client: WebSocketClient)
-    func didReceiveText(_ text: String, from websocket: HassWebSocket)
-    func didReceiveEvent(_ event: HAEventData)
     // ... other methods
 }
 
 public protocol EventMessageHandler {
-    func handleEventMessage(_ message: HAEventData)
+    func handleEventMessage(_ event: HAEventWrapper.HAEventDetail)
 }
-protocol WebSocketManagerDelegate: AnyObject {
-    func didReceiveWebSocketMessage(_ message: HAEventMessage)
-    // ... other methods as necessary
-}
+
 public protocol WebSocketProvider {
     var connectionState: Published<ConnectionState>.Publisher { get }
     var onConnected: (() -> Void)? { get set }
@@ -32,10 +27,4 @@ public protocol WebSocketProvider {
     func disconnect()
     func subscribeToEvents()
 }
-protocol HAEventProtocol {
-    var type: String { get }
-    var event_type: String { get }
-    var entity_id: String { get }
-    var old_state: HAState? { get }
-    var new_state: HAState? { get }
-}
+

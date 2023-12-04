@@ -6,7 +6,7 @@ public class HassWebSocket {
     weak var delegate: HassWebSocketDelegate?
     public static let shared = HassWebSocket()
     
-    @Published public var connectionState: ConnectionState = .disconnected
+    @Published public var connectionState: HassFramework.ConnectionState = .disconnected
     private var socket: WebSocket!
     private let pingInterval: TimeInterval = 60.0
     public var messageId: Int = 0
@@ -45,24 +45,33 @@ public class HassWebSocket {
             print("Error parsing incoming text to JSON.")
             return
         }
-
+        
         switch type {
         case "auth_required":
             authenticate()
         case "auth_ok":
             isAuthenticated = true
             subscribeToEvents()
+ 
         case "event":
-            if let event = try? JSONDecoder().decode(HAEventData.self, from: data) {
-                // Delegate the event handling to the registered event message handlers
-                for handler in eventMessageHandlers {
-                    handler.handleEventMessage(event)
+            do {
+                let eventWrapper = try JSONDecoder().decode(HAEventWrapper.self, from: data)
+                if let event = eventWrapper.event {
+                    // Delegate the event handling to the registered event message handlers
+                    for handler in eventMessageHandlers {
+                        handler.handleEventMessage(event)
+                    }
+                } else {
+                    print("Event data is missing for 'event' type message")
                 }
-            } else {
-                print("Error decoding HAEventData.")
+            } catch {
+                print("Error decoding HAEventWrapper: \(error)")
             }
+
+
         case "result":
             print("We are at handleIncomingText.result")
+            // You can add more logic here to handle the result message
         default:
             print("Received unknown message type: \(type)")
         }

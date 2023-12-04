@@ -27,25 +27,3 @@ public struct HAMessage: Decodable {
 
 // This can be a utility you add if you don't already have it.
 // It allows you to handle dynamic JSON structures.
-struct AnyCodable: Codable {
-    private var _value: Codable!
-    
-    init<T: Codable>(_ value: T?) {
-        self._value = value
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        try _value.encode(to: encoder)
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        // Try decoding into various types, or expand as needed
-        if let intValue = try? container.decode(Int.self) {
-            _value = intValue
-        } else if let stringValue = try? container.decode(String.self) {
-            _value = stringValue
-        }
-        // ... and so on for other potential types.
-    }
-}

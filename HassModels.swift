@@ -29,55 +29,113 @@ public struct HAAttributes: Codable {
     // Add any other attributes as needed
 }
 
-public struct HAState: Codable {
-    public let entityId: String
-    public let state: String
-    public let attributes: [String: String]
-    public let lastChanged: String
-    public let context: HAContext
-
-    private enum CodingKeys: String, CodingKey {
-        case entityId = "entity_id"
-        case state
-        case attributes
-        case lastChanged = "last_changed"
-        case context
-    }
-}
-
-
 public struct HAEventData: Codable {
-    public let eventType: String
-    public let data: HAData
-    public let origin: String
-    public let timeFired: String
-    public let context: HAContext
+    public let type: String
+    public let id: Int?
+    public let event: EventDetail
 
     enum CodingKeys: String, CodingKey {
-        case eventType = "event_type"
-        case data
-        case origin
-        case timeFired = "time_fired"
-        case context
+        case type
+        case id
+        case event
+    }
+
+    public struct EventDetail: Codable {
+        public let eventType: String
+        public let data: HAData
+        public let origin: String?
+        public let timeFired: String?
+        public let context: HAContext?
+
+        enum CodingKeys: String, CodingKey {
+            case eventType = "event_type"
+            case data
+            case origin
+            case timeFired = "time_fired"
+            case context
+        }
     }
 }
 
 public struct HAData: Codable {
-    // Fields based on your JSON structure
     public let entityId: String
-    public let newState: HAState
-    public let oldState: HAState
+    public let oldState: HAState?
+    public let newState: HAState?
 
     enum CodingKeys: String, CodingKey {
         case entityId = "entity_id"
-        case newState = "new_state"
         case oldState = "old_state"
+        case newState = "new_state"
     }
 }
 
-public struct HAEventMessage {
-    public let eventType: String
+public struct HAState: Codable {
     public let entityId: String
-    public let newState: String
-    // ... any other necessary fields
+    public let state: String
+    let attributes: [String: AnyCodable]
+    public let lastChanged: String?
+    public let lastUpdated: String?
+    public let context: HAContext?
+
+    enum CodingKeys: String, CodingKey {
+        case entityId = "entity_id"
+        case state
+        case attributes
+        case lastChanged = "last_changed"
+        case lastUpdated = "last_updated"
+        case context
+    }
+}
+
+struct AnyCodable: Codable {
+    var value: Codable?
+
+    init<T: Codable>(_ value: T?) {
+        self.value = value
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let intValue = try? container.decode(Int.self) {
+            value = intValue
+        } else if let stringValue = try? container.decode(String.self) {
+            value = stringValue
+        } else if let boolValue = try? container.decode(Bool.self) {
+            value = boolValue
+        } else {
+            value = nil
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        guard let value = value else { return }
+        try value.encode(to: encoder)
+    }
+}
+public struct HAEventWrapper: Codable {
+    public let type: String
+    public let id: Int?
+    public let event: HAEventDetail?
+    
+    enum CodingKeys: String, CodingKey {
+        case type
+        case id
+        case event
+    }
+    
+    public struct HAEventDetail: Codable {
+        public let eventType: String
+        public let data: HAData
+        public let origin: String
+        public let timeFired: String
+        public let context: HAContext
+        
+        enum CodingKeys: String, CodingKey {
+            case eventType = "event_type"
+            case data
+            case origin
+            case timeFired = "time_fired"
+            case context
+        }
+    }
 }
