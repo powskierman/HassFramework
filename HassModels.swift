@@ -139,3 +139,13 @@ public struct HAEventWrapper: Codable {
         }
     }
 }
+
+extension HAEventData.EventDetail {
+    init(from wrapperDetail: HAEventWrapper.HAEventDetail) {
+        self.eventType = wrapperDetail.eventType
+        self.data = wrapperDetail.data
+        self.origin = wrapperDetail.origin
+        self.timeFired = wrapperDetail.timeFired
+        self.context = wrapperDetail.context
+    }
+}

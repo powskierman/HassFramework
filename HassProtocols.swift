@@ -15,7 +15,7 @@ public protocol HassWebSocketDelegate: AnyObject {
 }
 
 public protocol EventMessageHandler {
-    func handleEventMessage(_ event: HAEventWrapper.HAEventDetail)
+    func handleEventMessage(_ event: HAEventData.EventDetail)
 }
 
 public protocol WebSocketProvider {

@@ -57,9 +57,9 @@ public class HassWebSocket {
             do {
                 let eventWrapper = try JSONDecoder().decode(HAEventWrapper.self, from: data)
                 if let event = eventWrapper.event {
-                    // Delegate the event handling to the registered event message handlers
+                    let eventDetail = HAEventData.EventDetail(from: event)
                     for handler in eventMessageHandlers {
-                        handler.handleEventMessage(event)
+                        handler.handleEventMessage(eventDetail)
                     }
                 } else {
                     print("Event data is missing for 'event' type message")
