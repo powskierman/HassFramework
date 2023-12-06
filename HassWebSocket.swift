@@ -10,6 +10,8 @@ public class HassWebSocket {
     private var socket: WebSocket!
     private let pingInterval: TimeInterval = 60.0
     public var messageId: Int = 0
+    
+    private var isAuthenticating = false
     public var isAuthenticated = false
     public var onConnectionStateChanged: ((ConnectionState) -> Void)?
     public var onEventReceived: ((String) -> Void)?
@@ -39,44 +41,70 @@ public class HassWebSocket {
     }
     
     private func handleIncomingText(_ text: String) {
-        guard let data = text.data(using: .utf8),
-              let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let type = jsonObject["type"] as? String else {
-            print("Error parsing incoming text to JSON.")
+        guard let data = text.data(using: .utf8) else {
+            print("Error converting incoming text to Data.")
             return
         }
-        
-        switch type {
+
+        // Try decoding into HAEventWrapper which includes the type and potentially an event
+        guard let eventWrapper = try? JSONDecoder().decode(HAEventWrapper.self, from: data) else {
+            print("Error decoding message to HAEventWrapper.")
+            return
+        }
+
+        // Handle the message based on its type
+        switch eventWrapper.type {
         case "auth_required":
             authenticate()
         case "auth_ok":
             isAuthenticated = true
+            isAuthenticating = false
             subscribeToEvents()
- 
+     
         case "event":
-            do {
-                let eventWrapper = try JSONDecoder().decode(HAEventWrapper.self, from: data)
-                if let event = eventWrapper.event {
-                    let eventDetail = HAEventData.EventDetail(from: event)
-                    for handler in eventMessageHandlers {
-                        handler.handleEventMessage(eventDetail)
-                    }
-                } else {
-                    print("Event data is missing for 'event' type message")
+            if let event = eventWrapper.event {
+                let eventDetail = HAEventData.EventDetail(from: event)
+                for handler in eventMessageHandlers {
+                    handler.handleEventMessage(eventDetail)
                 }
-            } catch {
-                print("Error decoding HAEventWrapper: \(error)")
+            } else {
+                print("Event data is missing for 'event' type message")
             }
 
-
         case "result":
-            print("We are at handleIncomingText.result")
-            // You can add more logic here to handle the result message
+            print("Received a result message. Handling logic can be added here.")
+
         default:
-            print("Received unknown message type: \(type)")
+            print("Received unknown message type: \(eventWrapper.type)")
         }
     }
+
    
+    private func handleEventWrapper(_ eventWrapper: HAEventWrapper) {
+        switch eventWrapper.type {
+        case "auth_required":
+            authenticate()
+        case "auth_ok":
+            isAuthenticated = true
+            isAuthenticating = false
+            subscribeToEvents()
+        case "event":
+            // The event type is 'event', now process the event detail
+            if let event = eventWrapper.event {
+                let eventDetail = HAEventData.EventDetail(from: event)
+                for handler in eventMessageHandlers {
+                    handler.handleEventMessage(eventDetail)
+                }
+            } else {
+                print("Event data is missing for 'event' type message")
+            }
+        case "result":
+            print("Received a result message. Handling logic can be added here.")
+        default:
+            print("Received unknown message type: \(eventWrapper.type)")
+        }
+    }
+    
     public func addEventMessageHandler(_ handler: EventMessageHandler) {
         eventMessageHandlers.append(handler)
         print("Event message handler added: \(handler)")
@@ -115,6 +143,7 @@ public class HassWebSocket {
 
     public func disconnect() {
         print("Disconnecting WebSocket")
+        isAuthenticating = false
         socket.disconnect()
         isAttemptingReconnect = false
     }
@@ -132,6 +161,8 @@ public class HassWebSocket {
     }
     
     func authenticate() {
+        guard !isAuthenticating else { return }
+          isAuthenticating = true
         print("Attempting authentication with WebSocket")
         guard let accessToken = getAccessToken() else {
             print("Access token not found, cannot authenticate")

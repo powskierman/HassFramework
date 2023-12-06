@@ -5,8 +5,8 @@ import Combine
 
 public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
     public static let shared = WebSocketManager()
-
     @Published public var websocket: HassWebSocket
+    private var reconnectionAttempts = 0
 
     // Initializer
     private init() {
@@ -39,12 +39,15 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
             print("WebSocket connected")
             websocket.connectionState = .connected
 
-        case .disconnected(let reason, let code):
-            print("WebSocket disconnected with reason: \(reason), code: \(code)")
-            websocket.connectionState = .disconnected
-            websocket.isAuthenticated = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                self.websocket.connect(completion: {_ in}) // Reconnect logic
+        case .disconnected:
+            reconnectionAttempts += 1
+            let delay = min(pow(2.0, Double(reconnectionAttempts)), 60) // Exponential backoff with a max delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                self.websocket.connect(completion: { success in
+                    if success {
+                        self.reconnectionAttempts = 0
+                    }
+                })
             }
 
         case .text(let text):
