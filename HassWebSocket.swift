@@ -2,11 +2,13 @@ import Foundation
 import Starscream
 import Combine
 
-public class HassWebSocket {
+public class HassWebSocket: ObservableObject {
+    @Published public var connectionState: HassFramework.ConnectionState = .disconnected
+    
     weak var delegate: HassWebSocketDelegate?
     public static let shared = HassWebSocket()
     
-    @Published public var connectionState: HassFramework.ConnectionState = .disconnected
+
     private var socket: WebSocket!
     private let pingInterval: TimeInterval = 60.0
     public var messageId: Int = 0
@@ -18,6 +20,7 @@ public class HassWebSocket {
     var pingTimer: Timer?
     private var eventMessageHandlers: [EventMessageHandler] = []
  
+    public var shouldReconnect = true
     private var reconnectionInterval: TimeInterval = 5.0
     private var isAttemptingReconnect = false
     private var messageQueue: [String] = []
@@ -139,6 +142,7 @@ public class HassWebSocket {
         }
         
         socket.connect()
+        print("I'm Connecting...")
     }
 
     public func disconnect() {
@@ -146,6 +150,7 @@ public class HassWebSocket {
         isAuthenticating = false
         socket.disconnect()
         isAttemptingReconnect = false
+        print("isAttemptingReconnect after disconnect: \(isAttemptingReconnect)")
     }
     
     private func getAccessToken() -> String? {
@@ -299,6 +304,14 @@ public class HassWebSocket {
 
 // WebSocketDelegate extension with additional print statements
 extension HassWebSocket: WebSocketDelegate {
+    public func websocketDidConnect(socket: WebSocketClient) {
+        print("WebSocket is connected")
+    }
+
+    public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
+        print("WebSocket is disconnected: \(error?.localizedDescription ?? "No error")")
+    }
+    
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
         print("HassWebSocket received event: \(event)")
         switch event {
@@ -307,18 +320,20 @@ extension HassWebSocket: WebSocketDelegate {
             connectionState = .connected
             startHeartbeat()
             authenticate()
+            shouldReconnect = true
         case .disconnected(_, _):
-            print("WebSocket disconnected event received")
+            print("WebSocket disconnected event received in HassWebSocket at didReceive")
             connectionState = .disconnected
             isAuthenticated = false
             isSubscribedToStateChanges = false
             stopHeartbeat()
-            attemptReconnection()
+//            if shouldReconnect {
+//                attemptReconnection()
+//            }
         case .text(let text):
-               print("Received text from WebSocket: \(text)")
-               // Low-level text handling
-               handleIncomingText(text)
-               // Delegating to higher level
+            print("Received text from WebSocket: \(text)")
+            handleIncomingText(text) // Low-level text handling
+            delegate?.didReceive(event: event, client: client) // Delegating to higher level
 
            default:
                // Delegating unhandled events
