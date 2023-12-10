@@ -1,10 +1,13 @@
 import Foundation
 import Starscream
 import Combine
+import os
 
 public class HassWebSocket: ObservableObject {
     @Published public var connectionState: HassFramework.ConnectionState = .disconnected
     
+    private let logger = Logger(subsystem: "com.example.app", category: "network")
+
     weak var delegate: HassWebSocketDelegate?
     public static let shared = HassWebSocket()
     
@@ -19,6 +22,8 @@ public class HassWebSocket: ObservableObject {
     public var onEventReceived: ((String) -> Void)?
     var pingTimer: Timer?
     private var eventMessageHandlers: [EventMessageHandler] = []
+    // Publisher to emit connection status changes
+    public var connectionStatusPublisher = PassthroughSubject<Bool, Never>()
  
     public var shouldReconnect = true
     private var reconnectionInterval: TimeInterval = 5.0
@@ -190,10 +195,10 @@ public class HassWebSocket: ObservableObject {
     
     public func subscribeToEvents() {
         print("Attempting to subscribe to WebSocket events.")
-        if isSubscribedToStateChanges {
-            print("Already subscribed to state_changed events.")
-            return
-        }
+//        if isSubscribedToStateChanges {
+//            print("Already subscribed to state_changed events.")
+//            return
+//        }
         print("subscribeToEvents called with messageId: \(messageId)")
         messageId += 1
         let subscribeMessage: [String: Any] = [
@@ -264,10 +269,14 @@ public class HassWebSocket: ObservableObject {
     }
 
     public func isConnected() -> Bool {
-        let connected = connectionState == .connected
-        print("Checking if WebSocket is connected: \(connected)")
-        return connected
+        print("Checking if WebSocket is connected: \(connectionState)")
+        return connectionState == .connected
     }
+    
+    public func updateConnectionStatus() {
+         let currentStatus = self.isConnected()
+         connectionStatusPublisher.send(currentStatus)
+     }
 
     public func attemptReconnection() {
         guard !isConnected(), !isAttemptingReconnect else {
@@ -305,10 +314,12 @@ public class HassWebSocket: ObservableObject {
 // WebSocketDelegate extension with additional print statements
 extension HassWebSocket: WebSocketDelegate {
     public func websocketDidConnect(socket: WebSocketClient) {
+        logger.info("WebSocket is connected")
         print("WebSocket is connected")
     }
 
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
+        logger.error("WebSocket is disconnected.")
         print("WebSocket is disconnected: \(error?.localizedDescription ?? "No error")")
     }
     
@@ -316,20 +327,22 @@ extension HassWebSocket: WebSocketDelegate {
         print("HassWebSocket received event: \(event)")
         switch event {
         case .connected(_):
+            logger.debug("WebSocket connected event received")
             print("WebSocket connected event received")
             connectionState = .connected
             startHeartbeat()
             authenticate()
             shouldReconnect = true
         case .disconnected(_, _):
+            logger.error("WebSocket disconnected event received in HassWebSocket at didReceive")
             print("WebSocket disconnected event received in HassWebSocket at didReceive")
             connectionState = .disconnected
             isAuthenticated = false
             isSubscribedToStateChanges = false
             stopHeartbeat()
-//            if shouldReconnect {
-//                attemptReconnection()
-//            }
+            if shouldReconnect {
+                attemptReconnection()
+            }
         case .text(let text):
             print("Received text from WebSocket: \(text)")
             handleIncomingText(text) // Low-level text handling
