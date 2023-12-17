@@ -17,7 +17,7 @@ public class HassWebSocket: ObservableObject {
     public var messageId: Int = 0
     
     private var isAuthenticating = false
-    public var isAuthenticated = false
+    @Published public var isAuthenticated = false
     public var onConnectionStateChanged: ((ConnectionState) -> Void)?
     public var onEventReceived: ((String) -> Void)?
     var pingTimer: Timer?
