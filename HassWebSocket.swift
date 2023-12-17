@@ -5,6 +5,8 @@ import os
 
 public class HassWebSocket: ObservableObject {
     @Published public var connectionState: HassFramework.ConnectionState = .disconnected
+    @Published public var isAuthenticated = false
+    @Published public var isSubscribedToStateChanges = false
     
     private let logger = Logger(subsystem: "com.example.app", category: "network")
 
@@ -17,7 +19,6 @@ public class HassWebSocket: ObservableObject {
     public var messageId: Int = 0
     
     private var isAuthenticating = false
-    @Published public var isAuthenticated = false
     public var onConnectionStateChanged: ((ConnectionState) -> Void)?
     public var onEventReceived: ((String) -> Void)?
     var pingTimer: Timer?
@@ -86,32 +87,6 @@ public class HassWebSocket: ObservableObject {
             print("Received unknown message type: \(eventWrapper.type)")
         }
     }
-
-   
-//    private func handleEventWrapper(_ eventWrapper: HAEventWrapper) {
-//        switch eventWrapper.type {
-//        case "auth_required":
-//            authenticate()
-//        case "auth_ok":
-//            isAuthenticated = true
-//            isAuthenticating = false
-//            subscribeToEvents()
-//        case "event":
-//            // The event type is 'event', now process the event detail
-//            if let event = eventWrapper.event {
-//                let eventDetail = HAEventData.EventDetail(from: event)
-//                for handler in eventMessageHandlers {
-//                    handler.handleEventMessage(eventDetail)
-//                }
-//            } else {
-//                print("Event data is missing for 'event' type message")
-//            }
-//        case "result":
-//            print("Received a result message. Handling logic can be added here.")
-//        default:
-//            print("Received unknown message type: \(eventWrapper.type)")
-//        }
-//    }
     
     public func addEventMessageHandler(_ handler: EventMessageHandler) {
         eventMessageHandlers.append(handler)
@@ -191,14 +166,8 @@ public class HassWebSocket: ObservableObject {
         }
     }
     
-    var isSubscribedToStateChanges = false
-    
     public func subscribeToEvents() {
         print("Attempting to subscribe to WebSocket events.")
-//        if isSubscribedToStateChanges {
-//            print("Already subscribed to state_changed events.")
-//            return
-//        }
         print("subscribeToEvents called with messageId: \(messageId)")
         messageId += 1
         let subscribeMessage: [String: Any] = [
