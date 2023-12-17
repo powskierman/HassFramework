@@ -88,30 +88,30 @@ public class HassWebSocket: ObservableObject {
     }
 
    
-    private func handleEventWrapper(_ eventWrapper: HAEventWrapper) {
-        switch eventWrapper.type {
-        case "auth_required":
-            authenticate()
-        case "auth_ok":
-            isAuthenticated = true
-            isAuthenticating = false
-            subscribeToEvents()
-        case "event":
-            // The event type is 'event', now process the event detail
-            if let event = eventWrapper.event {
-                let eventDetail = HAEventData.EventDetail(from: event)
-                for handler in eventMessageHandlers {
-                    handler.handleEventMessage(eventDetail)
-                }
-            } else {
-                print("Event data is missing for 'event' type message")
-            }
-        case "result":
-            print("Received a result message. Handling logic can be added here.")
-        default:
-            print("Received unknown message type: \(eventWrapper.type)")
-        }
-    }
+//    private func handleEventWrapper(_ eventWrapper: HAEventWrapper) {
+//        switch eventWrapper.type {
+//        case "auth_required":
+//            authenticate()
+//        case "auth_ok":
+//            isAuthenticated = true
+//            isAuthenticating = false
+//            subscribeToEvents()
+//        case "event":
+//            // The event type is 'event', now process the event detail
+//            if let event = eventWrapper.event {
+//                let eventDetail = HAEventData.EventDetail(from: event)
+//                for handler in eventMessageHandlers {
+//                    handler.handleEventMessage(eventDetail)
+//                }
+//            } else {
+//                print("Event data is missing for 'event' type message")
+//            }
+//        case "result":
+//            print("Received a result message. Handling logic can be added here.")
+//        default:
+//            print("Received unknown message type: \(eventWrapper.type)")
+//        }
+//    }
     
     public func addEventMessageHandler(_ handler: EventMessageHandler) {
         eventMessageHandlers.append(handler)
@@ -324,13 +324,13 @@ extension HassWebSocket: WebSocketDelegate {
     }
     
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
-        print("HassWebSocket received event: \(event)")
+      //  print("HassWebSocket received event: \(event)")
         switch event {
         case .connected(_):
             logger.debug("WebSocket connected event received")
             print("WebSocket connected event received")
             connectionState = .connected
-            startHeartbeat()
+            //startHeartbeat()
             authenticate()
             shouldReconnect = true
         case .disconnected(_, _):
@@ -344,7 +344,7 @@ extension HassWebSocket: WebSocketDelegate {
                 attemptReconnection()
             }
         case .text(let text):
-            print("Received text from WebSocket: \(text)")
+            //print("Received text from WebSocket: \(text)")
             handleIncomingText(text) // Low-level text handling
             delegate?.didReceive(event: event, client: client) // Delegating to higher level
 
