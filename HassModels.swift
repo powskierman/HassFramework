@@ -57,6 +57,20 @@ public struct HAEventData: Codable {
     }
 }
 
+public struct HAResultData: Codable {
+    public let type: String
+    public let id: Int?
+    public let success: Bool
+    public let result: [HAState] // Assuming HAState struct can represent each state in the array
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case id
+        case success
+        case result
+    }
+}
+
 public struct HAData: Codable {
     public let entityId: String
     public let oldState: HAState?

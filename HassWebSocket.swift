@@ -31,7 +31,7 @@ public class HassWebSocket: ObservableObject {
     private var isAttemptingReconnect = false
     private var messageQueue: [String] = []
 
-    private var completionHandlers = [Int: (String?) -> Void]()
+    var completionHandlers: [Int: ([HAState]?) -> Void] = [:]
 
     public init() {
         self.messageId = 0
@@ -57,7 +57,7 @@ public class HassWebSocket: ObservableObject {
 
         // Try decoding into HAEventWrapper which includes the type and potentially an event
         guard let eventWrapper = try? JSONDecoder().decode(HAEventWrapper.self, from: data) else {
-            print("Error decoding message to HAEventWrapper.")
+            print("Error decoding message to HAEventWrapper. Text: \(text)")
             return
         }
 
@@ -69,7 +69,6 @@ public class HassWebSocket: ObservableObject {
             isAuthenticated = true
             isAuthenticating = false
             subscribeToEvents()
-     
         case "event":
             if let event = eventWrapper.event {
                 let eventDetail = HAEventData.EventDetail(from: event)
@@ -79,15 +78,28 @@ public class HassWebSocket: ObservableObject {
             } else {
                 print("Event data is missing for 'event' type message")
             }
-
         case "result":
-            print("Received a result message. Handling logic can be added here.")
+            print("Received result message: \(text)")
+            if let data = text.data(using: .utf8),
+               let jsonResponse = try? JSONSerialization.jsonObject(with: data, options: []),
+               let responseDict = jsonResponse as? [String: Any],
+               let id = responseDict["id"] as? Int {
+                
+                if let completionHandler = completionHandlers[id] {
+                    print("Found completion handler for message ID: \(id)")
+                    handleStateResponse(responseDict, messageId: id)
+                } else {
+                    print("No completion handler found for message ID: \(id)")
+                }
+            } else {
+                print("Error parsing result message to dictionary.")
+            }
 
         default:
             print("Received unknown message type: \(eventWrapper.type)")
         }
     }
-    
+
     public func addEventMessageHandler(_ handler: EventMessageHandler) {
         eventMessageHandlers.append(handler)
         print("Event message handler added: \(handler)")
@@ -186,14 +198,15 @@ public class HassWebSocket: ObservableObject {
         isSubscribedToStateChanges = true
     }
     
+    
     public func sendTextMessage(_ message: String) {
-        print("Preparing to send text message: \(message)")
+        print("Preparing to send WebSocket message: \(message)")
         guard isConnected() else {
             print("Not connected. Adding message to queue: \(message)")
             messageQueue.append(message)
             return
         }
-        print("Sending message: \(message)")
+        print("Sending message via WebSocket: \(message)")
         socket.write(string: message)
         flushMessageQueue()
     }
@@ -286,14 +299,14 @@ extension HassWebSocket: WebSocketDelegate {
         logger.info("WebSocket is connected")
         print("WebSocket is connected")
     }
-
+    
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
         logger.error("WebSocket is disconnected.")
         print("WebSocket is disconnected: \(error?.localizedDescription ?? "No error")")
     }
     
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
-      //  print("HassWebSocket received event: \(event)")
+        //  print("HassWebSocket received event: \(event)")
         switch event {
         case .connected(_):
             logger.debug("WebSocket connected event received")
@@ -316,43 +329,63 @@ extension HassWebSocket: WebSocketDelegate {
             //print("Received text from WebSocket: \(text)")
             handleIncomingText(text) // Low-level text handling
             delegate?.didReceive(event: event, client: client) // Delegating to higher level
-
-           default:
-               // Delegating unhandled events
-               print("Received unhandled event: \(event)")
-               delegate?.didReceive(event: event, client: client)
-       }
-   }
-
+            
+        default:
+            // Delegating unhandled events
+            print("Received unhandled event: \(event)")
+            delegate?.didReceive(event: event, client: client)
+        }
+    }
+    
     // Function to handle state response
-    private func handleStateResponse(_ response: [String: Any]) {
-        if let result = response["result"] as? [String: Any],
-           let state = result["state"] as? String {
-            // Retrieve and call the completion handler
+    private func handleStateResponse(_ response: [String: Any], messageId: Int) {
+        print("handleStateResponse called - messageId: \(messageId), response: \(response)")
+        if let result = response["result"] as? [[String: Any]] {
+            // Convert each dictionary in the result array to an HAState object
+            let states: [HAState] = result.compactMap { stateDict in
+                guard let jsonData = try? JSONSerialization.data(withJSONObject: stateDict, options: []),
+                      let state = try? JSONDecoder().decode(HAState.self, from: jsonData) else {
+                    return nil
+                }
+                return state
+            }
+            
+            // Print the contents of the states array
+            print("States array contents: \(states)")
+            
+            // Retrieve and call the completion handler with the array of states
             if let completion = completionHandlers[messageId] {
-                completion(state)
+                completion(states)
                 completionHandlers.removeValue(forKey: messageId)
             }
         } else {
             print("Error or unexpected format in state response: \(response)")
         }
     }
-
+    
+    
     // Function to fetch state
-    public func fetchState(for entityId: String, completion: @escaping (String?) -> Void) {
+    public func fetchState(completion: @escaping ([HAState]?) -> Void) {
+        print("Preparing to fetch state - current messageId: \(messageId)")
         messageId += 1
-        completionHandlers[messageId] = completion
+        let currentMessageId = messageId
+        print("fetchState called - messageId: \(currentMessageId)")
         
         let stateRequest: [String: Any] = [
-            "id": messageId,
-            "type": "get_states",
-            "entity_id": entityId
+            "id": currentMessageId,
+            "type": "get_states"
         ]
-
+        
         do {
             let data = try JSONSerialization.data(withJSONObject: stateRequest, options: [])
             if let jsonString = String(data: data, encoding: .utf8) {
                 sendTextMessage(jsonString)
+                
+                // Assign the completion handler using the captured messageId
+                completionHandlers[currentMessageId] = { states in
+                    print("Completion handler called for messageId: \(currentMessageId)")
+                    completion(states)
+                }
             }
         } catch {
             print("Error creating state request message: \(error)")
@@ -360,4 +393,3 @@ extension HassWebSocket: WebSocketDelegate {
         }
     }
 }
-
