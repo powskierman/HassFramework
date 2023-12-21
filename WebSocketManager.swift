@@ -18,7 +18,7 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
     }
 
     public func connectIfNeeded(completion: @escaping (Bool) -> Void) {
-        print("Checking if WebSocket needs to connect...")
+        // print("Checking if WebSocket needs to connect...")
         if websocket.connectionState == .disconnected {
             websocket.connect { success in
                 completion(success) // Call the completion handler with the success status
@@ -29,10 +29,10 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
     }
 
     public func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient) {
-        print("WebSocketManager didReceive event: \(event)")
+  //      // print("WebSocketManager didReceive event: \(event)")
         switch event {
         case .connected(_):
-            print("WebSocket connected")
+            // print("WebSocket connected")
             websocket.connectionState = .connected
 
         case .disconnected:
@@ -48,7 +48,7 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
             }
 
         case .text(let text):
-            print("Received text:", text)
+        //    // print("Received text:", text)
             if let data = text.data(using: .utf8) {
                 do {
                     let messageType = try websocket.determineWebSocketMessageType(data: data)
@@ -64,36 +64,36 @@ public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
                         // Handle result messages if needed
                         break
                     case .unknown:
-                        print("Unknown WebSocket message type received.")
+                         print("Unknown WebSocket message type received.")
                     }
                 } catch {
-                    print("Error determining WebSocket message type: \(error)")
+                    // print("Error determining WebSocket message type: \(error)")
                 }
             }
             
         case .binary(let data):
-            print("Received binary data:", data)
+             print("Received binary data:", data)
 
         case .ping:
-            print("Received ping.")
+             print("Received ping.")
             
         case .pong:
-            print("Received pong.")
+             print("Received pong.")
             
         case .viabilityChanged(let isViable):
-            print("Viability changed to: \(isViable)")
+             print("Viability changed to: \(isViable)")
             
         case .reconnectSuggested(let shouldReconnect):
-            print("Reconnect suggested: \(shouldReconnect)")
+             print("Reconnect suggested: \(shouldReconnect)")
             
         case .cancelled:
-            print("WebSocket cancelled")
+             print("WebSocket cancelled")
 
         case .error(let error):
-            print("WebSocket error:", error ?? "Unknown error occurred.")
+             print("WebSocket error:", error ?? "Unknown error occurred.")
 
         case .peerClosed:
-            print("Peer closed the WebSocket connection.")
+             print("Peer closed the WebSocket connection.")
             
 //        default:
 //            // Cover all other cases with a default case
