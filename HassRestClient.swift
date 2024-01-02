@@ -7,15 +7,26 @@
 
 import Foundation
 
-class HassRestClient {
+public class HassRestClient {
     private let baseURL: URL
     private let session: URLSession
     private let authToken: String
 
-    init(baseURL: URL, authToken: String) {
-        self.baseURL = baseURL
-        self.authToken = authToken
+    public init() {
         self.session = URLSession(configuration: .default)
+
+        // Fetch the server URL
+        guard let serverURLString = HassWebSocket.shared.getServerURLFromSecrets(),
+              let url = URL(string: serverURLString) else {
+            fatalError("Invalid or missing server URL.")
+        }
+        self.baseURL = url
+
+        // Assume the auth token is stored in Secrets.plist and fetched similarly
+        guard let token = HassWebSocket.shared.getAccessToken() else {
+            fatalError("Invalid or missing auth token.")
+        }
+        self.authToken = token
     }
 
     func performRequest<T: Decodable>(endpoint: String,
@@ -65,7 +76,7 @@ class HassRestClient {
     }
 
     // Example: Sending a command to a device
-    func sendCommandToDevice(deviceId: String, command: DeviceCommand, completion: @escaping (Result<CommandResponse, Error>) -> Void) {
+    public func sendCommandToDevice(deviceId: String, command: DeviceCommand, completion: @escaping (Result<CommandResponse, Error>) -> Void) {
         let endpoint = "api/services/\(command.service)"
         guard let body = try? JSONEncoder().encode(command) else {
             completion(.failure(HassError.encodingError))
@@ -89,12 +100,28 @@ struct DeviceState: Decodable {
     // Define properties according to Home Assistant's API response
 }
 
-struct DeviceCommand: Encodable {
-    let service: String
-    // Define other command properties
+public struct DeviceCommand: Encodable {
+    public let service: String
+    public let entityId: String
+    
+    public init(service: String, entityId: String) {
+        self.service = service
+        self.entityId = entityId
+    }
 }
 
-struct CommandResponse: Decodable {
+public struct CommandResponse: Decodable {
     // Define properties for command response
 }
 
+//public extension HassRestClient {
+//    // Example: Sending a command to a device
+//    func sendCommandToDevice(deviceId: String, command: DeviceCommand, completion: @escaping (Result<CommandResponse, Error>) -> Void) {
+//        let endpoint = "api/services/\(command.service)"
+//        guard let body = try? JSONEncoder().encode(command) else {
+//            completion(.failure(HassError.encodingError))
+//            return
+//        }
+//        performRequest(endpoint: endpoint, method: "POST", body: body, completion: completion)
+//    }
+//}

@@ -105,7 +105,7 @@ public class HassWebSocket: ObservableObject {
         // print("Event message handler added: \(handler)")
     }
 
-    private func getServerURLFromSecrets() -> String? {
+    public func getServerURLFromSecrets() -> String? {
         guard let path = Bundle(for: HassWebSocket.self).path(forResource: "Secrets", ofType: "plist"),
               let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
               let serverURL = dict["HomeAssistantServerURL"] as? String else {
@@ -145,7 +145,7 @@ public class HassWebSocket: ObservableObject {
         // print("isAttemptingReconnect after disconnect: \(isAttemptingReconnect)")
     }
     
-    private func getAccessToken() -> String? {
+    public func getAccessToken() -> String? {
         guard let path = Bundle(for: type(of: self)).path(forResource: "Secrets", ofType: "plist"),
               let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
               let token = dict["HomeAssistantAccessToken"] as? String else {
