@@ -10,15 +10,24 @@ public class HassWebSocket: ObservableObject {
     
     private let logger = Logger(subsystem: "com.example.app", category: "network")
 
+<<<<<<< HEAD
     weak var delegate: HassWebSocketDelegate?
     public static let shared = HassWebSocket()
     
 
+=======
+public class HassWebSocket: WebSocketDelegate {
+    weak var delegate: HassWebSocketDelegate?
+    public static let shared = HassWebSocket()
+
+    @Published public var connectionState: HassFramework.ConnectionState = .disconnected
+>>>>>>> Sleep
     private var socket: WebSocket!
     private let pingInterval: TimeInterval = 60.0
     public var messageId: Int = 0
-    
+
     private var isAuthenticating = false
+<<<<<<< HEAD
     public var onConnectionStateChanged: ((ConnectionState) -> Void)?
     public var onEventReceived: ((String) -> Void)?
     var pingTimer: Timer?
@@ -27,29 +36,64 @@ public class HassWebSocket: ObservableObject {
     public var connectionStatusPublisher = PassthroughSubject<Bool, Never>()
  
     public var shouldReconnect = true
+=======
+    public var isAuthenticated = false
+    var pingTimer: Timer?
+>>>>>>> Sleep
     private var reconnectionInterval: TimeInterval = 5.0
     private var isAttemptingReconnect = false
     private var messageQueue: [String] = []
 
+<<<<<<< HEAD
     var completionHandlers: [Int: ([HAState]?) -> Void] = [:]
 
     public init() {
         self.messageId = 0
         // print("HassWebSocket initialized")
         
+=======
+    public init() {
+        self.messageId = 0
+>>>>>>> Sleep
         guard let requestURLString = getServerURLFromSecrets(),
               let requestURL = URL(string: requestURLString) else {
             fatalError("Failed to create a URL from the string provided in Secrets.plist or the URL is malformed.")
         }
-        
+
         var request = URLRequest(url: requestURL)
         request.timeoutInterval = 5
         self.socket = WebSocket(request: request)
         self.socket.delegate = self
+<<<<<<< HEAD
         // print("WebSocket initialized with request: \(request)")
+=======
+>>>>>>> Sleep
     }
-    
+
+    public func didReceive(event: WebSocketEvent, client: WebSocketClient) {
+        print("HassWebSocket received event: \(event)")
+
+        switch event {
+        case .connected(_):
+            connectionState = .connected
+            startHeartbeat()
+            authenticate()
+
+        case .disconnected:
+            connectionState = .disconnected
+            stopHeartbeat()
+            delegate?.websocketDidDisconnect()
+
+        case .text(let text):
+            handleIncomingText(text)
+
+        default:
+            print("Received unhandled event: \(event)")
+        }
+    }
+
     private func handleIncomingText(_ text: String) {
+<<<<<<< HEAD
         guard let data = text.data(using: .utf8) else {
             // print("Error converting incoming text to Data.")
             return
@@ -133,11 +177,19 @@ public class HassWebSocket: ObservableObject {
             }
         }
         
+=======
+        // Logic to handle incoming text messages
+    }
+
+    public func connect(completion: @escaping (Bool) -> Void) {
+        connectionState = .connecting
+>>>>>>> Sleep
         socket.connect()
         // print("I'm Connecting...")
     }
 
     public func disconnect() {
+<<<<<<< HEAD
         // print("Disconnecting WebSocket")
         isAuthenticating = false
         socket.disconnect()
@@ -161,18 +213,30 @@ public class HassWebSocket: ObservableObject {
         guard !isAuthenticating else { return }
           isAuthenticating = true
         // print("Attempting authentication with WebSocket")
+=======
+        isAuthenticating = false
+        socket.disconnect()
+        isAttemptingReconnect = false
+        stopHeartbeat()
+    }
+
+    func authenticate() {
+        guard !isAuthenticating else { return }
+        isAuthenticating = true
+>>>>>>> Sleep
         guard let accessToken = getAccessToken() else {
             // print("Access token not found, cannot authenticate")
             return
         }
-        
+
         let authMessage = [
             "type": "auth",
             "access_token": accessToken
         ]
-        
+
         if let data = try? JSONSerialization.data(withJSONObject: authMessage, options: []),
            let jsonString = String(data: data, encoding: .utf8) {
+<<<<<<< HEAD
             // print("Sending authentication message: \(jsonString)")
             socket.write(string: jsonString)
         }
@@ -283,11 +347,38 @@ public class HassWebSocket: ObservableObject {
         pingTimer?.invalidate()
         pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { [weak self] _ in
             // print("Sending ping to WebSocket")
+=======
+            socket.write(string: jsonString)
+        }
+    }
+
+    private func getAccessToken() -> String? {
+            guard let path = Bundle(for: type(of: self)).path(forResource: "Secrets", ofType: "plist"),
+                  let dict = NSDictionary(contentsOfFile: path) as? [String: Any],
+                  let token = dict["HomeAssistantAccessToken"] as? String else {
+                print("Failed to retrieve access token from Secrets.plist.")
+                return nil
+            }
+            
+            print("Access token retrieved: \(token)")
+            return token
+        }
+        
+        private func getServerURLFromSecrets() -> String? {
+             // Logic to retrieve server URL from secrets
+             return "Your_Server_URL"
+         }
+
+    private func startHeartbeat() {
+        pingTimer?.invalidate()
+        pingTimer = Timer.scheduledTimer(withTimeInterval: pingInterval, repeats: true) { [weak self] _ in
+>>>>>>> Sleep
             self?.socket.write(ping: Data())
         }
     }
 
     private func stopHeartbeat() {
+<<<<<<< HEAD
         // print("Stopping WebSocket heartbeat")
         pingTimer?.invalidate()
     }
@@ -396,3 +487,8 @@ extension HassWebSocket: WebSocketDelegate {
         }
     }
 }
+=======
+        pingTimer?.invalidate()
+    }
+}
+>>>>>>> Sleep
