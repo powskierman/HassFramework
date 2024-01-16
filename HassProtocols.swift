@@ -11,6 +11,7 @@ import Starscream
 
 public protocol HassWebSocketDelegate: AnyObject {
     func websocketDidDisconnect()
+    func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient)
     // ... other methods
 }
 

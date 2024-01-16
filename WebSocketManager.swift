@@ -6,7 +6,6 @@ import os
 
 public class WebSocketManager: ObservableObject, HassWebSocketDelegate {
     public func websocketDidDisconnect() {
-        <#code#>
     }
     
     public static let shared = WebSocketManager()
