@@ -114,14 +114,67 @@ public struct CommandResponse: Decodable {
     // Define properties for command response
 }
 
-//public extension HassRestClient {
-//    // Example: Sending a command to a device
-//    func sendCommandToDevice(deviceId: String, command: DeviceCommand, completion: @escaping (Result<CommandResponse, Error>) -> Void) {
-//        let endpoint = "api/services/\(command.service)"
-//        guard let body = try? JSONEncoder().encode(command) else {
-//            completion(.failure(HassError.encodingError))
-//            return
-//        }
-//        performRequest(endpoint: endpoint, method: "POST", body: body, completion: completion)
-//    }
-//}
+extension HassRestClient {
+    // Fetch the state of a specified entity
+    public func fetchState(entityId: String, completion: @escaping (Result<HAEntity, Error>) -> Void) {
+        let url = baseURL.appendingPathComponent("states/\(entityId)")
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+
+        let task = session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                completion(.failure(HAError.dataUnavailable))
+                return
+            }
+
+            do {
+                let entity = try JSONDecoder().decode(HAEntity.self, from: data)
+                completion(.success(entity))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+
+        task.resume()
+    }
+
+    // Modify the state of a specified entity
+    public func changeState(entityId: String, newState: String, completion: @escaping (Result<HAEntity, Error>) -> Void) {
+        let url = baseURL.appendingPathComponent("states/\(entityId)")
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body: [String: Any] = ["state": newState]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+
+        let task = session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                completion(.failure(HAError.dataUnavailable))
+                return
+            }
+
+            do {
+                let entity = try JSONDecoder().decode(HAEntity.self, from: data)
+                completion(.success(entity))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+
+        task.resume()
+    }
+}

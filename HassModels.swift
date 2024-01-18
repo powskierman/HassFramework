@@ -154,6 +154,24 @@ public struct HAEventWrapper: Codable {
     }
 }
 
+public struct HAEntity: Codable {
+    public let entityId: String
+    public let state: String
+    public let attributes: HAAttributes
+    public let lastChanged: String?
+    public let lastUpdated: String?
+    public let context: HAContext?
+
+    enum CodingKeys: String, CodingKey {
+        case entityId = "entity_id"
+        case state
+        case attributes
+        case lastChanged = "last_changed"
+        case lastUpdated = "last_updated"
+        case context
+    }
+}
+
 extension HAEventData.EventDetail {
     init(from wrapperDetail: HAEventWrapper.HAEventDetail) {
         self.eventType = wrapperDetail.eventType

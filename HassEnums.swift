@@ -11,11 +11,37 @@ public enum ConnectionState {
     case connecting
     case connected
 }
+
 enum HAError: Error {
     case unknownMessageType
     case unableToSerializeMessage
     case unableToRetrieveServerURL
     case unableToRetrieveAccessToken
+    case dataUnavailable
+    case customError(String)
+
+    var localizedDescription: String {
+        switch self {
+        case .unknownMessageType:
+            return "Unknown message type received."
+        case .unableToSerializeMessage:
+            return "Unable to serialize the message."
+        case .unableToRetrieveServerURL:
+            return "Unable to retrieve the server URL."
+        case .unableToRetrieveAccessToken:
+            return "Unable to retrieve the access token."
+        case .dataUnavailable:
+            return "Data is unavailable."
+        case .customError(let message):
+            return message
+        }
+    }
+
+    // Initializer for custom error messages
+    init(_ message: String) {
+        self = .customError(message)
+    }
 }
+
 
 
