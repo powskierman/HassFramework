@@ -163,6 +163,16 @@ public struct HAEntity: Codable {
     }
 }
 
+public struct ScriptResponse: Decodable {
+    let entityId: String
+    let state: String
+
+    enum CodingKeys: String, CodingKey {
+        case entityId = "entity_id"
+        case state
+    }
+}
+
 extension HAEventData.EventDetail {
     init(from wrapperDetail: HAEventWrapper.HAEventDetail) {
         self.eventType = wrapperDetail.eventType

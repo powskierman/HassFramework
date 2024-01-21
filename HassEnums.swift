@@ -43,7 +43,7 @@ enum HAError: Error {
     }
 }
 
-enum HassError: Error {
+public enum HassError: Error {
     case invalidURL
     case noData
     case encodingError

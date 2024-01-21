@@ -89,8 +89,28 @@ public class HassRestClient {
         performRequest(endpoint: endpoint, method: "POST", body: body, completion: completion)
     }
     
+    public func callScript(entityId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let endpoint = "services/script/turn_on"
+        let body: [String: Any] = ["entity_id": entityId]
+
+        guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+            completion(.failure(HassError.encodingError))
+            return
+        }
+
+        performRequest(endpoint: endpoint, method: "POST", body: bodyData) { (result: Result<[ScriptResponse], Error>) in
+            switch result {
+            case .success(_):
+                // Since we only care about the success of the call, not the response data,
+                // we just pass success with Void (nothing) to the completion handler.
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
     // ... Other methods as needed
-    
     
     // Models for Decoding API Responses
     struct DeviceState: Decodable {
@@ -156,5 +176,3 @@ extension DecodingError {
         }
     }
 }
-
-
