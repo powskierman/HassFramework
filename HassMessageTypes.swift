@@ -7,14 +7,6 @@
 
 import Foundation
 
-// Enumeration for type of messages
-public enum MessageType: String, Decodable {
-    case event
-    case result
-    case command
-    // ... any other relevant message types
-}
-
 // Struct to encapsulate the general structure of incoming messages
 public struct HAMessage: Decodable {
     let id: Int?

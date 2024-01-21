@@ -1,13 +1,5 @@
 import Foundation
 
-enum WebSocketMessageType {
-    case authRequired
-    case authOk
-    case event
-    case result
-    case unknown
-}
-
 public struct HAContext: Codable {
     let id: String
     let parentId: String?
@@ -20,13 +12,12 @@ public struct HAContext: Codable {
     }
 }
 
-public struct HAAttributes: Codable {
-    public let friendlyName: String
+struct HAAttributes: Codable { // Changed from Decodable to Codable
+    let friendlyName: String?
 
-    private enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case friendlyName = "friendly_name"
     }
-    // Add any other attributes as needed
 }
 
 public struct HAEventData: Codable {
@@ -157,7 +148,7 @@ public struct HAEventWrapper: Codable {
 public struct HAEntity: Codable {
     public let entityId: String
     public let state: String
-    public let attributes: HAAttributes
+    let attributes: HAAttributes
     public let lastChanged: String?
     public let lastUpdated: String?
     public let context: HAContext?

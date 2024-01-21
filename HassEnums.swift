@@ -43,5 +43,27 @@ enum HAError: Error {
     }
 }
 
+enum HassError: Error {
+    case invalidURL
+    case noData
+    case encodingError
+    case entityNotFound
+}
+
+enum WebSocketMessageType {
+    case authRequired
+    case authOk
+    case event
+    case result
+    case unknown
+}
+
+// Enumeration for type of messages
+public enum MessageType: String, Decodable {
+    case event
+    case result
+    case command
+    // ... any other relevant message types
+}
 
 
