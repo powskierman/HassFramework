@@ -11,24 +11,28 @@ public class HassRestClient {
     private let baseURL: URL
     private let session: URLSession
     private let authToken: String
-    
+
     public init() {
-        self.session = URLSession(configuration: .default)
-        
-        // Fetch the server URL
-        guard let serverURLString = HassWebSocket.shared.getServerURLFromSecrets(),
-              let url = URL(string: serverURLString) else {
-            fatalError("Invalid or missing server URL.")
+        guard let secrets = HassRestClient.loadSecrets(),
+              let serverURLString = secrets["serverURL"] as? String,
+              let url = URL(string: serverURLString),
+              let token = secrets["authToken"] as? String else {
+            fatalError("Invalid or missing server URL or auth token in Secrets.plist.")
         }
+
         self.baseURL = url
-        
-        // Assume the auth token is stored in Secrets.plist and fetched similarly
-        guard let token = HassWebSocket.shared.getAccessToken() else {
-            fatalError("Invalid or missing auth token.")
-        }
         self.authToken = token
+        self.session = URLSession(configuration: .default)
     }
-    
+
+    private static func loadSecrets() -> [String: Any]? {
+        guard let path = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+              let dictionary = NSDictionary(contentsOfFile: path) as? [String: Any] else {
+            return nil
+        }
+        return dictionary
+}
+
     func performRequest<T: Decodable>(endpoint: String,
                                       method: String = "GET",
                                       body: Data? = nil,

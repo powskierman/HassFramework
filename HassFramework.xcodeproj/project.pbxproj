@@ -13,6 +13,14 @@
 		D03142C52B4225300045E387 /* HassRestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03142C42B4225300045E387 /* HassRestClient.swift */; };
 		D033BAEA2ACC575C00FAFC4C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D033BAE92ACC575C00FAFC4C /* .gitignore */; };
 		D033BAEC2ACC57D600FAFC4C /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033BAEB2ACC57D600FAFC4C /* Secrets.plist */; };
+		D03610322B607066001CFE29 /* HassWatchFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = D03610312B607066001CFE29 /* HassWatchFramework.docc */; };
+		D03610332B607066001CFE29 /* HassWatchFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = D03610302B607066001CFE29 /* HassWatchFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D03610372B6071B7001CFE29 /* HassRestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03142C42B4225300045E387 /* HassRestClient.swift */; };
+		D03610382B6071BF001CFE29 /* HassModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF702ADC312B000AF815 /* HassModels.swift */; };
+		D03610392B6071C3001CFE29 /* HassProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */; };
+		D036103A2B6071C7001CFE29 /* HassMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */; };
+		D036103B2B6071CC001CFE29 /* HassEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* HassEnums.swift */; };
+		D036103C2B6071D1001CFE29 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033BAEB2ACC57D600FAFC4C /* Secrets.plist */; };
 		D05FCF6F2ADC30A2000AF815 /* HassProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */; };
 		D05FCF712ADC312B000AF815 /* HassModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF702ADC312B000AF815 /* HassModels.swift */; };
 		D05FCF732ADC31A5000AF815 /* HassMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */; };
@@ -29,6 +37,9 @@
 		D03142C42B4225300045E387 /* HassRestClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassRestClient.swift; sourceTree = "<group>"; };
 		D033BAE92ACC575C00FAFC4C /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D033BAEB2ACC57D600FAFC4C /* Secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secrets.plist; sourceTree = "<group>"; };
+		D036102E2B607066001CFE29 /* HassWatchFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HassWatchFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D03610302B607066001CFE29 /* HassWatchFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HassWatchFramework.h; sourceTree = "<group>"; };
+		D03610312B607066001CFE29 /* HassWatchFramework.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = HassWatchFramework.docc; sourceTree = "<group>"; };
 		D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassProtocols.swift; sourceTree = "<group>"; };
 		D05FCF702ADC312B000AF815 /* HassModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassModels.swift; sourceTree = "<group>"; };
 		D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassMessageTypes.swift; sourceTree = "<group>"; };
@@ -42,6 +53,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0640BEC2AEF29F300809829 /* Starscream in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D036102B2B607066001CFE29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +79,7 @@
 				D033BAEB2ACC57D600FAFC4C /* Secrets.plist */,
 				D033BAE92ACC575C00FAFC4C /* .gitignore */,
 				D00BF6132AC9F85C00B7C307 /* HassFramework */,
+				D036102F2B607066001CFE29 /* HassWatchFramework */,
 				D00BF6122AC9F85C00B7C307 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				D00BF6112AC9F85C00B7C307 /* HassFramework.framework */,
+				D036102E2B607066001CFE29 /* HassWatchFramework.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -82,6 +102,15 @@
 			path = HassFramework;
 			sourceTree = "<group>";
 		};
+		D036102F2B607066001CFE29 /* HassWatchFramework */ = {
+			isa = PBXGroup;
+			children = (
+				D03610302B607066001CFE29 /* HassWatchFramework.h */,
+				D03610312B607066001CFE29 /* HassWatchFramework.docc */,
+			);
+			path = HassWatchFramework;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -90,6 +119,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				D00BF6172AC9F85C00B7C307 /* HassFramework.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D03610292B607066001CFE29 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D03610332B607066001CFE29 /* HassWatchFramework.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +154,24 @@
 			productReference = D00BF6112AC9F85C00B7C307 /* HassFramework.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		D036102D2B607066001CFE29 /* HassWatchFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D03610342B607066001CFE29 /* Build configuration list for PBXNativeTarget "HassWatchFramework" */;
+			buildPhases = (
+				D03610292B607066001CFE29 /* Headers */,
+				D036102A2B607066001CFE29 /* Sources */,
+				D036102B2B607066001CFE29 /* Frameworks */,
+				D036102C2B607066001CFE29 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HassWatchFramework;
+			productName = HassWatchFramework;
+			productReference = D036102E2B607066001CFE29 /* HassWatchFramework.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -128,6 +183,9 @@
 				TargetAttributes = {
 					D00BF6102AC9F85C00B7C307 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					D036102D2B607066001CFE29 = {
+						CreatedOnToolsVersion = 15.2;
 					};
 				};
 			};
@@ -148,6 +206,7 @@
 			projectRoot = "";
 			targets = (
 				D00BF6102AC9F85C00B7C307 /* HassFramework */,
+				D036102D2B607066001CFE29 /* HassWatchFramework */,
 			);
 		};
 /* End PBXProject section */
@@ -159,6 +218,14 @@
 			files = (
 				D033BAEC2ACC57D600FAFC4C /* Secrets.plist in Resources */,
 				D033BAEA2ACC575C00FAFC4C /* .gitignore in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D036102C2B607066001CFE29 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D036103C2B6071D1001CFE29 /* Secrets.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,12 +247,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D036102A2B607066001CFE29 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D03610322B607066001CFE29 /* HassWatchFramework.docc in Sources */,
+				D036103B2B6071CC001CFE29 /* HassEnums.swift in Sources */,
+				D03610372B6071B7001CFE29 /* HassRestClient.swift in Sources */,
+				D036103A2B6071C7001CFE29 /* HassMessageTypes.swift in Sources */,
+				D03610392B6071C3001CFE29 /* HassProtocols.swift in Sources */,
+				D03610382B6071BF001CFE29 /* HassModels.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		D00BF6182AC9F85C00B7C307 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"ADDITIONAL_SDKS[arch=*]" = "";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
@@ -382,6 +463,74 @@
 			};
 			name = Release;
 		};
+		D03610352B607066001CFE29 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = G3337N7QRS;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.powskierman.HassWatchFramework;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.2;
+			};
+			name = Debug;
+		};
+		D03610362B607066001CFE29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = G3337N7QRS;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.powskierman.HassWatchFramework;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -399,6 +548,15 @@
 			buildConfigurations = (
 				D00BF61B2AC9F85C00B7C307 /* Debug */,
 				D00BF61C2AC9F85C00B7C307 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D03610342B607066001CFE29 /* Build configuration list for PBXNativeTarget "HassWatchFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D03610352B607066001CFE29 /* Debug */,
+				D03610362B607066001CFE29 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

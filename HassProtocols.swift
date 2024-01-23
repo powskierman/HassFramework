@@ -7,11 +7,16 @@
 
 import Foundation
 import Combine
+#if canImport(Starscream) && os(iOS)
 import Starscream
+#endif
+
 
 public protocol HassWebSocketDelegate: AnyObject {
     func websocketDidDisconnect()
+#if os(iOS)
     func didReceive(event: Starscream.WebSocketEvent, client: Starscream.WebSocketClient)
+    #endif
     // ... other methods
 }
 
