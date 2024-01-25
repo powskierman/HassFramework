@@ -12,12 +12,15 @@ public class HassRestClient {
     private let session: URLSession
     private let authToken: String
 
-    public init() {
+    public init?() {
         guard let secrets = HassRestClient.loadSecrets(),
               let serverURLString = secrets["serverURL"] as? String,
               let url = URL(string: serverURLString),
               let token = secrets["authToken"] as? String else {
-            fatalError("Invalid or missing server URL or auth token in Secrets.plist.")
+            // Instead of fatalError, handle the error gracefully
+            // For example, log an error message and return nil
+            print("Error: Invalid or missing server URL or auth token in Secrets.plist.")
+            return nil
         }
 
         self.baseURL = url
