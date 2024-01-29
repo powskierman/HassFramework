@@ -12,35 +12,46 @@ public class HassRestClient {
     private let session: URLSession
     private let authToken: String
 
-    public init?() {
-        guard let secrets = HassRestClient.loadSecrets(),
-              let serverURLString = secrets["serverURL"] as? String,
-              let url = URL(string: serverURLString),
-              let token = secrets["authToken"] as? String else {
-            // Instead of fatalError, handle the error gracefully
-            // For example, log an error message and return nil
-            print("Error: Invalid or missing server URL or auth token in Secrets.plist.")
-            return nil
+    public init() {
+        let secrets = HassRestClient.loadSecrets()
+        guard let serverURLString = secrets?["RESTURL"] as? String,
+              let _ = secrets?["WSURL"] as? String, // WebSocket URL, if needed
+              let token = secrets?["authToken"] as? String else {
+            print("Error: Invalid or missing URL or auth token in Secrets.plist.")
+            fatalError("Invalid or missing URL or auth token in Secrets.plist.")
         }
 
-        self.baseURL = url
+        // Use REST URL for baseURL
+        self.baseURL = URL(string: serverURLString)!
+        // WebSocket URL can be used as needed, perhaps as a separate property
+        // let wsURL = URL(string: wsURLString)!
+
         self.authToken = token
         self.session = URLSession(configuration: .default)
     }
-
+ 
     private static func loadSecrets() -> [String: Any]? {
-        guard let path = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
-              let dictionary = NSDictionary(contentsOfFile: path) as? [String: Any] else {
+        guard let path = Bundle.main.path(forResource: "Secrets", ofType: "plist") else {
+            print("Error: Secrets.plist file not found.")
             return nil
         }
+
+        guard let dictionary = NSDictionary(contentsOfFile: path) as? [String: Any] else {
+            print("Error: Unable to read or cast Secrets.plist as a dictionary.")
+            return nil
+        }
+
+        // Print the retrieved data for debugging
+        print("Loaded Secrets from Secrets.plist: \(dictionary)")
         return dictionary
-}
+    }
 
     func performRequest<T: Decodable>(endpoint: String,
                                       method: String = "GET",
                                       body: Data? = nil,
                                       completion: @escaping (Result<T, Error>) -> Void) {
-        guard let url = URL(string: endpoint, relativeTo: baseURL) else {
+        let fullURLString = "http://192.168.1.7:8123/api/\(endpoint)"
+        guard let url = URL(string: fullURLString) else {
             completion(.failure(HassError.invalidURL))
             return
         }
@@ -55,9 +66,12 @@ public class HassRestClient {
         }
         
         let task = session.dataTask(with: request) { data, response, error in
+            if let httpResponse = response as? HTTPURLResponse {
+                print("[HassRestClient] Response Status Code: \(httpResponse.statusCode)")
+            }
             if let data = data {
                 let rawJSON = String(decoding: data, as: UTF8.self)
-                print("[HassRestClient] Raw JSON for \(endpoint): \(rawJSON)")
+                print("[HassRestClient] Raw JSON Response: \(rawJSON)")
             }
             if let error = error {
                 completion(.failure(error))
