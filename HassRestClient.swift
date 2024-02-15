@@ -50,13 +50,10 @@ public class HassRestClient {
                                       method: String = "GET",
                                       body: Data? = nil,
                                       completion: @escaping (Result<T, Error>) -> Void) {
-        let fullURLString = "http://192.168.1.7:8123/api/\(endpoint)"
-        guard let url = URL(string: fullURLString) else {
-            completion(.failure(HassError.invalidURL))
-            return
-        }
+        // Construct the full URL by appending the endpoint to the baseURL
+        let fullURL = baseURL.appendingPathComponent(endpoint)
         
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: fullURL)
         request.httpMethod = method
         request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -92,6 +89,7 @@ public class HassRestClient {
         }
         task.resume()
     }
+
     
     // Add specific methods for various Home Assistant actions
     
