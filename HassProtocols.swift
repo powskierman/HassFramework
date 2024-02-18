@@ -36,3 +36,8 @@ public protocol WebSocketProvider {
     func subscribeToEvents()
 }
 
+public protocol HassCommand {
+    var endpoint: String { get }
+    var method: String { get }
+    var body: Data? { get }
+}
