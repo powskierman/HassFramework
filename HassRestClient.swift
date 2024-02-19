@@ -8,24 +8,20 @@
 import Foundation
 
 public class HassRestClient {
+    public static let shared = HassRestClient()
+
     private let baseURL: URL
     private let session: URLSession
     private let authToken: String
     
-    public init() {
+    private init() {
         let secrets = HassRestClient.loadSecrets()
         guard let serverURLString = secrets?["RESTURL"] as? String,
-              let _ = secrets?["WSURL"] as? String, // WebSocket URL, if needed
               let token = secrets?["authToken"] as? String else {
-            print("Error: Invalid or missing URL or auth token in Secrets.plist.")
             fatalError("Invalid or missing URL or auth token in Secrets.plist.")
         }
         
-        // Use REST URL for baseURL
         self.baseURL = URL(string: serverURLString)!
-        // WebSocket URL can be used as needed, perhaps as a separate property
-        // let wsURL = URL(string: wsURLString)!
-        
         self.authToken = token
         self.session = URLSession(configuration: .default)
     }
@@ -41,17 +37,20 @@ public class HassRestClient {
             return nil
         }
         
-        // Print the retrieved data for debugging
         print("Loaded Secrets from Secrets.plist: \(dictionary)")
         return dictionary
     }
     
-    func performRequest<T: Decodable>(endpoint: String,
+    public func performRequest<T: Decodable>(endpoint: String,
                                       method: String = "GET",
                                       body: Data? = nil,
-                                      completion: @escaping (Result<T, Error>) -> Void) {
-        // Construct the full URL by appending the endpoint to the baseURL
-        let fullURL = baseURL.appendingPathComponent(endpoint)
+                                             completion: @escaping (Result<T, Error>) -> Void) {
+        // Check if baseURL already contains '/api', and endpoint also starts with it
+        let adjustedEndpoint = baseURL.absoluteString.hasSuffix("/api") && endpoint.hasPrefix("/api") ?
+        String(endpoint.dropFirst(4)) : // Drop the first '/api'
+        endpoint
+        
+        let fullURL = baseURL.appendingPathComponent(adjustedEndpoint)
         
         var request = URLRequest(url: fullURL)
         request.httpMethod = method
@@ -62,34 +61,40 @@ public class HassRestClient {
             request.httpBody = body
         }
         
+        print("[HassRestClient] Request URL: \(fullURL.absoluteString), Method: \(method)")
+        
         let task = session.dataTask(with: request) { data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                print("[HassRestClient] Response Status Code: \(httpResponse.statusCode)")
-            }
-            if let data = data {
-                let rawJSON = String(decoding: data, as: UTF8.self)
-                print("[HassRestClient] Raw JSON Response: \(rawJSON)")
-            }
+            // Check for any network request errors
             if let error = error {
-                completion(.failure(error))
+                print("[HassRestClient] Network request error: \(error)")
                 return
             }
             
+            // Ensure we have received data
             guard let data = data else {
-                completion(.failure(HassError.noData))
+                print("[HassRestClient] Did not receive data")
                 return
             }
             
+            // Attempt to directly handle the empty array case
+            if let rawJSONString = String(data: data, encoding: .utf8), rawJSONString == "[]" {
+                print("[HassRestClient] Success: Received an empty array, indicating a successful operation with no errors.")
+                // Handle the success case, possibly invoking a success completion handler
+                return
+            }
+            
+            // Attempt to decode into a known structure or handle alternative content
             do {
-                let decodedResponse = try JSONDecoder().decode(T.self, from: data)
-                completion(.success(decodedResponse))
+                let decodedResponse = try JSONDecoder().decode(AnyCodable.self, from: data)
+                print("[HassRestClient] Successfully decoded response: \(decodedResponse)")
+                // Handle the decoded response
             } catch {
-                completion(.failure(error))
+                print("[HassRestClient] JSON Decoding Error: \(error.localizedDescription)")
+                // If decoding into the specific model fails, handle as needed, possibly checking for other types
             }
         }
         task.resume()
     }
-    
     
     // Add specific methods for various Home Assistant actions
     
@@ -100,7 +105,7 @@ public class HassRestClient {
     
     // Example: Sending a command to a device
     public func sendCommandToDevice(deviceId: String, command: DeviceCommand, completion: @escaping (Result<CommandResponse, Error>) -> Void) {
-        let endpoint = "api/services/\(command.service)"
+        let endpoint = "api/services/climate/set_temperature"
         guard let body = try? JSONEncoder().encode(command) else {
             completion(.failure(HassError.encodingError))
             return
