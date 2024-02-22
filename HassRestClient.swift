@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 public class HassRestClient {
     public static let shared = HassRestClient()
@@ -82,6 +83,7 @@ public class HassRestClient {
                 // Handle the success case, possibly invoking a success completion handler
                 return
             }
+            print("[HassRestClient] Received raw data: \(String(data: data, encoding: .utf8) ?? "Invalid UTF-8 data")")
             
             // Attempt to decode into a known structure or handle alternative content
             do {
@@ -215,6 +217,7 @@ public class HassRestClient {
         performRequest(endpoint: endpoint, method: "POST", body: bodyData, completion: completion)
     }
 }
+
     extension HassRestClient {
         // Fetch the state of a specified entity
         
