@@ -10,7 +10,7 @@ import Combine
 
 public class HassRestClient {
     public static let shared = HassRestClient()
-
+    
     private let baseURL: URL
     private let session: URLSession
     private let authToken: String
@@ -42,99 +42,77 @@ public class HassRestClient {
         return dictionary
     }
     
-    public func performRequest<T: Decodable>(endpoint: String,
-                                      method: String = "GET",
-                                      body: Data? = nil,
-                                             completion: @escaping (Result<T, Error>) -> Void) {
-        // Check if baseURL already contains '/api', and endpoint also starts with it
-        let adjustedEndpoint = baseURL.absoluteString.hasSuffix("/api") && endpoint.hasPrefix("/api") ?
-        String(endpoint.dropFirst(4)) : // Drop the first '/api'
-        endpoint
-        
-        let fullURL = baseURL.appendingPathComponent(adjustedEndpoint)
-        
-        var request = URLRequest(url: fullURL)
+    public func performRequest(endpoint: String, method: String, body: Data?) -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
+        let adjustedEndpoint = baseURL.appendingPathComponent(endpoint)
+        var request = URLRequest(url: adjustedEndpoint)
         request.httpMethod = method
         request.addValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
         if let body = body {
             request.httpBody = body
         }
-        
-        print("[HassRestClient] Request URL: \(fullURL.absoluteString), Method: \(method)")
-        
-        let task = session.dataTask(with: request) { data, response, error in
-            // Check for any network request errors
-            if let error = error {
-                print("[HassRestClient] Network request error: \(error)")
-                return
-            }
-            
-            // Ensure we have received data
-            guard let data = data else {
-                print("[HassRestClient] Did not receive data")
-                return
-            }
-            
-            // Attempt to directly handle the empty array case
-            if let rawJSONString = String(data: data, encoding: .utf8), rawJSONString == "[]" {
-                print("[HassRestClient] Success: Received an empty array, indicating a successful operation with no errors.")
-                // Handle the success case, possibly invoking a success completion handler
-                return
-            }
-            print("[HassRestClient] Received raw data: \(String(data: data, encoding: .utf8) ?? "Invalid UTF-8 data")")
-            
-            // Attempt to decode into a known structure or handle alternative content
-            do {
-                let decodedResponse = try JSONDecoder().decode(AnyCodable.self, from: data)
-                print("[HassRestClient] Successfully decoded response: \(decodedResponse)")
-                // Handle the decoded response
-            } catch {
-                print("[HassRestClient] JSON Decoding Error: \(error.localizedDescription)")
-                // If decoding into the specific model fails, handle as needed, possibly checking for other types
-            }
-        }
-        task.resume()
+
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .mapError { $0 as URLError }
+            .eraseToAnyPublisher()
     }
+    
     
     // Add specific methods for various Home Assistant actions
     
     // Example: Fetching the state of a device
-    public func fetchDeviceState(deviceId: String, completion: @escaping (Result<DeviceState, Error>) -> Void) {
-        performRequest(endpoint: "api/states/\(deviceId)", completion: completion)
-    }
+ 
+        public func fetchDeviceState(deviceId: String) -> AnyPublisher<DeviceState, Error> {
+            let endpoint = "api/states/\(deviceId)"
+            
+            return performRequest(endpoint: endpoint, method: "GET", body: nil)
+                .tryMap { output -> Data in
+                    guard let httpResponse = output.response as? HTTPURLResponse,
+                          200...299 ~= httpResponse.statusCode else {
+                        throw URLError(.badServerResponse)
+                    }
+                    return output.data
+                }
+                .decode(type: DeviceState.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        }
     
-    // Example: Sending a command to a device
-    public func sendCommandToDevice(deviceId: String, command: DeviceCommand, completion: @escaping (Result<CommandResponse, Error>) -> Void) {
-        let endpoint = "api/services/climate/set_temperature"
+    
+    public func sendCommandToDevice<T: Encodable, R: Decodable>(deviceId: String, command: T, endpoint: String) -> AnyPublisher<R, Error> {
         guard let body = try? JSONEncoder().encode(command) else {
-            completion(.failure(HassError.encodingError))
-            return
+            return Fail(error: HassError.encodingError).eraseToAnyPublisher()
         }
-        performRequest(endpoint: endpoint, method: "POST", body: body, completion: completion)
+        
+        return performRequest(endpoint: endpoint, method: "POST", body: body)
+            .tryMap { output -> Data in
+                // Ensure the response is successful before attempting to decode
+                guard let httpResponse = output.response as? HTTPURLResponse,
+                      200...299 ~= httpResponse.statusCode else {
+                    throw URLError(.badServerResponse)
+                }
+                return output.data
+            }
+            .decode(type: R.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
     }
     
-    public func callScript(entityId: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let endpoint = "services/script/turn_on"
-        let body: [String: Any] = ["entity_id": entityId]
-        
-        guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
-            completion(.failure(HassError.encodingError))
-            return
+        public func callScript(scriptName: String) -> AnyPublisher<Void, Error> {
+            let endpoint = "api/services/script/\(scriptName)"
+            // If bodyData is not needed for the script, this can remain nil
+            let bodyData: Data? = nil
+            
+            return performRequest(endpoint: endpoint, method: "POST", body: bodyData)
+                .tryMap { output in
+                    guard let httpResponse = output.response as? HTTPURLResponse,
+                          200...299 ~= httpResponse.statusCode else {
+                        throw URLError(.badServerResponse)
+                    }
+                    // Simply return Void since you're only interested in the success of the HTTP request
+                    return ()
+                }
+                .mapError { $0 as Error } // Ensure any URLError is properly cast to Error
+                .eraseToAnyPublisher()
         }
-        
-        performRequest(endpoint: endpoint, method: "POST", body: bodyData) { (result: Result<[ScriptResponse], Error>) in
-            switch result {
-            case .success(_):
-                // Since we only care about the success of the call, not the response data,
-                // we just pass success with Void (nothing) to the completion handler.
-                completion(.success(()))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
     
     // ... Other methods as needed
     
@@ -184,8 +162,8 @@ public class HassRestClient {
             // You don't need a coding key for `data` as it encodes itself.
         }
     }
-
-
+    
+    
     
     /// A type-erasing wrapper to enable `Encodable` types to be used for `data`.
     
@@ -200,47 +178,66 @@ public class HassRestClient {
             try encodeFunc(encoder)
         }
     }
-
+    
     
     public struct CommandResponse: Decodable {
         // Define properties for command response
     }
     
-    public func changeState(entityId: String, newState: Int, completion: @escaping (Result<HAEntity, Error>) -> Void) {
-        let endpoint = "states/\(entityId)"
-        // Assuming newState is a temperature, it might need to be sent as a string.
-        let body = ["state": String(newState)]
-        guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
-            completion(.failure(HassError.encodingError))
-            return
-        }
-        performRequest(endpoint: endpoint, method: "POST", body: bodyData, completion: completion)
-    }
-}
-
-    extension HassRestClient {
-        // Fetch the state of a specified entity
-        
-        public func fetchState(entityId: String, completion: @escaping (Result<HAEntity, Error>) -> Void) {
+        public func changeState(entityId: String, newState: Int) -> AnyPublisher<HAEntity, Error> {
             let endpoint = "states/\(entityId)"
-            performRequest(endpoint: endpoint) { (result: Result<HAEntity, Error>) in
-                switch result {
-                case .success(let entity):
-                    completion(.success(entity))
-                case .failure(let error):
-                    if let decodingError = error as? DecodingError,
-                       decodingError.isEntityNotFoundError() {
-                        // Handle the case where the entity is not found
-                        print("[HassRestClient] Entity not found: \(entityId)")
-                        completion(.failure(HassError.entityNotFound))
-                    } else {
-                        completion(.failure(error))
+            // Constructing the JSON body
+            let body = ["state": String(newState)]
+            do {
+                let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
+                
+                // Adjust the call to performRequest and ensure it's prepared for decoding
+                return performRequest(endpoint: endpoint, method: "POST", body: bodyData)
+                    .tryMap { output -> Data in
+                        // Verify the HTTP response status before proceeding
+                        guard let httpResponse = output.response as? HTTPURLResponse,
+                              200...299 ~= httpResponse.statusCode else {
+                            throw URLError(.badServerResponse)
+                        }
+                        return output.data // Directly return the Data component for decoding
                     }
-                }
+                    .decode(type: HAEntity.self, decoder: JSONDecoder()) // Now decode the Data to HAEntity
+                    .eraseToAnyPublisher()
+            } catch {
+                // Handle JSON encoding error by returning a Fail publisher
+                return Fail(error: error).eraseToAnyPublisher()
             }
         }
-    }
     
+        public func fetchState(entityId: String) -> AnyPublisher<HAEntity, Error> {
+            let endpoint = "states/\(entityId)"
+            
+            return performRequest(endpoint: endpoint, method: "GET", body: nil)
+                .tryMap { output -> Data in
+                    // Ensure the response is successful before attempting to decode
+                    guard let httpResponse = output.response as? HTTPURLResponse,
+                          200...299 ~= httpResponse.statusCode else {
+                        throw URLError(.badServerResponse)
+                    }
+                    return output.data
+                }
+                .decode(type: HAEntity.self, decoder: JSONDecoder())
+                .catch { error -> AnyPublisher<HAEntity, Error> in
+                    // Check if the error is a decoding error indicating the entity is not found
+                    if let decodingError = error as? DecodingError,
+                       decodingError.isEntityNotFoundError() {
+                        // Handle the specific case of entity not found
+                        print("[HassRestClient] Entity not found: \(entityId)")
+                        return Fail(error: HassError.entityNotFound).eraseToAnyPublisher()
+                    } else {
+                        // Forward other errors as is
+                        return Fail(error: error).eraseToAnyPublisher()
+                    }
+                }
+                .eraseToAnyPublisher()
+        }
+    }
+
 extension DecodingError {
     func isEntityNotFoundError() -> Bool {
         switch self {
