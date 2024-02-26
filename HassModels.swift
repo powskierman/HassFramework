@@ -12,7 +12,7 @@ public struct HAContext: Codable {
     }
 }
 
-struct HAAttributes: Codable { // Changed from Decodable to Codable
+public struct HAAttributes: Codable { // Changed from Decodable to Codable
     let friendlyName: String?
 
     enum CodingKeys: String, CodingKey {
@@ -77,7 +77,7 @@ public struct HAData: Codable {
 public struct HAState: Codable {
     public let entityId: String
     public let state: String
-    let attributes: [String: AnyCodable]
+    public let attributes: HAAttributes
     public let lastChanged: String?
     public let lastUpdated: String?
     public let context: HAContext?
