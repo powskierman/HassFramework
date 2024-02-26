@@ -12,13 +12,71 @@ public struct HAContext: Codable {
     }
 }
 
-public struct HAAttributes: Codable { // Changed from Decodable to Codable
-    let friendlyName: String?
+public struct HAAttributes: Codable {
+    var friendlyName: String?
+    var additionalAttributes: [String: AnyCodable]
 
     enum CodingKeys: String, CodingKey {
         case friendlyName = "friendly_name"
+        // No explicit coding key for additionalAttributes, as it will be handled dynamically.
+    }
+
+    public init(friendlyName: String? = nil, additionalAttributes: [String: AnyCodable] = [:]) {
+        self.friendlyName = friendlyName
+        self.additionalAttributes = additionalAttributes
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        friendlyName = try container.decodeIfPresent(String.self, forKey: .friendlyName)
+        
+        let allKeys = container.allKeys.filter { $0 != CodingKeys.friendlyName }
+        var tempAdditionalAttributes = [String: AnyCodable]()
+
+        for key in allKeys {
+            if let intValue = try? container.decode(Int.self, forKey: key) {
+                tempAdditionalAttributes[key.stringValue] = AnyCodable(intValue)
+            } else if let stringValue = try? container.decode(String.self, forKey: key) {
+                tempAdditionalAttributes[key.stringValue] = AnyCodable(stringValue)
+            } else if let boolValue = try? container.decode(Bool.self, forKey: key) {
+                tempAdditionalAttributes[key.stringValue] = AnyCodable(boolValue)
+            }
+            // Extend with other types as needed, or adjust based on your AnyCodable's capabilities.
+        }
+
+        self.additionalAttributes = tempAdditionalAttributes
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(friendlyName, forKey: .friendlyName)
+
+        var dynamicContainer = encoder.container(keyedBy: DynamicCodingKey.self)
+        for (key, value) in additionalAttributes {
+            guard let codingKey = DynamicCodingKey(stringValue: key) else {
+                continue
+            }
+            try dynamicContainer.encode(value, forKey: codingKey)
+        }
     }
 }
+
+// Supporting dynamic keys for encoding/decoding additional attributes
+struct DynamicCodingKey: CodingKey {
+var stringValue: String
+var intValue: Int?
+
+init?(stringValue: String) {
+    self.stringValue = stringValue
+    self.intValue = nil
+}
+
+init?(intValue: Int) {
+    self.stringValue = String(intValue)
+    self.intValue = intValue
+}
+}
+
 
 public struct HAEventData: Codable {
     public let type: String
@@ -92,14 +150,14 @@ public struct HAState: Codable {
     }
 }
 
-struct AnyCodable: Codable {
-    var value: Codable?
+public struct AnyCodable: Codable {
+    public var value: Codable?
 
-    init<T: Codable>(_ value: T?) {
+    public init<T: Codable>(_ value: T?) {
         self.value = value
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let intValue = try? container.decode(Int.self) {
             value = intValue
@@ -112,11 +170,15 @@ struct AnyCodable: Codable {
         }
     }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         guard let value = value else { return }
-        try value.encode(to: encoder)
+        
+        // This portion needs to be adjusted based on how you plan to handle encoding
+        // of different types. For example, you might switch on the type of `value`
+        // and encode it accordingly.
     }
 }
+
 public struct HAEventWrapper: Codable {
     public let type: String
     public let id: Int?

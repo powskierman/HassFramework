@@ -27,6 +27,12 @@ public class HassRestClient {
         self.session = URLSession(configuration: .default)
     }
     
+    public init(baseURL: URL, authToken: String, session: URLSession = URLSession(configuration: .default)) {
+        self.baseURL = baseURL
+        self.authToken = authToken
+        self.session = session
+    }
+    
     private static func loadSecrets() -> [String: Any]? {
         guard let path = Bundle.main.path(forResource: "Secrets", ofType: "plist") else {
             print("Error: Secrets.plist file not found.")
@@ -215,6 +221,16 @@ public class HassRestClient {
             return
         }
         performRequest(endpoint: endpoint, method: "POST", body: bodyData, completion: completion)
+    }
+    
+    public func sendRequest<T: Decodable>(endpoint: String, method: String = "GET", payload: Encodable? = nil, completion: @escaping (Result<T, Error>) -> Void) {
+        // Convert payload to Data here, then proceed as before
+        var bodyData: Data? = nil
+        if let payload = payload {
+            bodyData = try? JSONEncoder().encode(AnyEncodable(payload))
+        }
+
+        performRequest(endpoint: endpoint, method: method, body: bodyData, completion: completion)
     }
 }
 
