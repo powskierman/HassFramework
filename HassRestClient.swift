@@ -48,15 +48,8 @@ public class HassRestClient {
         return dictionary
     }
     
-    public func performRequest<T: Decodable>(endpoint: String,
-                                      method: String = "GET",
-                                      body: Data? = nil,
-                                             completion: @escaping (Result<T, Error>) -> Void) {
-        // Check if baseURL already contains '/api', and endpoint also starts with it
-        let adjustedEndpoint = baseURL.absoluteString.hasSuffix("/api") && endpoint.hasPrefix("/api") ?
-        String(endpoint.dropFirst(4)) : // Drop the first '/api'
-        endpoint
-        
+    public func performRequest<T: Decodable>(endpoint: String, method: String = "GET", body: Data? = nil, completion: @escaping (Result<T, Error>) -> Void) {
+        let adjustedEndpoint = baseURL.absoluteString.hasSuffix("/api") && endpoint.hasPrefix("/api") ? String(endpoint.dropFirst(4)) : endpoint
         let fullURL = baseURL.appendingPathComponent(adjustedEndpoint)
         
         var request = URLRequest(url: fullURL)
@@ -71,38 +64,31 @@ public class HassRestClient {
         print("[HassRestClient] Request URL: \(fullURL.absoluteString), Method: \(method)")
         
         let task = session.dataTask(with: request) { data, response, error in
-            // Check for any network request errors
             if let error = error {
                 print("[HassRestClient] Network request error: \(error)")
+                completion(.failure(error))
                 return
             }
             
-            // Ensure we have received data
             guard let data = data else {
                 print("[HassRestClient] Did not receive data")
+                completion(.failure(HassError.noData))
                 return
             }
             
-            // Attempt to directly handle the empty array case
-            if let rawJSONString = String(data: data, encoding: .utf8), rawJSONString == "[]" {
-                print("[HassRestClient] Success: Received an empty array, indicating a successful operation with no errors.")
-                // Handle the success case, possibly invoking a success completion handler
-                return
-            }
             print("[HassRestClient] Received raw data: \(String(data: data, encoding: .utf8) ?? "Invalid UTF-8 data")")
             
-            // Attempt to decode into a known structure or handle alternative content
             do {
-                let decodedResponse = try JSONDecoder().decode(AnyCodable.self, from: data)
-                print("[HassRestClient] Successfully decoded response: \(decodedResponse)")
-                // Handle the decoded response
+                let decodedResponse = try JSONDecoder().decode(T.self, from: data)
+                completion(.success(decodedResponse))
             } catch {
-                print("[HassRestClient] JSON Decoding Error: \(error.localizedDescription)")
-                // If decoding into the specific model fails, handle as needed, possibly checking for other types
+                print("[HassRestClient] JSON Decoding Error: \(error)")
+                completion(.failure(error))
             }
         }
         task.resume()
     }
+
     
     // Add specific methods for various Home Assistant actions
     
@@ -212,15 +198,24 @@ public class HassRestClient {
         // Define properties for command response
     }
     
-    public func changeState(entityId: String, newState: Int, completion: @escaping (Result<HAEntity, Error>) -> Void) {
+    public func changeState<EntityState: Encodable>(entityId: String, newState: EntityState, completion: @escaping (Result<HAEntity, Error>) -> Void) {
         let endpoint = "states/\(entityId)"
-        // Assuming newState is a temperature, it might need to be sent as a string.
-        let body = ["state": String(newState)]
-        guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+        
+        // Use a generic payload structure that can accommodate various state types
+        let payload = ChangeStatePayload(entityId: entityId, state: newState)
+        
+        guard let bodyData = try? JSONEncoder().encode(payload) else {
             completion(.failure(HassError.encodingError))
             return
         }
+        
         performRequest(endpoint: endpoint, method: "POST", body: bodyData, completion: completion)
+    }
+
+    // Supporting structure for encoding the state change request
+    struct ChangeStatePayload<EntityState: Encodable>: Encodable {
+        let entityId: String
+        let state: EntityState
     }
     
     public func sendRequest<T: Decodable>(endpoint: String, method: String = "GET", payload: Encodable? = nil, completion: @escaping (Result<T, Error>) -> Void) {

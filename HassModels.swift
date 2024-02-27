@@ -166,18 +166,35 @@ public struct AnyCodable: Codable {
         } else if let boolValue = try? container.decode(Bool.self) {
             value = boolValue
         } else {
+            // Log an error or a warning when encountering an unknown type
+            print("Warning: AnyCodable encountered an unknown type that could not be decoded.")
+            // Consider throwing a custom error if you want to handle this scenario more strictly
             value = nil
         }
     }
 
     public func encode(to encoder: Encoder) throws {
-        guard let value = value else { return }
+        guard let value = value else {
+            print("AnyCodable contains a nil value and cannot be encoded.")
+            throw EncodingError.invalidValue(value as Any, EncodingError.Context(codingPath: [], debugDescription: "Nil value cannot be encoded."))
+        }
         
-        // This portion needs to be adjusted based on how you plan to handle encoding
-        // of different types. For example, you might switch on the type of `value`
-        // and encode it accordingly.
+        var container = encoder.singleValueContainer()
+        if let intValue = value as? Int {
+            try container.encode(intValue)
+        } else if let stringValue = value as? String {
+            try container.encode(stringValue)
+        } else if let boolValue = value as? Bool {
+            try container.encode(boolValue)
+        } else {
+            // Log an error for unsupported types
+            let debugDescription = "AnyCodable contains an unsupported type (\(type(of: value))) that cannot be encoded."
+            print("Error: \(debugDescription)")
+            throw EncodingError.invalidValue(value as Any, EncodingError.Context(codingPath: [], debugDescription: debugDescription))
+        }
     }
 }
+
 
 public struct HAEventWrapper: Codable {
     public let type: String
