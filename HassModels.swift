@@ -13,8 +13,8 @@ public struct HAContext: Codable {
 }
 
 public struct HAAttributes: Codable {
-    public var friendlyName: String?
-    public var additionalAttributes: [String: AnyCodable]
+    var friendlyName: String?
+    var additionalAttributes: [String: AnyCodable]
 
     enum CodingKeys: String, CodingKey {
         case friendlyName = "friendly_name"
@@ -227,7 +227,7 @@ public struct HAEventWrapper: Codable {
 public struct HAEntity: Codable {
     public let entityId: String
     public let state: String
-    public let attributes: HAAttributes
+    let attributes: HAAttributes
     public let lastChanged: String?
     public let lastUpdated: String?
     public let context: HAContext?
