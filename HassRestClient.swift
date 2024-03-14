@@ -47,10 +47,9 @@ public class HassRestClient {
         print("Loaded Secrets from Secrets.plist: \(dictionary)")
         return dictionary
     }
-    
-    public func performRequest<T: Decodable>(endpoint: String, method: String = "GET", body: Data? = nil, completion: @escaping (Result<T, Error>) -> Void) {
-        let adjustedEndpoint = baseURL.absoluteString.hasSuffix("/api") && endpoint.hasPrefix("/api") ? String(endpoint.dropFirst(4)) : endpoint
-        let fullURL = baseURL.appendingPathComponent(adjustedEndpoint)
+
+    public func performRequest<T: Decodable>(endpoint: String, method: String = "GET", body: Data? = nil, expectingResponse: Bool = true, completion: @escaping (Result<T, Error>) -> Void) {
+        let fullURL = baseURL.appendingPathComponent(endpoint)
         
         var request = URLRequest(url: fullURL)
         request.httpMethod = method
@@ -58,36 +57,75 @@ public class HassRestClient {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if let body = body {
-            request.httpBody = body
-        }
-        
-        print("[HassRestClient] Request URL: \(fullURL.absoluteString), Method: \(method)")
+                request.httpBody = body
+                if let bodyString = String(data: body, encoding: .utf8) {
+                    print("Request Body: \(bodyString)")
+                }
+            }
+            
+            // Print URL, Method, and Headers
+            print("Request URL: \(request.url?.absoluteString ?? "N/A")")
+            print("Request Method: \(request.httpMethod ?? "N/A")")
+            print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
         
         let task = session.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("[HassRestClient] Network request error: \(error)")
                 completion(.failure(error))
                 return
             }
             
+            // Cast URLResponse to HTTPURLResponse to access statusCode
+               guard let httpResponse = response as? HTTPURLResponse else {
+                   completion(.failure(HassError.invalidResponse)) // Define this error based on your error handling strategy
+                   return
+               }
+               
+               // Check for HTTP status code 200
+            switch httpResponse.statusCode {
+            case 200:
+                print("Status code is 200:  Success!")
+                break
+                
+            case 400:
+                print("Error: Bad Request (400).")
+                completion(.failure(HassError.badRequest))
+                return
+            case 404:
+                print("Error: Not Found (404).")
+                completion(.failure(HassError.notFound))
+                return
+            default:
+                print("Error: Unexpected status code received: \(httpResponse.statusCode).")
+                completion(.failure(HassError.unexpectedStatusCode(httpResponse.statusCode)))
+                return
+            }
+                
             guard let data = data else {
-                print("[HassRestClient] Did not receive data")
                 completion(.failure(HassError.noData))
                 return
             }
             
-            print("[HassRestClient] Received raw data: \(String(data: data, encoding: .utf8) ?? "Invalid UTF-8 data")")
+            if !expectingResponse {
+                // Assuming success if we reach this point and don't care about the response body.
+                // Use EmptyResponse as a placeholder for T when no data is expected.
+                if let emptyResponse = EmptyResponse() as? T {
+                    completion(.success(emptyResponse))
+                } else {
+                    completion(.failure(HassError.unexpectedResponseType))
+                }
+                return
+            }
             
             do {
                 let decodedResponse = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(decodedResponse))
             } catch {
-                print("[HassRestClient] JSON Decoding Error: \(error)")
                 completion(.failure(error))
             }
         }
         task.resume()
     }
+
 
     
     // Add specific methods for various Home Assistant actions
@@ -107,8 +145,37 @@ public class HassRestClient {
         performRequest(endpoint: endpoint, method: "POST", body: body, completion: completion)
     }
     
+    public func callService(domain: String, service: String, entityId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        print("At callservice()")
+        let endpoint = "api/services/\(domain)/\(service)"
+        let body = ToggleServiceRequest(entityId: entityId)
+        
+        guard let bodyData = try? JSONEncoder().encode(body) else {
+            print("Encoding error for body: \(body)")
+            completion(.failure(HassError.encodingError))
+            return
+        }
+        
+        // Convert bodyData to a string to print it.
+          if let bodyString = String(data: bodyData, encoding: .utf8) {
+              print("Making POST request to endpoint: \(endpoint) with body: \(bodyString)")
+          }
+          
+        performRequest(endpoint: endpoint, method: "POST", body: bodyData, expectingResponse: false) { (result: Result<EmptyResponse, Error>) in
+            print("[HassRestClient](performRequest) result: \(result)")
+            switch result {
+            case .success(_):
+                // The response type is EmptyResponse, indicating we weren't expecting meaningful data.
+                // Convert this success into the expected Void result to match the completion handler's signature.
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     public func callScript(entityId: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        let endpoint = "services/script/turn_on"
+        let endpoint = "api/services/script/turn_on"
         let body: [String: Any] = ["entity_id": entityId]
         
         guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
@@ -199,7 +266,7 @@ public class HassRestClient {
     }
     
     public func changeState<EntityState: Encodable>(entityId: String, newState: EntityState, completion: @escaping (Result<HAEntity, Error>) -> Void) {
-        let endpoint = "states/\(entityId)"
+        let endpoint = "apip/states/\(entityId)"
         
         // Use a generic payload structure that can accommodate various state types
         let payload = ChangeStatePayload(entityId: entityId, state: newState)
@@ -233,7 +300,7 @@ public class HassRestClient {
         // Fetch the state of a specified entity
         
         public func fetchState(entityId: String, completion: @escaping (Result<HAEntity, Error>) -> Void) {
-            let endpoint = "states/\(entityId)"
+            let endpoint = "api/states/\(entityId)"
             performRequest(endpoint: endpoint) { (result: Result<HAEntity, Error>) in
                 switch result {
                 case .success(let entity):

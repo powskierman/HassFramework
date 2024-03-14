@@ -48,6 +48,12 @@ public enum HassError: Error {
     case noData
     case encodingError
     case entityNotFound
+    case unexpectedResponseType
+    case invalidResponse
+    case unexpectedStatusCode(Int)
+    case unknownError(String)
+    case badRequest
+    case notFound
 }
 
 enum WebSocketMessageType {

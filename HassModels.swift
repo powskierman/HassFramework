@@ -252,6 +252,16 @@ public struct ScriptResponse: Decodable {
     }
 }
 
+public struct ToggleServiceRequest: Encodable {
+    let entityId: String
+    
+    enum CodingKeys: String, CodingKey {
+        case entityId = "entity_id"
+    }
+}
+
+public struct EmptyResponse: Decodable {}
+
 extension HAEventData.EventDetail {
     init(from wrapperDetail: HAEventWrapper.HAEventDetail) {
         self.eventType = wrapperDetail.eventType
@@ -259,5 +269,32 @@ extension HAEventData.EventDetail {
         self.origin = wrapperDetail.origin
         self.timeFired = wrapperDetail.timeFired
         self.context = wrapperDetail.context
+    }
+}
+
+extension HassError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "Invalid URL."
+        case .noData:
+            return "No data received."
+        case .encodingError:
+            return "Failed to encode the request."
+        case .entityNotFound:
+            return "Entity not found."
+        case .unexpectedResponseType:
+            return "Unexpected response type."
+        case .invalidResponse:
+            return "Invalid response from the server."
+        case .unexpectedStatusCode(let statusCode):
+            return "Unexpected status code: \(statusCode)."
+        case .unknownError(let message):
+            return "Unknown error: \(message)."
+        case .badRequest:
+            return "Bad request sent."
+        case .notFound:
+            return "Requested resource not found."
+        }
     }
 }
