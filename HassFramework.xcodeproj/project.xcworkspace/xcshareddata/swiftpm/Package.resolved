@@ -1,4 +1,5 @@
 {
+  "originHash" : "e8f3d807b8851580962a5f637525769c7a3103c86678d33bbf654ac845a2cb8c",
   "pins" : [
     {
       "identity" : "starscream",
@@ -10,5 +11,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

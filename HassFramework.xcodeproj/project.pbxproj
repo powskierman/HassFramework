@@ -24,7 +24,8 @@
 		D05FCF6F2ADC30A2000AF815 /* HassProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */; };
 		D05FCF712ADC312B000AF815 /* HassModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF702ADC312B000AF815 /* HassModels.swift */; };
 		D05FCF732ADC31A5000AF815 /* HassMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */; };
-		D0640BEC2AEF29F300809829 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D0640BEB2AEF29F300809829 /* Starscream */; };
+		D0D1E6E42BB88DCF00CF32BC /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D0D1E6E32BB88DCF00CF32BC /* Starscream */; };
+		D0D1E6E62BB88DEB00CF32BC /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D0D1E6E52BB88DEB00CF32BC /* Starscream */; };
 		D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */; };
 		D0E5D6C82AD5A875007038A7 /* HassEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* HassEnums.swift */; };
 /* End PBXBuildFile section */
@@ -52,7 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0640BEC2AEF29F300809829 /* Starscream in Frameworks */,
+				D0D1E6E42BB88DCF00CF32BC /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D1E6E62BB88DEB00CF32BC /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,7 +150,7 @@
 			);
 			name = HassFramework;
 			packageProductDependencies = (
-				D0640BEB2AEF29F300809829 /* Starscream */,
+				D0D1E6E32BB88DCF00CF32BC /* Starscream */,
 			);
 			productName = HassFramework;
 			productReference = D00BF6112AC9F85C00B7C307 /* HassFramework.framework */;
@@ -168,6 +170,9 @@
 			dependencies = (
 			);
 			name = HassWatchFramework;
+			packageProductDependencies = (
+				D0D1E6E52BB88DEB00CF32BC /* Starscream */,
+			);
 			productName = HassWatchFramework;
 			productReference = D036102E2B607066001CFE29 /* HassWatchFramework.framework */;
 			productType = "com.apple.product-type.framework";
@@ -575,7 +580,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D0640BEB2AEF29F300809829 /* Starscream */ = {
+		D0D1E6E32BB88DCF00CF32BC /* Starscream */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D00BF6212ACA020E00B7C307 /* XCRemoteSwiftPackageReference "Starscream" */;
+			productName = Starscream;
+		};
+		D0D1E6E52BB88DEB00CF32BC /* Starscream */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D00BF6212ACA020E00B7C307 /* XCRemoteSwiftPackageReference "Starscream" */;
 			productName = Starscream;

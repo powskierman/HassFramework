@@ -13,54 +13,147 @@ public struct HAContext: Codable {
 }
 
 public struct HAAttributes: Codable {
-    var friendlyName: String?
-    public var additionalAttributes: [String: AnyCodable]
-
+    public var friendlyName: String?
+    public var additionalAttributes: [String: Any] = [:]
+    
     enum CodingKeys: String, CodingKey {
         case friendlyName = "friendly_name"
-        // No explicit coding key for additionalAttributes, as it will be handled dynamically.
+        case attributes
     }
-
-    public init(friendlyName: String? = nil, additionalAttributes: [String: AnyCodable] = [:]) {
-        self.friendlyName = friendlyName
-        self.additionalAttributes = additionalAttributes
-    }
-
+    
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         friendlyName = try container.decodeIfPresent(String.self, forKey: .friendlyName)
         
-        let allKeys = container.allKeys.filter { $0 != CodingKeys.friendlyName }
-        var tempAdditionalAttributes = [String: AnyCodable]()
-
-        for key in allKeys {
-            if let intValue = try? container.decode(Int.self, forKey: key) {
-                tempAdditionalAttributes[key.stringValue] = AnyCodable(intValue)
-            } else if let stringValue = try? container.decode(String.self, forKey: key) {
-                tempAdditionalAttributes[key.stringValue] = AnyCodable(stringValue)
-            } else if let boolValue = try? container.decode(Bool.self, forKey: key) {
-                tempAdditionalAttributes[key.stringValue] = AnyCodable(boolValue)
+        if let attributesContainer = try? container.nestedContainer(keyedBy: CodingKeys.self, forKey: .attributes) {
+            for key in attributesContainer.allKeys {
+                if key == .friendlyName {
+                    continue
+                }
+                
+                if let value = try? attributesContainer.decode(Int.self, forKey: key) {
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode(Double.self, forKey: key) {
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode(String.self, forKey: key) {
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode(Bool.self, forKey: key) {
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode([String].self, forKey: key) {
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode([Int].self, forKey: key) {
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode([Double].self, forKey: key) {
+                    additionalAttributes[key.stringValue] = value
+                }
             }
-            // Extend with other types as needed, or adjust based on your AnyCodable's capabilities.
         }
-
-        self.additionalAttributes = tempAdditionalAttributes
     }
-
+    
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(friendlyName, forKey: .friendlyName)
-
-        var dynamicContainer = encoder.container(keyedBy: DynamicCodingKey.self)
+        
+        var attributesContainer = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .attributes)
         for (key, value) in additionalAttributes {
-            guard let codingKey = DynamicCodingKey(stringValue: key) else {
-                continue
+            if let intValue = value as? Int {
+                try attributesContainer.encode(intValue, forKey: CodingKeys(stringValue: key)!)
+            } else if let doubleValue = value as? Double {
+                try attributesContainer.encode(doubleValue, forKey: CodingKeys(stringValue: key)!)
+            } else if let stringValue = value as? String {
+                try attributesContainer.encode(stringValue, forKey: CodingKeys(stringValue: key)!)
+            } else if let boolValue = value as? Bool {
+                try attributesContainer.encode(boolValue, forKey: CodingKeys(stringValue: key)!)
+            } else if let stringArrayValue = value as? [String] {
+                try attributesContainer.encode(stringArrayValue, forKey: CodingKeys(stringValue: key)!)
+            } else if let intArrayValue = value as? [Int] {
+                try attributesContainer.encode(intArrayValue, forKey: CodingKeys(stringValue: key)!)
+            } else if let doubleArrayValue = value as? [Double] {
+                try attributesContainer.encode(doubleArrayValue, forKey: CodingKeys(stringValue: key)!)
             }
-            try dynamicContainer.encode(value, forKey: codingKey)
         }
     }
 }
 
+
+
+extension HAAttributes {
+    mutating func decodeAdditionalAttributes(from decoder: Decoder) throws {
+        print("Decoding additional attributes...")
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        if let attributesContainer = try? container.nestedContainer(keyedBy: CodingKeys.self, forKey: .attributes) {
+            for key in attributesContainer.allKeys {
+                print("Decoding key: \(key.stringValue)")
+                
+                if key == .friendlyName {
+                    continue
+                }
+                
+                if let value = try? attributesContainer.decode(Int.self, forKey: key) {
+                    print("Decoded Int value: \(value)")
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode(Double.self, forKey: key) {
+                    print("Decoded Double value: \(value)")
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode(String.self, forKey: key) {
+                    print("Decoded String value: \(value)")
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode(Bool.self, forKey: key) {
+                    print("Decoded Bool value: \(value)")
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode([String].self, forKey: key) {
+                    print("Decoded [String] value: \(value)")
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode([Int].self, forKey: key) {
+                    print("Decoded [Int] value: \(value)")
+                    additionalAttributes[key.stringValue] = value
+                } else if let value = try? attributesContainer.decode([Double].self, forKey: key) {
+                    print("Decoded [Double] value: \(value)")
+                    additionalAttributes[key.stringValue] = value
+                } else {
+                    print("Failed to decode value for key: \(key.stringValue)")
+                }
+            }
+        }
+        
+        print("Decoded additional attributes: \(additionalAttributes)")
+    }
+}
+
+struct StringKeyedDictionary: Codable {
+    let value: [String: AnyCodable]
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: DynamicCodingKey.self)
+        var dictionary: [String: AnyCodable] = [:]
+        for key in container.allKeys {
+            if let value = try? container.decode(Int.self, forKey: key) {
+                dictionary[key.stringValue] = AnyCodable(value)
+            } else if let value = try? container.decode(Double.self, forKey: key) {
+                dictionary[key.stringValue] = AnyCodable(value)
+            } else if let value = try? container.decode(String.self, forKey: key) {
+                dictionary[key.stringValue] = AnyCodable(value)
+            } else if let value = try? container.decode(Bool.self, forKey: key) {
+                dictionary[key.stringValue] = AnyCodable(value)
+            }
+        }
+        
+        self.value = dictionary
+        
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: DynamicCodingKey.self)
+            for (key, value) in value {
+                guard let codingKey = DynamicCodingKey(stringValue: key) else {
+                    continue
+                }
+                try value.encode(to: container.superEncoder(forKey: codingKey))
+            }
+        }
+    }
+}
+            
 // Supporting dynamic keys for encoding/decoding additional attributes
 struct DynamicCodingKey: CodingKey {
 var stringValue: String
@@ -148,6 +241,16 @@ public struct HAState: Codable {
         case lastUpdated = "last_updated"
         case context
     }
+    
+    public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(entityId, forKey: .entityId)
+            try container.encode(state, forKey: .state)
+            try container.encode(attributes, forKey: .attributes)
+            try container.encodeIfPresent(lastChanged, forKey: .lastChanged)
+            try container.encodeIfPresent(lastUpdated, forKey: .lastUpdated)
+            try container.encodeIfPresent(context, forKey: .context)
+        }
 }
 
 public struct AnyCodable: Codable {
@@ -165,10 +268,15 @@ public struct AnyCodable: Codable {
             value = stringValue
         } else if let boolValue = try? container.decode(Bool.self) {
             value = boolValue
+        } else if let doubleValue = try? container.decode(Double.self) {
+            value = doubleValue
+        } else if let stringArray = try? container.decode([String].self) {
+            value = stringArray
+        } else if let intArray = try? container.decode([Int].self) {
+            value = intArray
         } else {
             // Log an error or a warning when encountering an unknown type
             print("Warning: AnyCodable encountered an unknown type that could not be decoded.")
-            // Consider throwing a custom error if you want to handle this scenario more strictly
             value = nil
         }
     }
@@ -186,6 +294,12 @@ public struct AnyCodable: Codable {
             try container.encode(stringValue)
         } else if let boolValue = value as? Bool {
             try container.encode(boolValue)
+        } else if let doubleValue = value as? Double {
+            try container.encode(doubleValue)
+        } else if let stringArray = value as? [String] {
+            try container.encode(stringArray)
+        } else if let intArray = value as? [Int] {
+            try container.encode(intArray)
         } else {
             // Log an error for unsupported types
             let debugDescription = "AnyCodable contains an unsupported type (\(type(of: value))) that cannot be encoded."
@@ -225,13 +339,13 @@ public struct HAEventWrapper: Codable {
 }
 
 public struct HAEntity: Codable {
-    public let entityId: String
-    public let state: String
-    public let attributes: HAAttributes
-    public let lastChanged: String?
-    public let lastUpdated: String?
-    public let context: HAContext?
-
+    public var entityId: String
+    public var state: String
+    public var attributes: HAAttributes
+    public var lastChanged: String?
+    public var lastUpdated: String?
+    public var context: HAContext?
+    
     enum CodingKeys: String, CodingKey {
         case entityId = "entity_id"
         case state
@@ -240,6 +354,30 @@ public struct HAEntity: Codable {
         case lastUpdated = "last_updated"
         case context
     }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        entityId = try container.decode(String.self, forKey: .entityId)
+        state = try container.decode(String.self, forKey: .state)
+        attributes = try container.decode(HAAttributes.self, forKey: .attributes)
+        lastChanged = try container.decodeIfPresent(String.self, forKey: .lastChanged)
+        lastUpdated = try container.decodeIfPresent(String.self, forKey: .lastUpdated)
+        context = try container.decodeIfPresent(HAContext.self, forKey: .context)
+        
+        // Call decodeAdditionalAttributes after decoding HAAttributes
+        try attributes.decodeAdditionalAttributes(from: decoder)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(entityId, forKey: .entityId)
+            try container.encode(state, forKey: .state)
+            try container.encode(attributes, forKey: .attributes)
+            try container.encode(lastChanged, forKey: .lastChanged)
+            try container.encode(lastUpdated, forKey: .lastUpdated)
+            try container.encode(context, forKey: .context)
+        }
+    // ... other code ...
 }
 
 public struct ScriptResponse: Decodable {

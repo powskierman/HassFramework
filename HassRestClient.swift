@@ -47,7 +47,7 @@ public class HassRestClient {
         print("Loaded Secrets from Secrets.plist: \(dictionary)")
         return dictionary
     }
-
+    
     public func performRequest<T: Decodable>(endpoint: String, method: String = "GET", body: Data? = nil, expectingResponse: Bool = true, completion: @escaping (Result<T, Error>) -> Void) {
         let fullURL = baseURL.appendingPathComponent(endpoint)
         
@@ -57,52 +57,43 @@ public class HassRestClient {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if let body = body {
-                request.httpBody = body
-                if let bodyString = String(data: body, encoding: .utf8) {
-                    print("Request Body: \(bodyString)")
-                }
+            request.httpBody = body
+            if let bodyString = String(data: body, encoding: .utf8) {
+                print("Request Body: \(bodyString)")
             }
-            
-            // Print URL, Method, and Headers
-            print("Request URL: \(request.url?.absoluteString ?? "N/A")")
-            print("Request Method: \(request.httpMethod ?? "N/A")")
-            print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
+        }
+        
+        // Print URL, Method, and Headers
+        print("Request URL: \(request.url?.absoluteString ?? "N/A")")
+        print("Request Method: \(request.httpMethod ?? "N/A")")
+        print("Request Headers: \(request.allHTTPHeaderFields ?? [:])")
         
         let task = session.dataTask(with: request) { data, response, error in
             if let error = error {
+                print("Error encountered: \(error.localizedDescription)")
                 completion(.failure(error))
                 return
             }
             
-            // Cast URLResponse to HTTPURLResponse to access statusCode
-               guard let httpResponse = response as? HTTPURLResponse else {
-                   completion(.failure(HassError.invalidResponse)) // Define this error based on your error handling strategy
-                   return
-               }
-               
-               // Check for HTTP status code 200
-            switch httpResponse.statusCode {
-            case 200:
-                print("Status code is 200:  Success!")
-                break
-                
-            case 400:
-                print("Error: Bad Request (400).")
-                completion(.failure(HassError.badRequest))
-                return
-            case 404:
-                print("Error: Not Found (404).")
-                completion(.failure(HassError.notFound))
-                return
-            default:
-                print("Error: Unexpected status code received: \(httpResponse.statusCode).")
-                completion(.failure(HassError.unexpectedStatusCode(httpResponse.statusCode)))
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response received.")
+                completion(.failure(HassError.invalidResponse))
                 return
             }
-                
-            guard let data = data else {
+            
+            // Print the status code and response headers
+            print("Response Status Code: \(httpResponse.statusCode)")
+            print("Response Headers: \(httpResponse.allHeaderFields)")
+            
+            guard let data = data, !data.isEmpty else {
+                print("No data received in response.")
                 completion(.failure(HassError.noData))
                 return
+            }
+            
+            // Print the raw response data as a string for debugging
+            if let responseDataString = String(data: data, encoding: .utf8) {
+                print("Raw Response Data: \(responseDataString)")
             }
             
             if !expectingResponse {
@@ -111,6 +102,7 @@ public class HassRestClient {
                 if let emptyResponse = EmptyResponse() as? T {
                     completion(.success(emptyResponse))
                 } else {
+                    print("Unexpected response type when no response was expected.")
                     completion(.failure(HassError.unexpectedResponseType))
                 }
                 return
@@ -118,8 +110,10 @@ public class HassRestClient {
             
             do {
                 let decodedResponse = try JSONDecoder().decode(T.self, from: data)
+                print("Decoded Response: \(decodedResponse)")
                 completion(.success(decodedResponse))
             } catch {
+                print("Failed to decode response: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
@@ -127,7 +121,6 @@ public class HassRestClient {
     }
 
 
-    
     // Add specific methods for various Home Assistant actions
     
     // Example: Fetching the state of a device
@@ -266,7 +259,7 @@ public class HassRestClient {
     }
     
     public func changeState<EntityState: Encodable>(entityId: String, newState: EntityState, completion: @escaping (Result<HAEntity, Error>) -> Void) {
-        let endpoint = "apip/states/\(entityId)"
+        let endpoint = "api/states/\(entityId)"
         
         // Use a generic payload structure that can accommodate various state types
         let payload = ChangeStatePayload(entityId: entityId, state: newState)
@@ -285,15 +278,15 @@ public class HassRestClient {
         let state: EntityState
     }
     
-    public func sendRequest<T: Decodable>(endpoint: String, method: String = "GET", payload: Encodable? = nil, completion: @escaping (Result<T, Error>) -> Void) {
-        // Convert payload to Data here, then proceed as before
-        var bodyData: Data? = nil
-        if let payload = payload {
-            bodyData = try? JSONEncoder().encode(AnyEncodable(payload))
-        }
-
-        performRequest(endpoint: endpoint, method: method, body: bodyData, completion: completion)
-    }
+//    public func sendRequest<T: Decodable>(endpoint: String, method: String = "GET", payload: Encodable? = nil, completion: @escaping (Result<T, Error>) -> Void) {
+//        // Convert payload to Data here, then proceed as before
+//        var bodyData: Data? = nil
+//        if let payload = payload {
+//            bodyData = try? JSONEncoder().encode(AnyEncodable(payload))
+//        }
+//
+//        performRequest(endpoint: endpoint, method: method, body: bodyData, completion: completion)
+//    }
 }
 
     extension HassRestClient {
