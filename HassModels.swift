@@ -25,28 +25,26 @@ public struct HAAttributes: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         friendlyName = try container.decodeIfPresent(String.self, forKey: .friendlyName)
         
-        if let attributesContainer = try? container.nestedContainer(keyedBy: CodingKeys.self, forKey: .attributes) {
-            for key in attributesContainer.allKeys {
-                if key == .friendlyName {
-                    continue
-                }
-                
-                if let value = try? attributesContainer.decode(Int.self, forKey: key) {
-                    additionalAttributes[key.stringValue] = value
-                } else if let value = try? attributesContainer.decode(Double.self, forKey: key) {
-                    additionalAttributes[key.stringValue] = value
-                } else if let value = try? attributesContainer.decode(String.self, forKey: key) {
-                    additionalAttributes[key.stringValue] = value
-                } else if let value = try? attributesContainer.decode(Bool.self, forKey: key) {
-                    additionalAttributes[key.stringValue] = value
-                } else if let value = try? attributesContainer.decode([String].self, forKey: key) {
-                    additionalAttributes[key.stringValue] = value
-                } else if let value = try? attributesContainer.decode([Int].self, forKey: key) {
-                    additionalAttributes[key.stringValue] = value
-                } else if let value = try? attributesContainer.decode([Double].self, forKey: key) {
-                    additionalAttributes[key.stringValue] = value
-                }
+        // Decode the rest of the keys dynamically
+        let additionalInfo = try decoder.container(keyedBy: DynamicCodingKey.self)
+        for key in additionalInfo.allKeys where key.stringValue != "friendly_name" {
+            if let intValue = try? additionalInfo.decodeIfPresent(Int.self, forKey: key) {
+                additionalAttributes[key.stringValue] = intValue
+            } else if let doubleValue = try? additionalInfo.decodeIfPresent(Double.self, forKey: key) {
+                additionalAttributes[key.stringValue] = doubleValue
+            } else if let stringValue = try? additionalInfo.decodeIfPresent(String.self, forKey: key) {
+                additionalAttributes[key.stringValue] = stringValue
+            } else if let boolValue = try? additionalInfo.decodeIfPresent(Bool.self, forKey: key) {
+                additionalAttributes[key.stringValue] = boolValue
             }
+            // Extend with other types as necessary
+        }
+        
+        // Log the temperature for diagnostic purposes
+        if let temperature = self.additionalAttributes["temperature"] as? Double {
+            print("Decoded temperature: \(temperature)")
+        } else {
+            print("Temperature not found or not a Double")
         }
     }
     
@@ -54,22 +52,28 @@ public struct HAAttributes: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(friendlyName, forKey: .friendlyName)
         
-        var attributesContainer = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .attributes)
+        // Encode the predefined attributes
+        var dynamicContainer = encoder.container(keyedBy: DynamicCodingKey.self)
         for (key, value) in additionalAttributes {
-            if let intValue = value as? Int {
-                try attributesContainer.encode(intValue, forKey: CodingKeys(stringValue: key)!)
-            } else if let doubleValue = value as? Double {
-                try attributesContainer.encode(doubleValue, forKey: CodingKeys(stringValue: key)!)
-            } else if let stringValue = value as? String {
-                try attributesContainer.encode(stringValue, forKey: CodingKeys(stringValue: key)!)
-            } else if let boolValue = value as? Bool {
-                try attributesContainer.encode(boolValue, forKey: CodingKeys(stringValue: key)!)
-            } else if let stringArrayValue = value as? [String] {
-                try attributesContainer.encode(stringArrayValue, forKey: CodingKeys(stringValue: key)!)
-            } else if let intArrayValue = value as? [Int] {
-                try attributesContainer.encode(intArrayValue, forKey: CodingKeys(stringValue: key)!)
-            } else if let doubleArrayValue = value as? [Double] {
-                try attributesContainer.encode(doubleArrayValue, forKey: CodingKeys(stringValue: key)!)
+            let codingKey = DynamicCodingKey(stringValue: key)!
+            switch value {
+            case let intValue as Int:
+                try dynamicContainer.encode(intValue, forKey: codingKey)
+            case let doubleValue as Double:
+                try dynamicContainer.encode(doubleValue, forKey: codingKey)
+            case let stringValue as String:
+                try dynamicContainer.encode(stringValue, forKey: codingKey)
+            case let boolValue as Bool:
+                try dynamicContainer.encode(boolValue, forKey: codingKey)
+            case let stringArrayValue as [String]:
+                try dynamicContainer.encode(stringArrayValue, forKey: codingKey)
+            case let intArrayValue as [Int]:
+                try dynamicContainer.encode(intArrayValue, forKey: codingKey)
+            case let doubleArrayValue as [Double]:
+                try dynamicContainer.encode(doubleArrayValue, forKey: codingKey)
+            default:
+                // Handle or ignore any unsupported types
+                print("Warning: Unsupported type for key \(key)")
             }
         }
     }
