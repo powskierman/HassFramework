@@ -1,0 +1,65 @@
+The HassRestClient is a class provided by the HassFramework that allows you to interact with the Home Assistant REST API. It provides methods to perform various operations such as fetching entity states, sending commands, and more. Here's how you can use the HassRestClient:
+
+Initialization:
+
+Create an instance of HassRestClient using the shared instance or by initializing a new instance.
+Example: let restClient = HassRestClient.shared
+Fetching Entity State:
+
+Use the fetchState(entityId:completion:) method to fetch the state of a specific entity.
+Pass the entityId as a parameter and provide a completion handler to receive the result.
+Example:
+restClient.fetchState(entityId: "climate.living_room") { result in
+    switch result {
+    case .success(let entity):
+        // Handle the fetched entity state
+        print("Entity state: \(entity)")
+    case .failure(let error):
+        // Handle the error
+        print("Error fetching entity state: \(error)")
+    }
+}
+
+
+
+Sending Commands:
+
+Use the performRequest(endpoint:method:body:expectingResponse:completion:) method to send commands to Home Assistant.
+Specify the endpoint (e.g., "api/services/climate/set_temperature"), the method (e.g., "POST"), and the body (command data) as parameters.
+Set expectingResponse to false if you don't expect a response from the server.
+Provide a completion handler to handle the result.
+Example:
+let commandData: [String: Any] = [
+    "entity_id": "climate.living_room",
+    "temperature": 22
+]
+let jsonData = try? JSONSerialization.data(withJSONObject: commandData, options: [])
+
+restClient.performRequest(endpoint: "api/services/climate/set_temperature", method: "POST", body: jsonData, expectingResponse: false) { result in
+    switch result {
+    case .success:
+        // Command sent successfully
+        print("Temperature set successfully")
+    case .failure(let error):
+        // Handle the error
+        print("Error setting temperature: \(error)")
+    }
+}
+
+
+
+Fetching Device State:
+
+Use the fetchDeviceState(deviceId:completion:) method to fetch the state of a specific device.
+Pass the deviceId as a parameter and provide a completion handler to receive the result.
+Example:
+restClient.fetchDeviceState(deviceId: "device_123") { result in
+    switch result {
+    case .success(let deviceState):
+        // Handle the fetched device state
+        print("Device state: \(deviceState)")
+    case .failure(let error):
+        // Handle the error
+        print("Error fetching device state: \(error)")
+    }
+}
