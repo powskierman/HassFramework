@@ -120,7 +120,26 @@ public class HassRestClient {
         task.resume()
     }
 
-
+    // Add the sendDeviceToken method
+    public func sendDeviceToken(_ deviceToken: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let endpoint = "api/push_token"
+        let body: [String: Any] = ["token": deviceToken]
+        
+        guard let bodyData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
+            completion(.failure(HassError.encodingError))
+            return
+        }
+        
+        performRequest(endpoint: endpoint, method: "POST", body: bodyData, expectingResponse: false) { (result: Result<EmptyResponse, Error>) in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     // Add specific methods for various Home Assistant actions
     
     // Example: Fetching the state of a device
@@ -150,9 +169,9 @@ public class HassRestClient {
         }
         
         // Convert bodyData to a string to print it.
-          if let bodyString = String(data: bodyData, encoding: .utf8) {
-              print("Making POST request to endpoint: \(endpoint) with body: \(bodyString)")
-          }
+        if let bodyString = String(data: bodyData, encoding: .utf8) {
+            print("Making POST request to endpoint: \(endpoint) with body: \(bodyString)")
+        }
           
         performRequest(endpoint: endpoint, method: "POST", body: bodyData, expectingResponse: false) { (result: Result<EmptyResponse, Error>) in
             print("[HassRestClient](performRequest) result: \(result)")
@@ -237,10 +256,7 @@ public class HassRestClient {
         }
     }
 
-
-    
     /// A type-erasing wrapper to enable `Encodable` types to be used for `data`.
-    
     public struct AnyEncodable: Encodable {
         private let encodeFunc: (Encoder) throws -> Void
         
@@ -253,7 +269,6 @@ public class HassRestClient {
         }
     }
 
-    
     public struct CommandResponse: Decodable {
         // Define properties for command response
     }
@@ -278,40 +293,26 @@ public class HassRestClient {
         let state: EntityState
     }
     
-//    public func sendRequest<T: Decodable>(endpoint: String, method: String = "GET", payload: Encodable? = nil, completion: @escaping (Result<T, Error>) -> Void) {
-//        // Convert payload to Data here, then proceed as before
-//        var bodyData: Data? = nil
-//        if let payload = payload {
-//            bodyData = try? JSONEncoder().encode(AnyEncodable(payload))
-//        }
-//
-//        performRequest(endpoint: endpoint, method: method, body: bodyData, completion: completion)
-//    }
-}
-
-    extension HassRestClient {
-        // Fetch the state of a specified entity
-        
-        public func fetchState(entityId: String, completion: @escaping (Result<HAEntity, Error>) -> Void) {
-            let endpoint = "api/states/\(entityId)"
-            performRequest(endpoint: endpoint) { (result: Result<HAEntity, Error>) in
-                switch result {
-                case .success(let entity):
-                    completion(.success(entity))
-                case .failure(let error):
-                    if let decodingError = error as? DecodingError,
-                       decodingError.isEntityNotFoundError() {
-                        // Handle the case where the entity is not found
-                        print("[HassRestClient] Entity not found: \(entityId)")
-                        completion(.failure(HassError.entityNotFound))
-                    } else {
-                        completion(.failure(error))
-                    }
+    public func fetchState(entityId: String, completion: @escaping (Result<HAEntity, Error>) -> Void) {
+        let endpoint = "api/states/\(entityId)"
+        performRequest(endpoint: endpoint) { (result: Result<HAEntity, Error>) in
+            switch result {
+            case .success(let entity):
+                completion(.success(entity))
+            case .failure(let error):
+                if let decodingError = error as? DecodingError,
+                   decodingError.isEntityNotFoundError() {
+                    // Handle the case where the entity is not found
+                    print("[HassRestClient] Entity not found: \(entityId)")
+                    completion(.failure(HassError.entityNotFound))
+                } else {
+                    completion(.failure(error))
                 }
             }
         }
     }
-    
+}
+
 extension DecodingError {
     func isEntityNotFoundError() -> Bool {
         switch self {

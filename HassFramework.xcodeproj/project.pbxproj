@@ -24,6 +24,7 @@
 		D05FCF6F2ADC30A2000AF815 /* HassProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */; };
 		D05FCF712ADC312B000AF815 /* HassModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF702ADC312B000AF815 /* HassModels.swift */; };
 		D05FCF732ADC31A5000AF815 /* HassMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */; };
+		D07652A92C161A1300197F2B /* HassFramework.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07652A82C161A1300197F2B /* HassFramework.swift */; };
 		D0D1E6E42BB88DCF00CF32BC /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D0D1E6E32BB88DCF00CF32BC /* Starscream */; };
 		D0D1E6E62BB88DEB00CF32BC /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D0D1E6E52BB88DEB00CF32BC /* Starscream */; };
 		D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */; };
@@ -44,6 +45,7 @@
 		D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassProtocols.swift; sourceTree = "<group>"; };
 		D05FCF702ADC312B000AF815 /* HassModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassModels.swift; sourceTree = "<group>"; };
 		D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassMessageTypes.swift; sourceTree = "<group>"; };
+		D07652A82C161A1300197F2B /* HassFramework.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassFramework.swift; sourceTree = "<group>"; };
 		D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		D0E5D6C72AD5A875007038A7 /* HassEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HassEnums.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,6 +73,7 @@
 		D00BF6072AC9F85C00B7C307 = {
 			isa = PBXGroup;
 			children = (
+				D07652A82C161A1300197F2B /* HassFramework.swift */,
 				D03142C42B4225300045E387 /* HassRestClient.swift */,
 				D00BF6242ACA023400B7C307 /* HassWebSocket.swift */,
 				D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */,
@@ -249,6 +252,7 @@
 				D05FCF732ADC31A5000AF815 /* HassMessageTypes.swift in Sources */,
 				D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */,
 				D05FCF6F2ADC30A2000AF815 /* HassProtocols.swift in Sources */,
+				D07652A92C161A1300197F2B /* HassFramework.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

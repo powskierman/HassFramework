@@ -6,11 +6,14 @@
 //
 
 import Foundation
+
 public enum ConnectionState {
+    case connected
     case disconnected
     case connecting
-    case connected
+    case error
 }
+
 
 enum HAError: Error {
     case unknownMessageType
@@ -71,5 +74,4 @@ public enum MessageType: String, Decodable {
     case command
     // ... any other relevant message types
 }
-
 
