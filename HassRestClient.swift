@@ -325,3 +325,55 @@ extension DecodingError {
         }
     }
 }
+
+
+// MARK: - Async/Await Convenience
+public extension HassRestClient {
+    /// Async variant for REST requests. Decodes the response into `T`.
+    func request<T: Decodable>(endpoint: String,
+                               method: String = "GET",
+                               body: Encodable? = nil) async -> Result<T, HassError> {
+        do {
+            var request = URLRequest(url: baseURL.appendingPathComponent(endpoint))
+            request.httpMethod = method
+            request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            if let body = body {
+                let data = try JSONEncoder().encode(AnyEncodable(body))
+                request.httpBody = data
+            }
+
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse else {
+                return .failure(.invalidResponse)
+            }
+            guard (200..<300).contains(http.statusCode) else {
+                switch http.statusCode {
+                case 400: return .failure(.badRequest)
+                case 404: return .failure(.notFound)
+                default:  return .failure(.unexpectedStatusCode(http.statusCode))
+                }
+            }
+            guard !data.isEmpty else {
+                return .failure(.noData)
+            }
+            let decoded = try JSONDecoder().decode(T.self, from: data)
+            return .success(decoded)
+        } catch let e as DecodingError {
+            // Keep enum stable: map to unknownError with a helpful message
+            return .failure(.unknownError("Decoding error: \(e)"))
+        } catch {
+            return .failure(.unknownError(error.localizedDescription))
+        }
+    }
+}
+
+/// Type-erased Encodable wrapper.
+private struct AnyEncodable: Encodable {
+    private let _encode: (Encoder) throws -> Void
+    init(_ wrapped: Encodable) {
+        self._encode = wrapped.encode
+    }
+    func encode(to encoder: Encoder) throws { try _encode(encoder) }
+}

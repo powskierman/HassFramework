@@ -10,6 +10,8 @@
 		D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6152AC9F85C00B7C307 /* HassFramework.docc */; };
 		D00BF6172AC9F85C00B7C307 /* HassFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = D00BF6142AC9F85C00B7C307 /* HassFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D00BF6252ACA023400B7C307 /* HassWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BF6242ACA023400B7C307 /* HassWebSocket.swift */; };
+		D014D4862E49115D009D3388 /* HassEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* HassEnums.swift */; };
+		D014D4872E49115D009D3388 /* HassEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* HassEnums.swift */; };
 		D03142C52B4225300045E387 /* HassRestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03142C42B4225300045E387 /* HassRestClient.swift */; };
 		D033BAEA2ACC575C00FAFC4C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D033BAE92ACC575C00FAFC4C /* .gitignore */; };
 		D033BAEC2ACC57D600FAFC4C /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033BAEB2ACC57D600FAFC4C /* Secrets.plist */; };
@@ -19,7 +21,6 @@
 		D03610382B6071BF001CFE29 /* HassModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF702ADC312B000AF815 /* HassModels.swift */; };
 		D03610392B6071C3001CFE29 /* HassProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */; };
 		D036103A2B6071C7001CFE29 /* HassMessageTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF722ADC31A5000AF815 /* HassMessageTypes.swift */; };
-		D036103B2B6071CC001CFE29 /* HassEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* HassEnums.swift */; };
 		D036103C2B6071D1001CFE29 /* Secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = D033BAEB2ACC57D600FAFC4C /* Secrets.plist */; };
 		D05FCF6F2ADC30A2000AF815 /* HassProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF6E2ADC30A2000AF815 /* HassProtocols.swift */; };
 		D05FCF712ADC312B000AF815 /* HassModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05FCF702ADC312B000AF815 /* HassModels.swift */; };
@@ -28,7 +29,6 @@
 		D0D1E6E42BB88DCF00CF32BC /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D0D1E6E32BB88DCF00CF32BC /* Starscream */; };
 		D0D1E6E62BB88DEB00CF32BC /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = D0D1E6E52BB88DEB00CF32BC /* Starscream */; };
 		D0E5D6C62AD5913D007038A7 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C52AD5913D007038A7 /* WebSocketManager.swift */; };
-		D0E5D6C82AD5A875007038A7 /* HassEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E5D6C72AD5A875007038A7 /* HassEnums.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -187,7 +187,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					D00BF6102AC9F85C00B7C307 = {
 						CreatedOnToolsVersion = 15.0;
@@ -245,7 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D00BF6162AC9F85C00B7C307 /* HassFramework.docc in Sources */,
-				D0E5D6C82AD5A875007038A7 /* HassEnums.swift in Sources */,
+				D014D4862E49115D009D3388 /* HassEnums.swift in Sources */,
 				D05FCF712ADC312B000AF815 /* HassModels.swift in Sources */,
 				D03142C52B4225300045E387 /* HassRestClient.swift in Sources */,
 				D00BF6252ACA023400B7C307 /* HassWebSocket.swift in Sources */,
@@ -261,7 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D03610322B607066001CFE29 /* HassWatchFramework.docc in Sources */,
-				D036103B2B6071CC001CFE29 /* HassEnums.swift in Sources */,
+				D014D4872E49115D009D3388 /* HassEnums.swift in Sources */,
 				D03610372B6071B7001CFE29 /* HassRestClient.swift in Sources */,
 				D036103A2B6071C7001CFE29 /* HassMessageTypes.swift in Sources */,
 				D03610392B6071C3001CFE29 /* HassProtocols.swift in Sources */,
@@ -420,6 +420,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -455,6 +456,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -476,6 +478,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -510,6 +513,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;

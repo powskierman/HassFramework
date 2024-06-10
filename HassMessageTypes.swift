@@ -3,19 +3,36 @@
 //  HassFramework
 //
 //  Created by Michel Lapointe on 2023-10-15.
+//  Refactored on 2025-08-10: public properties, solid Codable support.
 //
 
 import Foundation
 
-// Struct to encapsulate the general structure of incoming messages
-public struct HAMessage: Decodable {
-    let id: Int?
-    let type: MessageType
-    let success: Bool?
-    let event: HAEventData?
-    let result: AnyCodable? // You'd use something like `AnyCodable` to handle dynamic result types. This is just an example; actual implementation might differ.
-    // ... any other general message attributes
-}
+/// General structure of incoming WebSocket/API messages from Home Assistant.
+public struct HAMessage: Codable {
+    public let id: Int?
+    public let type: MessageType
+    public let success: Bool?
+    public let event: HAEventData?
+    public let result: AnyCodable?
 
-// This can be a utility you add if you don't already have it.
-// It allows you to handle dynamic JSON structures.
+    public init(id: Int? = nil,
+                type: MessageType,
+                success: Bool? = nil,
+                event: HAEventData? = nil,
+                result: AnyCodable? = nil) {
+        self.id = id
+        self.type = type
+        self.success = success
+        self.event = event
+        self.result = result
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case type
+        case success
+        case event
+        case result
+    }
+}
